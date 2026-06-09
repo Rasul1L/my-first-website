@@ -1,5 +1,7 @@
 document.querySelectorAll("[data-assemble]").forEach((element) => {
   const text = element.textContent.trim();
+  const assembleDelay = Number(element.dataset.assembleDelay || 0);
+
   element.setAttribute("aria-label", text);
   element.textContent = "";
 
@@ -9,7 +11,7 @@ document.querySelectorAll("[data-assemble]").forEach((element) => {
 
     span.className = `assemble-letter fly-${direction}`;
     span.textContent = letter === " " ? "\u00a0" : letter;
-    span.style.animationDelay = `${index * 0.07}s`;
+    span.style.animationDelay = `${assembleDelay + index * 70}ms`;
     span.setAttribute("aria-hidden", "true");
     element.appendChild(span);
   });

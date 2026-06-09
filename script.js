@@ -1,3 +1,3 @@
 function sayHello() {
-  alert("Hello! Your website is working.");
+  alert("The Force is strong with this website.");
 }

@@ -743,6 +743,34 @@ button:hover {
   animation: lens-sweep 12s ease-in-out infinite;
 }
 
+.picture-name {
+  position: absolute;
+  left: 22px;
+  bottom: 22px;
+  z-index: 4;
+  display: grid;
+  gap: 5px;
+  padding: 14px 16px;
+  border: 1px solid rgba(251, 191, 36, 0.34);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.46);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.32);
+}
+
+.picture-name span {
+  color: #fbbf24;
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.picture-name strong {
+  color: #ffffff;
+  font-family: "Orbitron", "Poppins", Arial, Helvetica, sans-serif;
+  font-size: clamp(1rem, 2.4vw, 1.35rem);
+  text-transform: uppercase;
+}
+
 .hobbies-intro {
   border-left: 3px solid #fbbf24;
   padding-left: clamp(24px, 4vw, 42px);

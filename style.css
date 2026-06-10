@@ -416,9 +416,7 @@ body {
 
 .home {
   min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 46px 20px;
+  padding: 46px 20px 80px;
   opacity: 0;
   transform: translateY(22px);
   animation: home-reveal 900ms ease 6.35s forwards;
@@ -426,6 +424,8 @@ body {
 
 .hero {
   width: min(1050px, 100%);
+  min-height: calc(100vh - 92px);
+  margin: 0 auto;
   display: grid;
   grid-template-columns: minmax(240px, 360px) 1fr;
   gap: clamp(30px, 6vw, 72px);
@@ -541,6 +541,338 @@ button {
 button:hover {
   transform: translateY(-2px);
   box-shadow: 0 20px 44px rgba(251, 191, 36, 0.2);
+}
+
+.story-page {
+  width: min(1120px, 100%);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 72px 0 24px;
+  display: grid;
+  align-content: center;
+  gap: 34px;
+}
+
+.story-header {
+  max-width: 760px;
+}
+
+.story-header h2 {
+  margin: 0 0 16px;
+  color: #ffffff;
+  font-family: "Orbitron", "Poppins", Arial, Helvetica, sans-serif;
+  font-size: clamp(2.3rem, 7vw, 5.4rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  text-shadow:
+    0 0 18px rgba(34, 211, 238, 0.32),
+    0 0 38px rgba(251, 191, 36, 0.2);
+}
+
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.topic-card {
+  display: block;
+  min-height: 260px;
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  background:
+    linear-gradient(160deg, rgba(15, 23, 42, 0.92), rgba(8, 47, 73, 0.72)),
+    rgba(2, 6, 23, 0.9);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.3);
+}
+
+.topic-link {
+  color: inherit;
+  text-decoration: none;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.topic-link:hover {
+  border-color: rgba(34, 211, 238, 0.5);
+  box-shadow:
+    0 22px 56px rgba(0, 0, 0, 0.36),
+    0 0 30px rgba(34, 211, 238, 0.16);
+  transform: translateY(-4px);
+}
+
+.award-card {
+  background:
+    linear-gradient(160deg, rgba(251, 191, 36, 0.22), rgba(8, 145, 178, 0.2)),
+    rgba(15, 23, 42, 0.94);
+  border-color: rgba(251, 191, 36, 0.38);
+}
+
+.topic-number {
+  display: inline-block;
+  margin-bottom: 34px;
+  color: #fbbf24;
+  font-family: "Orbitron", "Poppins", Arial, Helvetica, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.topic-card h3 {
+  margin: 0 0 14px;
+  color: #ffffff;
+  font-family: "Orbitron", "Poppins", Arial, Helvetica, sans-serif;
+  font-size: clamp(1.25rem, 2.5vw, 1.7rem);
+  text-transform: uppercase;
+}
+
+.topic-card p {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 0.98rem;
+  line-height: 1.65;
+}
+
+.hobbies-body {
+  background:
+    radial-gradient(circle at 20% 12%, rgba(120, 53, 15, 0.32), transparent 28%),
+    radial-gradient(circle at 86% 24%, rgba(127, 29, 29, 0.3), transparent 30%),
+    linear-gradient(135deg, #050505 0%, #160b07 48%, #050505 100%);
+}
+
+.hobbies-page {
+  width: min(1120px, 100%);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 24px 20px 80px;
+}
+
+.page-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 0 42px;
+  color: #f8fafc;
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.page-nav a {
+  color: #fbbf24;
+  text-decoration: none;
+}
+
+.page-nav span {
+  color: #cbd5e1;
+}
+
+.hobbies-hero {
+  min-height: calc(100vh - 120px);
+  display: grid;
+  grid-template-columns: minmax(260px, 480px) 1fr;
+  gap: clamp(32px, 6vw, 78px);
+  align-items: center;
+}
+
+.mafia-promo {
+  position: relative;
+  min-height: 560px;
+  border: 1px solid rgba(251, 191, 36, 0.32);
+  border-radius: 8px;
+  background: #080504;
+  perspective: 1000px;
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.56),
+    inset 0 0 80px rgba(251, 191, 36, 0.08);
+  overflow: hidden;
+  transform-style: preserve-3d;
+}
+
+.mafia-promo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.58), transparent 36%, rgba(0, 0, 0, 0.32)),
+    linear-gradient(180deg, rgba(251, 191, 36, 0.18), transparent 32%, rgba(0, 0, 0, 0.42));
+  pointer-events: none;
+}
+
+.mafia-promo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(90deg, rgba(251, 191, 36, 0.24), transparent 26%, transparent 74%, rgba(127, 29, 29, 0.22)),
+    radial-gradient(circle at 50% 42%, transparent 0 34%, rgba(0, 0, 0, 0.42) 82%);
+  pointer-events: none;
+}
+
+.mafia-promo .promo-image {
+  transform-origin: center;
+}
+
+.promo-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 560px;
+  object-fit: cover;
+  object-position: 50% 50%;
+  animation: property-camera 24s ease-in-out infinite;
+  will-change: transform, object-position, filter;
+}
+
+.camera-sweep {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background:
+    linear-gradient(105deg, transparent 0 32%, rgba(255, 255, 255, 0.16) 43%, transparent 54%),
+    linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.22));
+  mix-blend-mode: screen;
+  opacity: 0.22;
+  pointer-events: none;
+  transform: translateX(-58%);
+  animation: lens-sweep 12s ease-in-out infinite;
+}
+
+.hobbies-intro {
+  border-left: 3px solid #fbbf24;
+  padding-left: clamp(24px, 4vw, 42px);
+}
+
+.hobby-topics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  padding-top: 64px;
+}
+
+.hobby-topic {
+  min-height: 240px;
+  padding: 24px;
+  border: 1px solid rgba(251, 191, 36, 0.18);
+  border-radius: 8px;
+  background:
+    linear-gradient(160deg, rgba(69, 26, 3, 0.5), rgba(15, 23, 42, 0.9)),
+    rgba(2, 6, 23, 0.92);
+}
+
+.mafia-topic {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(220px, 0.54fr) minmax(420px, 1.46fr);
+  gap: 34px;
+  align-items: start;
+  border-color: rgba(251, 191, 36, 0.46);
+  background:
+    linear-gradient(160deg, rgba(127, 29, 29, 0.45), rgba(69, 26, 3, 0.66)),
+    rgba(2, 6, 23, 0.9);
+}
+
+.player-profile-title {
+  position: sticky;
+  top: 24px;
+}
+
+.player-profile-title h2 {
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  line-height: 0.98;
+}
+
+.mafia-stats {
+  display: grid;
+  gap: 18px;
+}
+
+.profile-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.metric-card {
+  min-height: 118px;
+  padding: 18px;
+  border: 1px solid rgba(251, 191, 36, 0.22);
+  border-radius: 8px;
+  background:
+    linear-gradient(160deg, rgba(251, 191, 36, 0.12), rgba(2, 6, 23, 0.44)),
+    rgba(0, 0, 0, 0.2);
+}
+
+.metric-card span {
+  display: block;
+  margin-bottom: 22px;
+  color: #d6d3d1;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.metric-card strong {
+  color: #fbbf24;
+  font-family: "Orbitron", "Poppins", Arial, Helvetica, sans-serif;
+  font-size: clamp(1.45rem, 3vw, 2.25rem);
+}
+
+.stats-table {
+  display: grid;
+  border: 1px solid rgba(251, 191, 36, 0.22);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: minmax(110px, 1fr) minmax(92px, 0.72fr) minmax(64px, 0.5fr) minmax(72px, 0.58fr);
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  border-top: 1px solid rgba(251, 191, 36, 0.14);
+}
+
+.stats-row:first-child {
+  border-top: 0;
+}
+
+.stats-head {
+  color: #fbbf24;
+  background: rgba(0, 0, 0, 0.28);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.stats-row span,
+.stats-row strong {
+  color: #f8fafc;
+}
+
+.stats-row strong {
+  font-family: "Orbitron", "Poppins", Arial, Helvetica, sans-serif;
+}
+
+.hobby-topic h2 {
+  margin: 0 0 14px;
+  color: #ffffff;
+  font-family: "Orbitron", "Poppins", Arial, Helvetica, sans-serif;
+  font-size: clamp(1.24rem, 2.5vw, 1.68rem);
+  text-transform: uppercase;
+}
+
+.hobby-topic p {
+  margin: 0;
+  color: #d6d3d1;
+  font-size: 0.98rem;
+  line-height: 1.65;
 }
 
 @keyframes letter-land {
@@ -710,6 +1042,54 @@ button:hover {
   }
 }
 
+@keyframes property-camera {
+  0% {
+    object-position: 44% 50%;
+    filter: saturate(1.04) contrast(1.03);
+    transform: scale(1.08) rotateY(0deg) rotateZ(0deg) translate3d(0, 0, 0);
+  }
+
+  24% {
+    object-position: 58% 48%;
+    filter: saturate(1.1) contrast(1.06);
+    transform: scale(1.2) rotateY(-2.8deg) rotateZ(0.25deg) translate3d(-2%, -1%, 18px);
+  }
+
+  50% {
+    object-position: 70% 54%;
+    filter: saturate(1.06) contrast(1.08);
+    transform: scale(1.28) rotateY(-5deg) rotateZ(-0.35deg) translate3d(-5%, 1%, 28px);
+  }
+
+  74% {
+    object-position: 36% 56%;
+    filter: saturate(1.12) contrast(1.05);
+    transform: scale(1.18) rotateY(3.2deg) rotateZ(0.35deg) translate3d(4%, 1%, 20px);
+  }
+
+  100% {
+    object-position: 44% 50%;
+    filter: saturate(1.04) contrast(1.03);
+    transform: scale(1.08) rotateY(0deg) rotateZ(0deg) translate3d(0, 0, 0);
+  }
+}
+
+@keyframes lens-sweep {
+  0%, 18% {
+    opacity: 0;
+    transform: translateX(-58%);
+  }
+
+  36%, 52% {
+    opacity: 0.22;
+  }
+
+  72%, 100% {
+    opacity: 0;
+    transform: translateX(58%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .cinematic-intro {
     display: none;
@@ -718,6 +1098,11 @@ button:hover {
   .home {
     opacity: 1;
     transform: none;
+    animation: none;
+  }
+
+  .promo-image,
+  .camera-sweep {
     animation: none;
   }
 }
@@ -738,5 +1123,87 @@ button:hover {
   p {
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .story-page {
+    padding-top: 58px;
+  }
+
+  .topic-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .topic-card {
+    min-height: auto;
+  }
+
+  .page-nav {
+    align-items: flex-start;
+    flex-direction: column;
+    padding-bottom: 28px;
+  }
+
+  .hobbies-hero {
+    min-height: auto;
+    grid-template-columns: 1fr;
+  }
+
+  .mafia-promo {
+    min-height: 440px;
+  }
+
+  .promo-image {
+    min-height: 440px;
+  }
+
+  .hobbies-intro {
+    border-left: 0;
+    border-top: 3px solid #fbbf24;
+    padding: 24px 0 0;
+    text-align: center;
+  }
+
+  .hobby-topics {
+    grid-template-columns: 1fr;
+    padding-top: 48px;
+  }
+
+  .hobby-topic {
+    min-height: auto;
+  }
+
+  .mafia-topic {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-row {
+    grid-template-columns: minmax(78px, 1fr) 56px 42px 58px;
+    gap: 8px;
+    padding: 12px;
+    font-size: 0.82rem;
+  }
+
+}
+
+@media (min-width: 761px) and (max-width: 1040px) {
+  .topic-grid,
+  .hobby-topics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hobbies-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .mafia-topic {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

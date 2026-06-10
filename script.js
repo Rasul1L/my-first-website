@@ -9,5 +9,5 @@ window.addEventListener("load", () => {
 });
 
 function sayHello() {
-  alert("Hello! Your website is working.");
+  window.location.href = "mailto:baidaev.rasul00@gmail.com?subject=Contact%20from%20Website";
 }

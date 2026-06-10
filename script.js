@@ -4,7 +4,7 @@ window.addEventListener("load", () => {
   if (intro) {
     window.setTimeout(() => {
       intro.remove();
-    }, 6400);
+    }, 7400);
   }
 });
 

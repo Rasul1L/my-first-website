@@ -642,6 +642,265 @@ button:hover {
   line-height: 1.65;
 }
 
+.live-numbers {
+  position: relative;
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 86px 0 34px;
+  overflow: hidden;
+}
+
+.live-numbers::before {
+  content: "";
+  position: absolute;
+  inset: 12% -12% auto;
+  height: 340px;
+  background:
+    radial-gradient(circle at 20% 40%, rgba(34, 211, 238, 0.18), transparent 28%),
+    radial-gradient(circle at 82% 12%, rgba(251, 191, 36, 0.16), transparent 30%),
+    linear-gradient(115deg, transparent, rgba(99, 102, 241, 0.12), transparent);
+  filter: blur(8px);
+  pointer-events: none;
+}
+
+.live-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.live-particles span {
+  position: absolute;
+  width: 5px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #22d3ee;
+  box-shadow: 0 0 22px rgba(34, 211, 238, 0.75);
+  opacity: 0.42;
+  animation: live-float 7s ease-in-out infinite;
+}
+
+.live-particles span:nth-child(1) {
+  left: 8%;
+  top: 30%;
+}
+
+.live-particles span:nth-child(2) {
+  right: 12%;
+  top: 18%;
+  animation-delay: 1.4s;
+  background: #fbbf24;
+}
+
+.live-particles span:nth-child(3) {
+  left: 48%;
+  bottom: 18%;
+  animation-delay: 2.1s;
+}
+
+.live-particles span:nth-child(4) {
+  right: 28%;
+  bottom: 8%;
+  animation-delay: 3s;
+  background: #a3e635;
+}
+
+.live-header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.live-header h2 {
+  margin: 0 0 16px;
+  color: #ffffff;
+  font-family: "Orbitron", "Poppins", Arial, Helvetica, sans-serif;
+  font-size: clamp(2.2rem, 6vw, 5.2rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  text-shadow:
+    0 0 24px rgba(34, 211, 238, 0.34),
+    0 0 42px rgba(251, 191, 36, 0.18);
+}
+
+.live-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: max-content;
+  border: 1px solid rgba(34, 211, 238, 0.28);
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: rgba(2, 6, 23, 0.56);
+  color: #dffafe;
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  box-shadow: 0 0 28px rgba(34, 211, 238, 0.14);
+}
+
+.live-status span {
+  width: 10px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 16px #22c55e;
+  animation: live-pulse 1.3s ease-in-out infinite;
+}
+
+.live-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.live-card {
+  grid-column: span 3;
+  min-height: 236px;
+  padding: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  background:
+    linear-gradient(155deg, rgba(15, 23, 42, 0.78), rgba(8, 47, 73, 0.44)),
+    rgba(2, 6, 23, 0.72);
+  box-shadow:
+    0 22px 64px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.live-card:hover {
+  border-color: rgba(34, 211, 238, 0.38);
+  box-shadow:
+    0 28px 76px rgba(0, 0, 0, 0.36),
+    0 0 34px rgba(34, 211, 238, 0.13);
+  transform: translateY(-4px);
+}
+
+.live-card-large {
+  grid-column: span 6;
+}
+
+.live-card-current {
+  position: relative;
+  overflow: hidden;
+}
+
+.live-label {
+  display: block;
+  margin-bottom: 20px;
+  color: #fbbf24;
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.live-card strong {
+  display: block;
+  margin-bottom: 14px;
+  color: #ffffff;
+  font-family: "Orbitron", "Poppins", Arial, Helvetica, sans-serif;
+  font-size: clamp(2.1rem, 5vw, 4.1rem);
+  line-height: 0.92;
+  overflow-wrap: anywhere;
+  text-shadow: 0 0 24px rgba(34, 211, 238, 0.28);
+}
+
+.live-card p {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 0.96rem;
+  line-height: 1.58;
+}
+
+.live-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  border: 1px solid rgba(34, 211, 238, 0.18);
+  border-radius: 999px;
+  padding: 8px 10px;
+  color: #dbeafe;
+  font-size: 0.78rem;
+  font-weight: 800;
+  background: rgba(2, 6, 23, 0.42);
+}
+
+.live-trend span {
+  color: #22c55e;
+}
+
+.live-trend.hot span {
+  color: #fbbf24;
+}
+
+.live-orbit {
+  position: absolute;
+  right: -48px;
+  bottom: -48px;
+  width: 150px;
+  aspect-ratio: 1;
+  border: 1px solid rgba(34, 211, 238, 0.28);
+  border-top-color: #fbbf24;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 34px rgba(34, 211, 238, 0.08),
+    0 0 38px rgba(34, 211, 238, 0.14);
+  animation: live-orbit-spin 12s linear infinite;
+}
+
+.did-you-know {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr minmax(120px, 180px);
+  gap: 24px;
+  align-items: center;
+  margin-top: 18px;
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  border-radius: 8px;
+  padding: 22px;
+  background:
+    linear-gradient(120deg, rgba(251, 191, 36, 0.12), rgba(34, 211, 238, 0.07)),
+    rgba(2, 6, 23, 0.72);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(18px);
+}
+
+.did-you-know p {
+  margin: 0;
+  color: #f8fafc;
+  font-size: clamp(1rem, 2vw, 1.22rem);
+  transition: opacity 220ms ease;
+}
+
+.fact-meter {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.18);
+  overflow: hidden;
+}
+
+.fact-meter span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #22d3ee, #fbbf24, #a3e635);
+  animation: fact-meter 4.2s linear infinite;
+}
+
 .brandscan-app {
   position: relative;
   width: min(1180px, 100%);
@@ -1216,6 +1475,14 @@ button:hover {
   padding-left: 12px;
 }
 
+.style-list div {
+  border-left-color: rgba(251, 191, 36, 0.58);
+  padding: 14px 0 14px 14px;
+  background:
+    linear-gradient(90deg, rgba(251, 191, 36, 0.07), transparent),
+    rgba(255, 255, 255, 0.02);
+}
+
 .bio-list strong,
 .style-list strong,
 .personality-grid strong,
@@ -1241,6 +1508,30 @@ button:hover {
 
 .history-facts {
   margin-top: 16px;
+}
+
+.identity-swatches {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 8px 0 12px;
+}
+
+.identity-swatches span {
+  display: grid;
+  align-items: end;
+  min-height: 58px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  padding: 7px;
+  color: #ffffff;
+  font-family: "Orbitron", "Poppins", Arial, Helvetica, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.85);
+  box-shadow:
+    inset 0 0 22px rgba(255, 255, 255, 0.08),
+    0 10px 28px rgba(0, 0, 0, 0.22);
 }
 
 .history-card {
@@ -1954,6 +2245,44 @@ button:hover {
   }
 }
 
+@keyframes live-pulse {
+  0%, 100% {
+    opacity: 0.55;
+    transform: scale(0.86);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.16);
+  }
+}
+
+@keyframes live-float {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(0.8);
+  }
+
+  50% {
+    transform: translate3d(14px, -22px, 0) scale(1.15);
+  }
+}
+
+@keyframes fact-meter {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes live-orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .cinematic-intro {
     display: none;
@@ -1977,7 +2306,11 @@ button:hover {
   .particle-field span,
   .reveal-letter,
   .brand-name-reveal::before,
-  .breakdown-row > div:last-child span {
+  .breakdown-row > div:last-child span,
+  .live-status span,
+  .live-particles span,
+  .live-orbit,
+  .fact-meter span {
     animation: none;
   }
 
@@ -2073,6 +2406,34 @@ button:hover {
     font-size: 0.82rem;
   }
 
+  .live-numbers {
+    padding-top: 58px;
+  }
+
+  .live-header {
+    display: grid;
+    align-items: start;
+  }
+
+  .live-status {
+    width: fit-content;
+  }
+
+  .live-grid,
+  .did-you-know {
+    grid-template-columns: 1fr;
+  }
+
+  .live-card,
+  .live-card-large {
+    grid-column: auto;
+    min-height: auto;
+  }
+
+  .live-card strong {
+    font-size: clamp(2rem, 12vw, 3.3rem);
+  }
+
   .brandscan-app {
     padding-top: 58px;
   }
@@ -2154,6 +2515,20 @@ button:hover {
 
   .profile-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .live-header {
+    display: grid;
+    align-items: start;
+  }
+
+  .live-card {
+    grid-column: span 6;
+  }
+
+  .live-card-large,
+  .live-card-current {
+    grid-column: span 12;
   }
 
   .brandscan-hero {

@@ -787,6 +787,40 @@ button:hover {
   line-height: 0.98;
 }
 
+.cinematic-title {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.02em;
+  overflow: visible;
+}
+
+.hobbies-intro .cinematic-title {
+  justify-content: flex-start;
+}
+
+.title-piece {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(12px);
+  text-shadow:
+    0 0 18px rgba(251, 191, 36, 0.74),
+    0 0 42px rgba(127, 29, 29, 0.48);
+  transform:
+    translate3d(var(--start-x), var(--start-y), 0)
+    rotate(var(--spin))
+    scale(1.8);
+  animation: mafia-title-gather 1.9s cubic-bezier(0.16, 1, 0.3, 1) var(--delay) forwards;
+  will-change: transform, opacity, filter;
+}
+
+.title-space {
+  width: 0.34em;
+}
+
+.cinematic-title-small .title-piece {
+  animation-duration: 1.65s;
+}
+
 .mafia-stats {
   display: grid;
   gap: 18px;
@@ -1090,6 +1124,41 @@ button:hover {
   }
 }
 
+@keyframes mafia-title-gather {
+  0% {
+    opacity: 0;
+    filter: blur(14px);
+    transform:
+      translate3d(var(--start-x), var(--start-y), 0)
+      rotate(var(--spin))
+      scale(1.8);
+  }
+
+  38% {
+    opacity: 1;
+    filter: blur(3px);
+    transform:
+      translate3d(var(--orbit-x), var(--orbit-y), 0)
+      rotate(calc(var(--spin) + 180deg))
+      scale(1.24);
+  }
+
+  64% {
+    opacity: 1;
+    filter: blur(1px);
+    transform:
+      translate3d(var(--orbit-2-x), var(--orbit-2-y), 0)
+      rotate(calc(var(--spin) + 300deg))
+      scale(1.08);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate3d(0, 0, 0) rotate(0) scale(1);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .cinematic-intro {
     display: none;
@@ -1102,8 +1171,15 @@ button:hover {
   }
 
   .promo-image,
-  .camera-sweep {
+  .camera-sweep,
+  .title-piece {
     animation: none;
+  }
+
+  .title-piece {
+    opacity: 1;
+    filter: none;
+    transform: none;
   }
 }
 
@@ -1161,6 +1237,10 @@ button:hover {
     border-top: 3px solid #fbbf24;
     padding: 24px 0 0;
     text-align: center;
+  }
+
+  .hobbies-intro .cinematic-title {
+    justify-content: center;
   }
 
   .hobby-topics {

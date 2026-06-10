@@ -95,7 +95,51 @@ function renderProfile() {
   });
 }
 
+function setupCinematicTitles() {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  document.querySelectorAll(".cinematic-title").forEach((title) => {
+    const text = title.textContent.trim();
+
+    if (!text || title.dataset.animated === "true") {
+      return;
+    }
+
+    title.dataset.animated = "true";
+    title.setAttribute("aria-label", text);
+
+    if (reduceMotion) {
+      return;
+    }
+
+    title.textContent = "";
+
+    [...text].forEach((letter, index) => {
+      const piece = document.createElement("span");
+      const angle = ((index * 47 - 110) * Math.PI) / 180;
+      const radiusX = index % 2 === 0 ? 92 : -88;
+      const radiusY = index % 3 === 0 ? -74 : 82;
+      const orbitX = Math.cos(angle) * 44;
+      const orbitY = Math.sin(angle) * 34;
+
+      piece.className = letter === " " ? "title-piece title-space" : "title-piece";
+      piece.textContent = letter === " " ? "\u00a0" : letter;
+      piece.setAttribute("aria-hidden", "true");
+      piece.style.setProperty("--start-x", `${Math.cos(angle) * 120 + radiusX}vw`);
+      piece.style.setProperty("--start-y", `${Math.sin(angle) * 80 + radiusY}vh`);
+      piece.style.setProperty("--orbit-x", `${orbitX}px`);
+      piece.style.setProperty("--orbit-y", `${orbitY}px`);
+      piece.style.setProperty("--orbit-2-x", `${orbitY * -0.45}px`);
+      piece.style.setProperty("--orbit-2-y", `${orbitX * 0.35}px`);
+      piece.style.setProperty("--spin", `${index * 47 - 110}deg`);
+      piece.style.setProperty("--delay", `${index * 90}ms`);
+      title.appendChild(piece);
+    });
+  });
+}
+
 window.addEventListener("DOMContentLoaded", () => {
+  setupCinematicTitles();
   renderProfile();
   window.rasulTechMafiaDatabase = {
     schema: gamesTableSchema,

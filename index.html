@@ -127,6 +127,164 @@
           </p>
         </a>
 
+        <a class="topic-card topic-link brandscan-topic" href="#brandscan-ai">
+          <span class="topic-number">05</span>
+          <h3>BrandScan AI</h3>
+          <p>
+            Analyze names, usernames, and personal brand ideas with a futuristic
+            AI-style dashboard built for RasulTech.
+          </p>
+        </a>
+
+      </div>
+    </section>
+
+    <section class="brandscan-app" id="brandscan-ai" aria-label="BrandScan AI personal brand analyzer">
+      <div class="brandscan-hero">
+        <div class="brandscan-copy">
+          <p class="eyebrow">RasulTech Lab</p>
+          <h2>BrandScan AI</h2>
+          <p>
+            Analyze your name, username, or personal brand identity with a futuristic
+            AI-style profile built for creators, coders, gamers, and founders.
+          </p>
+        </div>
+
+        <form class="brandscan-form" id="brandscan-form">
+          <label for="brand-name">Name, nickname, username, or brand idea</label>
+          <div class="brandscan-input-row">
+            <input
+              id="brand-name"
+              name="brand-name"
+              type="text"
+              autocomplete="off"
+              placeholder="RasulTech, Rasolve404, Nacho..."
+              required
+            >
+            <button type="submit">Analyze</button>
+          </div>
+          <div class="sample-chips" aria-label="Example brand names">
+            <button type="button" data-sample="Rasul">Rasul</button>
+            <button type="button" data-sample="RasulTech">RasulTech</button>
+            <button type="button" data-sample="Rasolve404">Rasolve404</button>
+            <button type="button" data-sample="Nacho">Nacho</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="scanner-visual" aria-hidden="true">
+        <div class="scanner-core"></div>
+        <div class="scanner-ring scanner-ring-one"></div>
+        <div class="scanner-ring scanner-ring-two"></div>
+        <div class="scanner-grid"></div>
+      </div>
+
+      <div class="brandscan-loading" id="brandscan-loading" hidden>
+        <div class="loading-mark">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <p id="loading-text">Scanning identity...</p>
+      </div>
+
+      <div class="brand-name-reveal" id="brand-name-reveal" hidden>
+        <div class="particle-field" id="particle-field" aria-hidden="true"></div>
+        <div class="reveal-name" id="reveal-name" aria-label="Analyzed name reveal"></div>
+      </div>
+
+      <div class="brandscan-results" id="brandscan-results" hidden>
+        <div class="result-topline">
+          <div>
+            <p class="eyebrow">Brand Signal Locked</p>
+            <h3 id="result-name">RasulTech</h3>
+          </div>
+          <button type="button" id="try-again">Try another name</button>
+        </div>
+
+        <div class="dashboard-grid">
+          <article class="brand-card score-card">
+            <div class="score-orbit" id="score-orbit">
+              <span id="score-value">87</span>
+            </div>
+            <div>
+              <span class="card-label">Brand Score</span>
+              <h4 id="score-title">87/100</h4>
+              <p id="score-summary">Strong, modern, and ready for a personal tech identity.</p>
+            </div>
+          </article>
+
+          <article class="brand-card breakdown-card">
+            <span class="card-label">Score Breakdown</span>
+            <div class="breakdown-list" id="breakdown-list"></div>
+          </article>
+
+          <article class="brand-card analysis-card">
+            <span class="card-label">Name / Username Analysis</span>
+            <h4 id="analysis-title">Clean technical energy</h4>
+            <p id="analysis-copy">
+              This name feels focused, memorable, and confident for a modern creator brand.
+            </p>
+          </article>
+
+          <article class="brand-card personality-card">
+            <span class="card-label">Brand Personality</span>
+            <div class="personality-grid" id="personality-grid"></div>
+          </article>
+
+          <article class="brand-card history-card">
+            <span class="card-label">Name Origin &amp; History</span>
+            <h4 id="history-title">Researching origin</h4>
+            <p id="history-copy">Historical intelligence will appear here after analysis.</p>
+            <div class="history-facts" id="history-facts"></div>
+            <a id="history-source" href="#" target="_blank" rel="noopener" hidden>View source</a>
+          </article>
+
+          <article class="brand-card comparison-card">
+            <span class="card-label">Similar Names Comparison</span>
+            <div class="comparison-list" id="comparison-list"></div>
+          </article>
+
+          <article class="brand-card growth-card">
+            <span class="card-label">Brand Growth Suggestions</span>
+            <div class="growth-list" id="growth-list"></div>
+          </article>
+
+          <article class="brand-card">
+            <span class="card-label">Strengths</span>
+            <ul id="strengths-list"></ul>
+          </article>
+
+          <article class="brand-card">
+            <span class="card-label">Weaknesses</span>
+            <ul id="weaknesses-list"></ul>
+          </article>
+
+          <article class="brand-card use-card">
+            <span class="card-label">Best Use Cases</span>
+            <div class="use-case-list" id="use-case-list"></div>
+          </article>
+
+          <article class="brand-card tagline-card">
+            <span class="card-label">Tagline Generator</span>
+            <ol id="tagline-list"></ol>
+          </article>
+
+          <article class="brand-card domain-card">
+            <span class="card-label">Domain Suggestions</span>
+            <div class="domain-list" id="domain-list"></div>
+          </article>
+
+          <article class="brand-card bio-card">
+            <span class="card-label">Social Bio Generator</span>
+            <div class="bio-list" id="bio-list"></div>
+          </article>
+
+          <article class="brand-card visual-card">
+            <span class="card-label">Visual Style Recommendation</span>
+            <div class="style-list" id="style-list"></div>
+          </article>
+        </div>
       </div>
     </section>
   </main>

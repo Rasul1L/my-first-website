@@ -2101,6 +2101,139 @@ const TECHNOLOGY_ERAS = [
   [2023, "AI Companion Era", "Generative AI makes software feel conversational and creative."]
 ];
 
+const YEAR_CAPSULES = {
+  1985: {
+    world: "Mikhail Gorbachev became leader of the Soviet Union, setting up a decade of major geopolitical change.",
+    science: "The ozone hole over Antarctica became a major scientific warning signal for the planet.",
+    politics: "Cold War tension was still shaping world identity, but the system was beginning to shift.",
+    sports: "Chicago Bears energy dominated American football culture as the 1985 season became legendary.",
+    culture: "Live Aid turned music into a global televised humanitarian event.",
+    movies: "Back to the Future made time travel, nostalgia, and possibility part of pop culture language.",
+    music: "Synth pop, arena rock, and MTV-driven visuals were defining how music looked and felt.",
+    technology: "Home computers and game consoles were moving from hobbyist worlds into family rooms."
+  },
+  1990: {
+    world: "Germany reunified, marking one of the clearest symbols of the post-Cold War world.",
+    science: "The Hubble Space Telescope launched, changing how people imagined deep space.",
+    politics: "Nelson Mandela was released from prison, becoming a central figure in a new political era.",
+    sports: "The FIFA World Cup in Italy gave the year a global football soundtrack.",
+    culture: "Sitcoms, CDs, malls, and cable TV shaped mainstream memory.",
+    movies: "Home Alone became a defining family movie of the year.",
+    music: "Hip-hop, dance pop, and alternative rock were all pushing into the mainstream.",
+    technology: "Most people were not online yet; personal computers existed, but the web was still about to arrive."
+  },
+  1995: {
+    world: "The World Trade Organization was formed, reflecting a more connected global economy.",
+    science: "The first exoplanet around a Sun-like star was confirmed, expanding the map of possible worlds.",
+    politics: "The Dayton Agreement helped end the Bosnian War.",
+    sports: "The Rugby World Cup in South Africa became a powerful sports and cultural moment.",
+    culture: "The 1990s felt bright, commercial, and increasingly digital.",
+    movies: "Toy Story became the first feature-length computer-animated film.",
+    music: "Pop, hip-hop, R&B, grunge echoes, and Britpop were all competing for attention.",
+    technology: "Windows 95 made personal computing feel more mainstream and visual."
+  },
+  2000: {
+    world: "The world entered a new millennium with Y2K behind it and global tech optimism ahead.",
+    science: "The Human Genome Project was accelerating toward a completed draft.",
+    politics: "A disputed U.S. presidential election became one of the year's defining political stories.",
+    sports: "The Sydney Olympics created a bright global sports moment.",
+    culture: "DVDs, boy bands, pop stars, and early internet culture shaped the atmosphere.",
+    movies: "Gladiator and Cast Away were among the movies defining the year.",
+    music: "Pop, R&B, nu metal, and hip-hop dominated radio and MTV.",
+    technology: "Many people used dial-up internet, desktop PCs, early mobile phones, and physical media."
+  },
+  2005: {
+    world: "The internet was becoming more social, searchable, and video-driven.",
+    science: "The Huygens probe landed on Titan, revealing a strange moon-world.",
+    politics: "Global attention stayed focused on conflict, climate, and post-9/11 politics.",
+    sports: "Liverpool's Champions League comeback became one of football's famous modern finals.",
+    culture: "Reality TV, blogs, forums, and ringtone culture were everywhere.",
+    movies: "Star Wars: Revenge of the Sith closed the prequel era.",
+    music: "iPods, digital downloads, pop punk, hip-hop, and R&B shaped listening habits.",
+    technology: "YouTube launched, making online video feel like a new public stage."
+  },
+  2010: {
+    world: "The world was entering a mobile-first decade after the financial crisis years.",
+    science: "The first synthetic bacterial cell was announced, pushing synthetic biology into headlines.",
+    politics: "The Arab Spring was about to begin, with social media becoming part of political movements.",
+    sports: "The FIFA World Cup in South Africa became a global cultural moment.",
+    culture: "Memes, apps, streaming, and social feeds were becoming normal life.",
+    movies: "Inception and Toy Story 3 became major cultural touchpoints.",
+    music: "Pop, EDM, rap, and YouTube-driven discovery were shaping youth culture.",
+    technology: "The iPad launched, Instagram launched, and smartphones were becoming the center of daily life."
+  },
+  2015: {
+    world: "The Paris Climate Agreement made climate action a central global conversation.",
+    science: "CRISPR gene-editing became a major mainstream science story.",
+    politics: "Migration, climate, and digital security were major global themes.",
+    sports: "The U.S. women's national soccer team won the World Cup.",
+    culture: "Streaming culture, fandoms, and creator platforms became more powerful.",
+    movies: "Star Wars: The Force Awakens revived one of cinema's biggest franchises.",
+    music: "Streaming was changing charts, discovery, and how songs became global.",
+    technology: "Apple Watch launched and wearables moved deeper into personal data."
+  }
+};
+
+const CATEGORY_FALLBACKS = {
+  world: [
+    "Globalization, climate, migration, and digital networks were reshaping daily life.",
+    "The world was becoming more connected, but also more complex and fast-moving.",
+    "News cycles were accelerating, making global events feel closer to ordinary people."
+  ],
+  science: [
+    "Space science, genetics, computing, and climate research were expanding what people could measure.",
+    "Scientific work was becoming more computational, collaborative, and data-heavy.",
+    "New discoveries were making the universe feel larger and the human body feel more readable."
+  ],
+  politics: [
+    "Politics was increasingly shaped by media, global markets, and fast communication.",
+    "Public life was being influenced by television, the internet, and changing international alliances.",
+    "Trust, security, and global cooperation were recurring political themes."
+  ],
+  sports: [
+    "Sports culture was becoming more global, televised, and personality-driven.",
+    "Major tournaments and superstar athletes were turning sports into shared world events.",
+    "Broadcast media made athletic moments feel immediate across borders."
+  ],
+  culture: [
+    "The culture of the period mixed entertainment, fashion, screens, and youth identity.",
+    "The year's atmosphere was shaped by what people watched, wore, played, and shared.",
+    "Pop culture was becoming a stronger language for belonging and memory."
+  ],
+  movies: [
+    "Blockbusters and home video shaped how people remembered the era.",
+    "Movies were a major shared language before social feeds fragmented attention.",
+    "Cinema was balancing big spectacle with character-driven cultural moments."
+  ],
+  music: [
+    "Music discovery was tied to radio, television, physical media, downloads, or streaming depending on the era.",
+    "Songs from this period often became memory anchors for school, travel, and family life.",
+    "The sound of the time reflected both technology and youth culture."
+  ],
+  technology: [
+    "The devices around a newborn's world were a strong clue to the speed of the era.",
+    "Technology was changing how people stored memories, talked, learned, and entertained themselves.",
+    "Everyday tech was quietly shaping what childhood would feel like."
+  ]
+};
+
+const TECH_MILESTONES = [
+  { year: 1981, title: "IBM PC", copy: "Personal computers started becoming a serious business and home category." },
+  { year: 1984, title: "Macintosh", copy: "Graphical interfaces made computers feel more visual and personal." },
+  { year: 1989, title: "World Wide Web Proposed", copy: "The idea of the web was born before most people knew they would one day live inside it." },
+  { year: 1995, title: "Mainstream Web Moment", copy: "Windows 95, browsers, and early websites made the internet feel reachable." },
+  { year: 1998, title: "Google Founded", copy: "Search became the front door to the internet." },
+  { year: 2001, title: "iPod + Wikipedia", copy: "Portable music and open knowledge changed how people carried culture and facts." },
+  { year: 2004, title: "Facebook Launches", copy: "Real-name social networking began reshaping identity online." },
+  { year: 2005, title: "YouTube Launches", copy: "Anyone could publish video to the world." },
+  { year: 2007, title: "iPhone", copy: "The phone became a pocket computer and a camera for daily life." },
+  { year: 2010, title: "iPad + Instagram", copy: "Touchscreens and image-first social life became mainstream signals." },
+  { year: 2012, title: "Short-Form Social Era", copy: "Mobile video and creator culture started speeding up internet culture." },
+  { year: 2016, title: "Pokemon Go + Practical AR", copy: "Phones began blending digital layers with physical places." },
+  { year: 2020, title: "Remote-First Tools", copy: "Video calls, cloud work, and online school became ordinary infrastructure." },
+  { year: 2023, title: "Generative AI Goes Mainstream", copy: "AI became a creative and practical assistant for millions of people." }
+];
+
 function formatDateLong(date) {
   return date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 }
@@ -2247,6 +2380,15 @@ function getHistoricalFacts(year) {
   ];
 }
 
+function getYearCapsule(year) {
+  const exact = YEAR_CAPSULES[year] || {};
+  const seed = year % 3;
+  return Object.fromEntries(Object.entries(CATEGORY_FALLBACKS).map(([key, values]) => [
+    key,
+    exact[key] || values[(seed + key.length) % values.length]
+  ]));
+}
+
 function getPersonalCapsule(birthDate) {
   const year = birthDate.getFullYear();
   const month = birthDate.getMonth() + 1;
@@ -2256,16 +2398,69 @@ function getPersonalCapsule(birthDate) {
   const [monthName, monthTheme, monthCopy] = getMonthSignal(birthDate);
   const daySignal = getDaySignal(birthDate);
   const decadeContext = DECADE_CONTEXT[decade] || DECADE_CONTEXT[2000];
-  const yearFacts = getHistoricalFacts(year);
+  const capsule = getYearCapsule(year);
 
   return [
-    { year, title: `${year} World Snapshot`, copy: yearFacts[0] },
-    { year, title: "Technology Milestone", copy: yearFacts[1] || `The ${decade}s were shaped by ${decadeContext[0]}.` },
-    { year, title: "Culture Signal", copy: `${monthName} adds ${monthTheme} to the story. ${monthCopy}` },
+    { year, title: "Major World Event", copy: capsule.world },
+    { year, title: "Science / Discovery", copy: capsule.science },
+    { year, title: "Politics", copy: capsule.politics },
+    { year, title: "Sports Moment", copy: capsule.sports },
+    { year, title: "Movies Around Your Birth", copy: capsule.movies },
+    { year, title: "Music and Culture", copy: `${capsule.music} ${capsule.culture}` },
+    { year, title: "Technology at Birth", copy: capsule.technology },
     { year, title: `${generation} Context`, copy: generationCopy },
-    { year, title: "Decade Atmosphere", copy: `You were born into the ${decade}s: ${decadeContext[1]}.` },
+    { year, title: `${monthName} Birth-Month Signal`, copy: `${monthName} adds ${monthTheme} to the story. ${monthCopy}` },
+    { year, title: "Decade Atmosphere", copy: `You were born into the ${decade}s: ${decadeContext[1]}. This makes your starting point feel different from someone born just one decade earlier or later.` },
     { year, title: "Exact Date Signature", copy: `The ${day}${day === 1 || day === 21 || day === 31 ? "st" : day === 2 || day === 22 ? "nd" : day === 3 || day === 23 ? "rd" : "th"} day gives this timeline a "${daySignal}" character, making ${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")} feel more specific than a birth year alone.` }
   ];
+}
+
+function getTechSnapshotAtBirth(year) {
+  if (year < 1990) return "At birth, computers were physical, expensive, and mostly offline; music, games, and photos lived on separate devices.";
+  if (year < 2000) return "At birth, the web was young or just becoming mainstream; family computers, CDs, cartridges, and early browsers defined the digital atmosphere.";
+  if (year < 2007) return "At birth, the internet was social but not fully mobile; desktops, flip phones, MP3 players, DVDs, and early social networks shaped daily tech.";
+  if (year < 2013) return "At birth, smartphones, apps, touchscreens, streaming, and social photos were becoming the default interface to life.";
+  if (year < 2020) return "At birth, mobile video, cloud apps, voice assistants, streaming, and creator platforms were already normal.";
+  return "At birth, AI tools, remote life, streaming, short video, and connected devices were already part of the background of childhood.";
+}
+
+function getAgeLabelAtYear(eventYear, birthYear) {
+  const age = eventYear - birthYear;
+  if (age < 0) {
+    const yearsBefore = Math.abs(age);
+    return `${yearsBefore} ${yearsBefore === 1 ? "year" : "years"} before you were born`;
+  }
+  if (age === 0) return "the year you were born";
+  if (age <= 5) return `when you were about ${age}`;
+  if (age <= 12) return `during childhood, around age ${age}`;
+  if (age <= 19) return `during your teen years, around age ${age}`;
+  return `during adulthood, around age ${age}`;
+}
+
+function getPersonalTechTimeline(birthYear, currentYear) {
+  const visible = TECH_MILESTONES
+    .filter((item) => item.year >= Math.max(1981, birthYear - 2) && item.year <= currentYear)
+    .map((item) => ({
+      year: item.year,
+      title: `${item.title} (${getAgeLabelAtYear(item.year, birthYear)})`,
+      copy: item.copy
+    }));
+
+  const birthSnapshot = {
+    year: birthYear,
+    title: "Technology When You Were Born",
+    copy: getTechSnapshotAtBirth(birthYear)
+  };
+
+  const future = currentYear < 2026
+    ? []
+    : [{
+      year: 2026,
+      title: "Your Current Tech Moment",
+      copy: "Your timeline now sits in an AI-native era where personal tools can generate images, code, text, analysis, and dashboards on demand."
+    }];
+
+  return [birthSnapshot, ...visible.slice(0, 7), ...future].slice(0, 9);
 }
 
 function buildLifeProfile(dateValue) {
@@ -2285,10 +2480,7 @@ function buildLifeProfile(dateValue) {
   const year = birthDate.getFullYear();
   const facts = getHistoricalFacts(year);
   const personalCapsule = getPersonalCapsule(birthDate);
-  const techTimeline = TECHNOLOGY_ERAS
-    .filter(([eraYear]) => eraYear >= year)
-    .slice(0, 6)
-    .map(([eraYear, title, copy]) => ({ year: eraYear, title, copy, estimate: eraYear > now.getFullYear() }));
+  const techTimeline = getPersonalTechTimeline(year, now.getFullYear());
 
   const milestones = [10000, 15000, 20000, 25000, 30000].map((day) => ({
     title: `${formatCompact(day)} days old`,

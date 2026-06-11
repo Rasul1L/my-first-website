@@ -2437,19 +2437,34 @@ function getAgeLabelAtYear(eventYear, birthYear) {
   return `during adulthood, around age ${age}`;
 }
 
+function sortTimelineByYear(items) {
+  return items
+    .map((item, index) => ({ ...item, order: item.order ?? index }))
+    .sort((a, b) => {
+      const yearA = Number(a.year ?? 0);
+      const yearB = Number(b.year ?? 0);
+      if (yearA !== yearB) return yearA - yearB;
+      return a.order - b.order;
+    })
+    .map(({ order, ...item }) => item);
+}
+
 function getPersonalTechTimeline(birthYear, currentYear) {
   const visible = TECH_MILESTONES
+    .map((item, index) => ({ ...item, order: index + 10 }))
     .filter((item) => item.year >= Math.max(1981, birthYear - 2) && item.year <= currentYear)
     .map((item) => ({
       year: item.year,
       title: `${item.title} (${getAgeLabelAtYear(item.year, birthYear)})`,
-      copy: item.copy
+      copy: item.copy,
+      order: item.order
     }));
 
   const birthSnapshot = {
     year: birthYear,
     title: "Technology When You Were Born",
-    copy: getTechSnapshotAtBirth(birthYear)
+    copy: getTechSnapshotAtBirth(birthYear),
+    order: 0
   };
 
   const future = currentYear < 2026
@@ -2457,10 +2472,11 @@ function getPersonalTechTimeline(birthYear, currentYear) {
     : [{
       year: 2026,
       title: "Your Current Tech Moment",
-      copy: "Your timeline now sits in an AI-native era where personal tools can generate images, code, text, analysis, and dashboards on demand."
+      copy: "Your timeline now sits in an AI-native era where personal tools can generate images, code, text, analysis, and dashboards on demand.",
+      order: 999
     }];
 
-  return [birthSnapshot, ...visible.slice(0, 7), ...future].slice(0, 9);
+  return sortTimelineByYear([birthSnapshot, ...visible, ...future]).slice(0, 9);
 }
 
 function buildLifeProfile(dateValue) {

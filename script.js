@@ -449,10 +449,32 @@ function getNameTraits(name, scoreProfile, history) {
   const lower = compact.toLowerCase();
   const nameFamilies = {
     rasul: "mission-led",
+    rassul: "mission-led",
     egor: "distinctive-slavic",
+    yegor: "distinctive-slavic",
+    igor: "distinctive-slavic",
     alexander: "classic-authority",
+    alexandr: "classic-authority",
+    aleksandr: "classic-authority",
+    alex: "classic-authority",
     nacho: "playful-nickname",
-    diana: "mythic-elegant"
+    ignacio: "playful-nickname",
+    diana: "mythic-elegant",
+    diane: "mythic-elegant",
+    sophia: "mythic-elegant",
+    sofia: "mythic-elegant",
+    victoria: "classic-authority",
+    victor: "classic-authority",
+    muhammad: "mission-led",
+    mohammed: "mission-led",
+    mohammad: "mission-led",
+    ahmed: "mission-led",
+    aaliyah: "mission-led",
+    maria: "mythic-elegant",
+    mary: "mythic-elegant",
+    anna: "classic-authority",
+    john: "classic-authority",
+    ivan: "classic-authority"
   };
   const vowels = (lower.match(/[aeiouy]/g) || []).length;
   const consonants = Math.max(0, compact.length - vowels);
@@ -506,7 +528,7 @@ function getNameTraits(name, scoreProfile, history) {
     lowFactor,
     origin: originFact ? originFact[1] : "unconfirmed origin",
     meaning: meaningFact ? meaningFact[1] : "meaning not confirmed",
-    nameFamily: nameFamilies[lower] || (compact.length >= 8 ? "expanded-personal" : "compact-personal"),
+    nameFamily: nameFamilies[lower] || nameFamilies[normalizeNameKey(name)] || (compact.length >= 8 ? "expanded-personal" : "compact-personal"),
     soundShape,
     lengthClass,
     category,
@@ -515,13 +537,18 @@ function getNameTraits(name, scoreProfile, history) {
 }
 
 function getEmotionalRead(name, traits) {
+  const hasMeaning = traits.meaning !== "meaning not confirmed";
+  const hasOrigin = traits.origin !== "unconfirmed origin";
+  const culturalRead = hasMeaning || hasOrigin
+    ? `${name} carries ${hasOrigin ? traits.origin.toLowerCase() : "a documented"} context${hasMeaning ? ` around ${traits.meaning.toLowerCase()}` : ""}; that makes the brand feel less invented and gives the identity a story to build from.`
+    : null;
   const personalReads = {
     "mission-led": `${name} carries a message-first feeling; it sounds like a person or project built around purpose, guidance, and communication.`,
     "distinctive-slavic": `${name} feels compact but uncommon in English-language branding, which gives it a sharper personal signature than many familiar first names.`,
     "classic-authority": `${name} has a long historic weight; it sounds more like a public-facing expert, founder, or strategist than a casual creator handle.`,
     "mythic-elegant": `${name} feels elegant and luminous, with a mythic association that suits beauty, storytelling, lifestyle, or a refined founder identity.`,
     "expanded-personal": `${name} feels established and complete, but the longer shape asks for a strong visual system so it does not feel too formal.`,
-    "compact-personal": `${name} feels direct and person-led; it can become credible quickly if the page shows a real story and visible work.`
+    "compact-personal": culturalRead || `${name} feels direct and person-led; it can become credible quickly if the page shows a real story and visible work.`
   };
   const reads = {
     technical: `${name} sounds like a builder identity: precise, system-minded, and more comfortable around products than lifestyle content.`,
@@ -888,132 +915,424 @@ function getAnalysis(profile) {
   };
 }
 
-async function fetchHistory(name) {
-  const firstWord = name.split(/[\s_-]+/)[0];
-  const fallback = getFallbackHistory(firstWord);
-  const queries = [`${firstWord} (name)`, firstWord];
+const NAME_VARIANTS = {
+  rasul: ["rassul", "rasool", "resul"],
+  egor: ["yegor", "igor", "georgy", "george"],
+  yegor: ["egor", "igor", "georgy", "george"],
+  alexander: ["alexandr", "aleksandr", "alexandre", "alejandro", "alex", "iskandar"],
+  nacho: ["ignacio", "inaki"],
+  diana: ["diane", "dianna"],
+  sophia: ["sofia", "sofie", "sophie"],
+  sofia: ["sophia", "sofie", "sophie"],
+  muhammad: ["mohammed", "mohammad", "muhammed", "mohamed"],
+  mohammed: ["muhammad", "mohammad", "muhammed", "mohamed"],
+  ahmed: ["ahmad", "akhmad"],
+  john: ["jon", "juan", "ivan", "johan", "jean", "ioannes"],
+  maria: ["mary", "marie", "mariam", "mariya"],
+  anna: ["anne", "ana", "hannah"],
+  elena: ["helena", "yelena", "helen"],
+  victor: ["viktor", "victorio"],
+  victoria: ["viktoria", "victor"],
+  zayn: ["zain", "zane", "zein"],
+  aaliyah: ["aliyah", "alia", "alya"],
+  xochitl: ["xochil", "sochitl"],
+  fatima: ["fatimah", "fatma"],
+  aisha: ["aesha", "aysha", "ayesha"],
+  yusuf: ["yousef", "youssef", "joseph"],
+  jose: ["joseph", "josef"],
+  isabella: ["isabel", "isabelle"],
+  priya: ["priya"],
+  arjun: ["arjuna"],
+  sakura: ["sakura"],
+  mei: ["may", "meilin"],
+  kai: ["cai", "kay"]
+};
 
-  for (const query of queries) {
-    const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 1600);
+const NAME_HISTORY_DATA = {
+  rasul: {
+    title: "Rasul: Arabic name meaning Messenger",
+    copy: "Rasul comes from Arabic and is commonly understood as Messenger or Apostle. In Islamic language and history, rasul carries deep cultural and religious significance because it refers to a divinely sent messenger. As a personal brand, the meaning gives the name a serious, mission-driven feeling connected to communication, leadership, and purpose.",
+    facts: [
+      ["Origin", "Arabic"],
+      ["Language", "Arabic"],
+      ["Historical Meaning", "Messenger or Apostle"],
+      ["Cultural Significance", "Strong religious and historical association with a divinely sent messenger in Islamic context"],
+      ["Famous / Notable References", "Used as a given name and surname in Muslim communities; verify specific public figures before using them in brand copy"],
+      ["Brand Fact", "The meaning supports a mission-driven identity built around communication, guidance, and trust"]
+    ],
+    source: "https://en.wikipedia.org/wiki/Rasul_(name)",
+    sourceLabel: "Reference"
+  },
+  nacho: {
+    title: "Nacho: Spanish nickname with warm personality",
+    copy: "Nacho is widely used as a Spanish nickname for Ignacio. It feels casual, friendly, and memorable, with strong social and creator-brand potential. The sound is playful and quick to say, which makes it useful for gaming, food, entertainment, and personal content brands.",
+    facts: [
+      ["Origin", "Spanish nickname"],
+      ["Language", "Spanish"],
+      ["Historical Meaning", "Common short form of Ignacio"],
+      ["Cultural Significance", "Friendly, informal, and familiar in Spanish-speaking contexts"],
+      ["Famous / Notable References", "Often appears as a nickname and is also widely recognized through food and pop culture references"],
+      ["Interesting Fact", "Its playful sound gives it strong nickname and social-handle energy"]
+    ],
+    source: "https://en.wikipedia.org/wiki/Nacho",
+    sourceLabel: "Reference"
+  },
+  egor: {
+    title: "Egor: Slavic form connected to George",
+    copy: "Egor is commonly associated with Russian and Slavic usage and is related to the name George, often interpreted through the older meaning of farmer or earth-worker. As a brand, Egor feels compact, direct, and distinctive in English-language contexts, which can help a personal site feel memorable without sounding invented.",
+    facts: [
+      ["Origin", "Russian and Slavic usage"],
+      ["Language", "Russian / Slavic"],
+      ["Historical Meaning", "Related to George, often connected with farmer or earth-worker"],
+      ["Cultural Significance", "Recognizable as a real given name while feeling uncommon in many English-language brand spaces"],
+      ["Brand Fact", "The four-letter shape is useful for a precise personal mark or developer identity"]
+    ],
+    source: "https://en.wikipedia.org/wiki/Yegor",
+    sourceLabel: "Reference"
+  },
+  alexander: {
+    title: "Alexander: Greek name associated with defender of men",
+    copy: "Alexander comes from Greek roots commonly understood as defender of men or protector of people. It has major historical weight through figures such as Alexander the Great, which gives the name authority, ambition, and classical scale. As a brand, it feels more premium and institutional than playful.",
+    facts: [
+      ["Origin", "Greek"],
+      ["Language", "Greek"],
+      ["Historical Meaning", "Defender of men or protector of people"],
+      ["Cultural Significance", "A long-standing royal, historical, and international given name"],
+      ["Famous / Notable References", "Strong association with Alexander the Great and many public figures across history"],
+      ["Brand Fact", "Best used with a monogram or shortened handle so the full name keeps its authority without becoming heavy"]
+    ],
+    source: "https://en.wikipedia.org/wiki/Alexander",
+    sourceLabel: "Reference"
+  },
+  diana: {
+    title: "Diana: Roman name associated with moon and hunt mythology",
+    copy: "Diana is strongly associated with Roman mythology, especially the goddess of the hunt, the moon, nature, and protection. The name carries elegance, independence, and a luminous historical quality. As a brand, it can feel refined, feminine, timeless, and emotionally polished.",
+    facts: [
+      ["Origin", "Roman / Latin"],
+      ["Language", "Latin"],
+      ["Historical Meaning", "Associated with the Roman goddess Diana, linked to the moon, hunt, nature, and protection"],
+      ["Cultural Significance", "A classical mythological name with elegant, independent, and luminous associations"],
+      ["Famous / Notable References", "Known through Roman mythology and many modern public figures with the name"],
+      ["Brand Fact", "Best suited for a refined visual identity using lunar geometry, elegant type, and soft contrast"]
+    ],
+    source: "https://en.wikipedia.org/wiki/Diana_(name)",
+    sourceLabel: "Reference"
+  },
+  sophia: createHistoryRecord("Sophia", "Greek", "Greek", "wisdom", "A classical international name with philosophical and elegant associations.", "The meaning supports an intelligent, refined, and trustworthy personal brand."),
+  muhammad: createHistoryRecord("Muhammad", "Arabic", "Arabic", "praiseworthy or praised", "One of the most widely used names in the world, with major Islamic historical and cultural significance.", "The name carries dignity, recognition, and a strong public trust signal."),
+  ahmed: createHistoryRecord("Ahmed", "Arabic", "Arabic", "highly praised or one who thanks God", "A major Arabic name used across Muslim communities and many regions.", "Works well for a calm, respected, and professional identity."),
+  aaliyah: createHistoryRecord("Aaliyah", "Arabic / Hebrew usage", "Arabic / Hebrew", "high, exalted, or ascending", "A name with graceful upward meaning and strong modern recognition.", "The upward meaning is useful for a premium growth, creator, or wellness identity."),
+  maria: createHistoryRecord("Maria", "Latin / Greek form of Mary", "Latin / Greek / Hebrew tradition", "often connected to Mary; exact ancient meaning is debated", "A deeply international name with Christian, European, and global cultural presence.", "Feels human, trusted, classic, and adaptable across many industries."),
+  anna: createHistoryRecord("Anna", "Hebrew through Greek and Latin tradition", "Hebrew / Greek / Latin", "grace or favor", "A widely used international name with a simple, balanced shape.", "The symmetry and gentle meaning support a clean, warm, premium identity."),
+  john: createHistoryRecord("John", "Hebrew through Greek and Latin tradition", "Hebrew / Greek / Latin", "God is gracious", "A classic international name with major religious, historical, and cultural depth.", "Best branded through specificity, because the name is trusted but very common."),
+  ivan: createHistoryRecord("Ivan", "Slavic form of John", "Slavic", "God is gracious", "A strong Slavic form used across Eastern Europe and beyond.", "Feels concise, direct, and more distinctive than John in English-language branding."),
+  elena: createHistoryRecord("Elena", "Greek / Romance / Slavic usage", "Greek-derived", "bright, shining, or torch-like", "A graceful international form connected to Helen and Helena.", "The light meaning supports elegant visuals, editorial layouts, and refined creator branding."),
+  victor: createHistoryRecord("Victor", "Latin", "Latin", "winner or conqueror", "A strong Roman name that communicates success and resilience.", "The meaning gives immediate strategic, athletic, or founder-brand energy."),
+  victoria: createHistoryRecord("Victoria", "Latin", "Latin", "victory", "A royal and classical name associated with triumph, power, and historic elegance.", "Strong fit for premium, leadership, and achievement-led identity systems."),
+  zayn: createHistoryRecord("Zayn", "Arabic", "Arabic", "beauty, grace, or adornment", "A short Arabic name with modern global recognition and stylish sound.", "The compact Z opening gives it fashion, creator, and music-brand potential."),
+  noah: createHistoryRecord("Noah", "Hebrew", "Hebrew", "rest or comfort", "A biblical name with a soft, widely recognized international profile.", "The calm meaning works well for wellness, storytelling, education, and founder identity."),
+  olivia: createHistoryRecord("Olivia", "Latin literary usage", "Latin", "connected to olive or olive tree", "A graceful name popularized through literature and modern global usage.", "The olive association can become a visual story around peace, growth, and elegance."),
+  emma: createHistoryRecord("Emma", "Germanic", "Germanic", "whole or universal", "A concise international name with soft sound and broad familiarity.", "The simple shape needs a strong visual motif to stand apart from other familiar first names."),
+  david: createHistoryRecord("David", "Hebrew", "Hebrew", "beloved", "A historic biblical and royal name used across many cultures.", "The meaning creates a warm trust signal, while the commonness requires precise positioning."),
+  michael: createHistoryRecord("Michael", "Hebrew", "Hebrew", "who is like God?", "A classic biblical name with major international usage and strong historical presence.", "Feels established and reliable, best with a modern visual system to avoid feeling generic."),
+  xochitl: createHistoryRecord("Xochitl", "Nahuatl", "Nahuatl", "flower", "A culturally distinctive Indigenous Mexican name with botanical meaning and strong visual potential.", "The flower meaning can become an elegant symbol system without making the identity feel generic or decorative."),
+  fatima: createHistoryRecord("Fatima", "Arabic", "Arabic", "one who abstains or weans", "A deeply significant Arabic name with major Islamic cultural and historical presence.", "Works well for a respected, graceful, trust-led identity."),
+  aisha: createHistoryRecord("Aisha", "Arabic", "Arabic", "alive or living", "A widely used Arabic name with strong historical recognition in Islamic tradition.", "The living meaning supports warm, energetic, creator-led branding."),
+  omar: createHistoryRecord("Omar", "Arabic", "Arabic", "flourishing, long-lived, or eloquent", "A concise Arabic name used across many cultures and public figures.", "The short shape and mature sound make it strong for professional or founder branding."),
+  ali: createHistoryRecord("Ali", "Arabic", "Arabic", "high, elevated, or noble", "A short name with major Arabic and Islamic historical significance.", "The three-letter form is excellent for a monogram but needs distinctive positioning because it is common."),
+  yusuf: createHistoryRecord("Yusuf", "Arabic / Hebrew tradition", "Arabic / Hebrew", "God increases", "A major cross-cultural form related to Joseph, used widely in Muslim communities and beyond.", "The softer sound and long history make it useful for trustworthy personal branding."),
+  jose: createHistoryRecord("Jose", "Spanish and Portuguese form of Joseph", "Spanish / Portuguese / Hebrew tradition", "God increases", "A very familiar name across Spanish- and Portuguese-speaking cultures.", "The brand should add a precise category signal so the familiarity becomes trust rather than blandness."),
+  diego: createHistoryRecord("Diego", "Spanish", "Spanish", "meaning debated; often connected to James, Jacob, or teaching traditions", "A strong Spanish name with energetic, artistic, and international recognition.", "The open ending gives it movement, making it useful for creator, sports, or founder identity."),
+  mateo: createHistoryRecord("Mateo", "Spanish form of Matthew", "Spanish / Hebrew tradition", "gift of God", "A warm international name with biblical roots and modern popularity.", "The vowel rhythm makes it approachable and excellent for personal storytelling."),
+  carlos: createHistoryRecord("Carlos", "Spanish and Portuguese form of Charles", "Spanish / Portuguese / Germanic tradition", "free man", "A classic Iberian and Latin American name with broad professional familiarity.", "Works well when paired with a sharp specialty, because the base name is trusted and familiar."),
+  isabella: createHistoryRecord("Isabella", "Romance-language form of Elizabeth", "Italian / Spanish / Hebrew tradition", "pledged to God or God is abundance", "A graceful royal and literary name with premium emotional tone.", "Best suited to elegant typography, storytelling, and lifestyle or founder branding."),
+  priya: createHistoryRecord("Priya", "Sanskrit", "Sanskrit / Indian usage", "beloved or dear", "A warm South Asian name with affectionate meaning and broad cultural recognition.", "The meaning gives it immediate emotional warmth for creator, wellness, and people-centered brands."),
+  arjun: createHistoryRecord("Arjun", "Sanskrit", "Sanskrit / Indian usage", "bright, white, or shining", "A major Indian name strongly associated with the heroic figure Arjuna from the Mahabharata.", "The heroic association supports a bold, disciplined, achievement-led identity."),
+  sakura: createHistoryRecord("Sakura", "Japanese", "Japanese", "cherry blossom", "A Japanese name and symbol connected to beauty, seasonality, impermanence, and renewal.", "The visual system can use delicate contrast and seasonal motion while staying modern."),
+  mei: createHistoryRecord("Mei", "Chinese and Japanese usage", "Chinese / Japanese", "often connected to beauty, plum blossom, or brightness depending on characters", "A very compact East Asian name where meaning depends on written characters.", "Because the name is short, the logo should rely on spacing, mark design, and a clear cultural context."),
+  kai: createHistoryRecord("Kai", "Multicultural", "Hawaiian / Japanese / Chinese / Germanic and other uses", "meaning varies by culture; often associated with sea in Hawaiian", "A short global name with different meanings across languages and regions.", "The name feels modern and flexible, but the brand should choose one cultural story carefully.")
+};
 
-    try {
-      const endpoint = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
-      const response = await fetch(endpoint, { signal: controller.signal });
-      window.clearTimeout(timeout);
-      if (!response.ok) continue;
-      const data = await response.json();
-      if (!data.extract || data.type === "disambiguation") continue;
+function createHistoryRecord(name, origin, language, meaning, culture, brandFact) {
+  return {
+    title: `${name}: ${origin} name intelligence`,
+    copy: `${name} is commonly connected to ${origin} naming history, with a meaning often given as ${meaning}. ${culture} As a brand, it should turn that background into a specific visual and storytelling angle rather than relying only on familiarity.`,
+    facts: [
+      ["Origin", origin],
+      ["Language", language],
+      ["Historical Meaning", meaning],
+      ["Cultural Significance", culture],
+      ["Brand Fact", brandFact]
+    ],
+    source: `https://en.wikipedia.org/wiki/${encodeURIComponent(name)}_(given_name)`,
+    sourceLabel: "Reference"
+  };
+}
 
-      return {
-        title: data.title || `${firstWord} history`,
-        copy: `${data.extract} ${fallback ? fallback.copy : ""}`.trim(),
-        facts: fallback?.facts || [
-          ["Origin", "Live encyclopedia summary found"],
-          ["Language", "Review the linked source for exact linguistic details"],
-          ["Meaning", "Extracted from the available historical summary"],
-          ["Cultural Signal", "Useful for checking whether the name has existing public meaning"],
-          ["Famous / Notable References", data.description || "See the linked source for notable people and references"]
-        ],
-        source: data.content_urls?.desktop?.page || endpoint,
-        sourceLabel: "Wikipedia source"
-      };
-    } catch (error) {
-      window.clearTimeout(timeout);
-      continue;
+function normalizeNameKey(value) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+}
+
+function getPrimaryNamePart(name) {
+  return String(name || "").trim().split(/[\s_-]+/).filter(Boolean)[0] || "";
+}
+
+function uniqueValues(values) {
+  return [...new Set(values.filter(Boolean))];
+}
+
+function getNameCandidates(name) {
+  const firstWord = getPrimaryNamePart(name);
+  const normalized = normalizeNameKey(firstWord);
+  const candidates = [firstWord, normalized];
+  const variants = NAME_VARIANTS[normalized] || [];
+
+  candidates.push(...variants);
+  Object.entries(NAME_VARIANTS).forEach(([base, baseVariants]) => {
+    if (baseVariants.includes(normalized)) {
+      candidates.push(base);
+    }
+  });
+
+  if (normalized.includes("ph")) candidates.push(normalized.replace(/ph/g, "f"));
+  if (normalized.includes("f")) candidates.push(normalized.replace(/f/g, "ph"));
+  if (normalized.includes("ks")) candidates.push(normalized.replace(/ks/g, "x"));
+  if (normalized.includes("x")) candidates.push(normalized.replace(/x/g, "ks"));
+  if (normalized.endsWith("y")) candidates.push(`${normalized.slice(0, -1)}i`);
+  if (normalized.endsWith("i")) candidates.push(`${normalized.slice(0, -1)}y`);
+  candidates.push(normalized.replace(/(.)\1+/g, "$1"));
+
+  return uniqueValues(candidates.map((candidate) => normalizeNameKey(candidate)));
+}
+
+function getFallbackHistory(name) {
+  const candidates = getNameCandidates(name);
+  for (const candidate of candidates) {
+    if (NAME_HISTORY_DATA[candidate]) {
+      return cloneHistoryRecord(NAME_HISTORY_DATA[candidate], name, candidate);
     }
   }
 
-  return fallback || {
-    title: `${firstWord} origin research`,
-    copy: `No reliable live source was reachable for ${firstWord}. Treat this as a brand-first analysis: the name should be validated through name dictionaries, cultural sources, and trademark research before being used professionally.`,
+  return null;
+}
+
+function cloneHistoryRecord(record, requestedName, matchedKey) {
+  const requested = getPrimaryNamePart(requestedName);
+  const facts = record.facts.map(([label, text]) => [label, text]);
+
+  if (normalizeNameKey(requested) !== matchedKey) {
+    facts.push(["Variant Match", `${requested} was matched to the related form ${matchedKey}. Treat the origin as a close linguistic signal, not a guaranteed exact etymology.`]);
+  }
+
+  return {
+    ...record,
+    facts
+  };
+}
+
+function isLikelyNameSummary(data, candidate) {
+  const haystack = `${data.title || ""} ${data.description || ""} ${data.extract || ""}`.toLowerCase();
+  const key = normalizeNameKey(candidate);
+  return Boolean(data.extract)
+    && data.type !== "disambiguation"
+    && (
+      haystack.includes("given name")
+      || haystack.includes("surname")
+      || haystack.includes("name")
+      || normalizeNameKey(data.title).includes(key)
+    );
+}
+
+async function fetchWithTimeout(endpoint, timeoutMs = 1700) {
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(endpoint, { signal: controller.signal });
+    window.clearTimeout(timeout);
+    if (!response.ok) return null;
+    return response.json();
+  } catch (error) {
+    window.clearTimeout(timeout);
+    return null;
+  }
+}
+
+async function fetchWikipediaSummary(query, candidate, fallback) {
+  const endpoint = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
+  const data = await fetchWithTimeout(endpoint);
+
+  if (!data || !isLikelyNameSummary(data, candidate)) {
+    return null;
+  }
+
+  return {
+    title: data.title || `${candidate} history`,
+    copy: `${data.extract} ${fallback ? fallback.copy : ""}`.trim(),
+    facts: fallback?.facts || [
+      ["Origin", "Live encyclopedia summary found"],
+      ["Language", "See the linked source for exact linguistic details"],
+      ["Historical Meaning", "Extracted from the available historical summary"],
+      ["Cultural Significance", "Useful for checking whether the name has existing public meaning"],
+      ["Famous / Notable References", data.description || "See the linked source for notable people and references"]
+    ],
+    source: data.content_urls?.desktop?.page || endpoint,
+    sourceLabel: "Wikipedia source"
+  };
+}
+
+async function fetchWikipediaSearchTitles(candidate) {
+  const endpoint = `https://en.wikipedia.org/w/api.php?action=opensearch&namespace=0&limit=6&format=json&origin=*&search=${encodeURIComponent(`${candidate} given name`)}`;
+  const data = await fetchWithTimeout(endpoint);
+  const titles = Array.isArray(data?.[1]) ? data[1] : [];
+  return titles.filter((title) => /name|given|surname/i.test(title) || normalizeNameKey(title).includes(candidate));
+}
+
+async function fetchWikidataNameRecord(candidate) {
+  const endpoint = `https://www.wikidata.org/w/api.php?action=wbsearchentities&language=en&format=json&origin=*&limit=6&search=${encodeURIComponent(candidate)}`;
+  const data = await fetchWithTimeout(endpoint);
+  const records = Array.isArray(data?.search) ? data.search : [];
+  const match = records.find((record) => {
+    const text = `${record.label || ""} ${record.description || ""} ${(record.aliases || []).join(" ")}`.toLowerCase();
+    return normalizeNameKey(record.label).includes(candidate) && /given name|family name|surname|name/i.test(text);
+  });
+
+  if (!match) return null;
+
+  return {
+    title: `${match.label}: name record found`,
+    copy: `Wikidata has a name-related record for ${match.label}. The available description is "${match.description || "name record"}"; use this as a live evidence signal alongside the brand analysis, especially if the exact origin is not fully documented in a short public summary.`,
     facts: [
-      ["Origin", "Not confirmed from a live source"],
-      ["Language", "Unknown"],
-      ["Meaning", "Needs source validation"],
-      ["Cultural Signal", "Check name dictionaries and cultural references before final branding"],
-      ["Interesting Fact", "A unique brand can still work if the story and visual identity are strong"]
+      ["Origin", "Matched in a live name record"],
+      ["Language", "See Wikidata record for language and regional details"],
+      ["Historical Meaning", match.description || "Name record found, meaning requires deeper validation"],
+      ["Cultural Significance", "The name appears in a structured public knowledge base, which helps confirm it is not just an invented handle"],
+      ["Variant / Alias Signal", (match.aliases || []).slice(0, 4).join(", ") || "No aliases listed in the short search result"]
+    ],
+    source: match.concepturi || "",
+    sourceLabel: "Wikidata source"
+  };
+}
+
+function getLevenshteinDistance(a, b) {
+  const matrix = Array.from({ length: a.length + 1 }, (_, index) => [index]);
+  for (let column = 1; column <= b.length; column += 1) matrix[0][column] = column;
+
+  for (let row = 1; row <= a.length; row += 1) {
+    for (let column = 1; column <= b.length; column += 1) {
+      const cost = a[row - 1] === b[column - 1] ? 0 : 1;
+      matrix[row][column] = Math.min(
+        matrix[row - 1][column] + 1,
+        matrix[row][column - 1] + 1,
+        matrix[row - 1][column - 1] + cost
+      );
+    }
+  }
+
+  return matrix[a.length][b.length];
+}
+
+function getFuzzyFallbackHistory(name) {
+  const key = normalizeNameKey(getPrimaryNamePart(name));
+  if (!key || key.length < 3) return null;
+
+  const searchable = Object.keys(NAME_HISTORY_DATA).flatMap((base) => [base, ...(NAME_VARIANTS[base] || [])].map((variant) => [base, variant]));
+  let best = null;
+
+  searchable.forEach(([base, variant]) => {
+    const distance = getLevenshteinDistance(key, normalizeNameKey(variant));
+    const limit = key.length <= 6 ? 1 : 2;
+    if (distance <= limit && (!best || distance < best.distance)) {
+      best = { base, variant, distance };
+    }
+  });
+
+  if (!best) return null;
+
+  const record = cloneHistoryRecord(NAME_HISTORY_DATA[best.base], name, best.base);
+  return {
+    ...record,
+    title: `${getPrimaryNamePart(name)}: closest historical match found`,
+    copy: `${getPrimaryNamePart(name)} did not return a perfect public-source match, but it is close to ${best.variant}, a known related form. ${record.copy}`,
+    facts: [
+      ["Match Confidence", best.distance === 0 ? "High variant match" : "Estimated fuzzy match"],
+      ["Closest Form", best.variant],
+      ...record.facts
+    ]
+  };
+}
+
+function estimateNameHistory(name) {
+  const firstWord = getPrimaryNamePart(name);
+  const key = normalizeNameKey(firstWord);
+  const hasNumbers = /\d/.test(firstWord);
+  const signals = [];
+
+  if (/^(xoch|itz|citl)/.test(key) || /(tl|tzin)$/.test(key)) {
+    signals.push(["Origin", "Estimated Nahuatl or Indigenous Mexican naming signal"], ["Language", "Likely Nahuatl-influenced"], ["Historical Meaning", "May connect to nature, place, or cultural symbolism; validate exact spelling and meaning"]);
+  } else if (/^(abd|abu|ras|muh|moh|ahm|ali|omar|zay|aali|fatim|aish|yus)/.test(key)) {
+    signals.push(["Origin", "Estimated Arabic / Islamic naming signal"], ["Language", "Likely Arabic-influenced"], ["Historical Meaning", "Meaning should be validated against Arabic name dictionaries"]);
+  } else if (/^(priy|arjun|ravi|dev|anaya)/.test(key)) {
+    signals.push(["Origin", "Estimated Sanskrit / South Asian naming signal"], ["Language", "Likely Sanskrit or Indian-language influence"], ["Historical Meaning", "May connect to virtue, light, devotion, or epic naming traditions; validate the exact form"]);
+  } else if (/^(sakur|hiro|yuki|mei|kai)/.test(key)) {
+    signals.push(["Origin", "Estimated East Asian naming signal"], ["Language", "Likely Japanese, Chinese, or regional East Asian influence"], ["Historical Meaning", "Meaning may depend on written characters, so exact confirmation is important"]);
+  } else if (/(mir|slav|vlad|igor|egor|yev|yevgen|nik|ov)$/.test(key)) {
+    signals.push(["Origin", "Estimated Slavic or Eastern European signal"], ["Language", "Likely Slavic-influenced"], ["Historical Meaning", "May connect to older regional naming roots; validate exact form"]);
+  } else if (/(el|iel|iah)$/.test(key)) {
+    signals.push(["Origin", "Estimated Hebrew / biblical-style signal"], ["Language", "Likely Hebrew-influenced"], ["Historical Meaning", "Names with this structure often carry religious or virtue-based meanings"]);
+  } else if (/(a|ia|ina|ella)$/.test(key)) {
+    signals.push(["Origin", "Estimated Latin, Romance, Slavic, or international feminine-name signal"], ["Language", "Likely cross-cultural European usage"], ["Historical Meaning", "Soft ending suggests an established given-name pattern, but exact meaning needs validation"]);
+  } else if (/(o|io|ino)$/.test(key)) {
+    signals.push(["Origin", "Estimated Romance, Spanish, Italian, or nickname-style signal"], ["Language", "Likely Romance-language influence"], ["Historical Meaning", "May be a short form, affectionate form, or regional variant"]);
+  } else {
+    signals.push(["Origin", hasNumbers ? "Digital alias or modern handle signal" : "Estimated modern personal-name signal"], ["Language", "Not enough public data for a confident language assignment"], ["Historical Meaning", "No exact meaning confirmed; analysis is based on sound, structure, and naming patterns"]);
+  }
+
+  return {
+    title: `${firstWord}: estimated name intelligence`,
+    copy: `${firstWord} does not have a strong exact public-source match in the quick live lookup, so BrandScan AI is using linguistic pattern analysis, spelling structure, sound, and related-name behavior. This is still useful for branding: the name's ${key.length}-character shape, ${/[aeiouy]/.test(key.slice(-1)) ? "open ending" : "firm ending"}, and ${/[xzqvk]/.test(key) ? "sharper consonant profile" : "softer sound profile"} give it a specific identity direction even when historical data is limited.`,
+    facts: [
+      ...signals,
+      ["Confidence", "Estimated, not a verified etymology"],
+      ["Cultural Significance", "Use this as a branding read; validate with cultural and linguistic sources before making formal claims"],
+      ["Brand Fact", hasNumbers ? "The numeric detail makes it feel more like a chosen internet identity than a traditional given name" : "The absence of a dominant public meaning can be an advantage if the visual identity creates a clear story"]
     ],
     source: "",
     sourceLabel: ""
   };
 }
 
-function getFallbackHistory(name) {
-  const key = name.toLowerCase();
-  const known = {
-    rasul: {
-      title: "Rasul: Arabic name meaning Messenger",
-      copy: "Rasul comes from Arabic and is commonly understood as Messenger or Apostle. In Islamic language and history, rasul carries deep cultural and religious significance because it refers to a divinely sent messenger. As a personal brand, the meaning gives the name a serious, mission-driven feeling connected to communication, leadership, and purpose.",
-      facts: [
-        ["Origin", "Arabic"],
-        ["Language", "Arabic"],
-        ["Historical Meaning", "Messenger or Apostle"],
-        ["Cultural Significance", "Strong religious and historical association with a divinely sent messenger in Islamic context"],
-        ["Famous / Notable References", "Used as a given name and surname in Muslim communities; verify specific public figures from the linked reference before using them in brand copy"],
-        ["Brand Fact", "The meaning supports a mission-driven identity built around communication, guidance, and trust"]
-      ],
-      source: "https://en.wikipedia.org/wiki/Rasul_(name)",
-      sourceLabel: "Reference"
-    },
-    nacho: {
-      title: "Nacho: Spanish nickname with warm personality",
-      copy: "Nacho is widely used as a Spanish nickname for Ignacio. It feels casual, friendly, and memorable, with strong social and creator-brand potential. The sound is playful and quick to say, which makes it useful for gaming, food, entertainment, and personal content brands.",
-      facts: [
-        ["Origin", "Spanish nickname"],
-        ["Language", "Spanish"],
-        ["Historical Meaning", "Common short form of Ignacio"],
-        ["Cultural Significance", "Friendly, informal, and familiar in Spanish-speaking contexts"],
-        ["Famous / Notable References", "Often appears as a nickname and is also widely recognized through food and pop culture references"],
-        ["Interesting Fact", "Its playful sound gives it strong nickname and social-handle energy"]
-      ],
-      source: "https://en.wikipedia.org/wiki/Nacho",
-      sourceLabel: "Reference"
-    },
-    egor: {
-      title: "Egor: Slavic form connected to George",
-      copy: "Egor is commonly associated with Russian and Slavic usage and is related to the name George, often interpreted through the older meaning of farmer or earth-worker. As a brand, Egor feels compact, direct, and distinctive in English-language contexts, which can help a personal site feel memorable without sounding invented.",
-      facts: [
-        ["Origin", "Russian and Slavic usage"],
-        ["Language", "Russian / Slavic"],
-        ["Historical Meaning", "Related to George, often connected with farmer or earth-worker"],
-        ["Cultural Significance", "Recognizable as a real given name while feeling uncommon in many English-language brand spaces"],
-        ["Brand Fact", "The four-letter shape is useful for a precise personal mark or developer identity"]
-      ],
-      source: "https://en.wikipedia.org/wiki/Yegor",
-      sourceLabel: "Reference"
-    },
-    alexander: {
-      title: "Alexander: Greek name associated with defender of men",
-      copy: "Alexander comes from Greek roots commonly understood as defender of men or protector of people. It has major historical weight through figures such as Alexander the Great, which gives the name authority, ambition, and classical scale. As a brand, it feels more premium and institutional than playful.",
-      facts: [
-        ["Origin", "Greek"],
-        ["Language", "Greek"],
-        ["Historical Meaning", "Defender of men or protector of people"],
-        ["Cultural Significance", "A long-standing royal, historical, and international given name"],
-        ["Famous / Notable References", "Strong association with Alexander the Great and many public figures across history"],
-        ["Brand Fact", "Best used with a monogram or shortened handle so the full name keeps its authority without becoming heavy"]
-      ],
-      source: "https://en.wikipedia.org/wiki/Alexander",
-      sourceLabel: "Reference"
-    },
-    diana: {
-      title: "Diana: Roman name associated with moon and hunt mythology",
-      copy: "Diana is strongly associated with Roman mythology, especially the goddess of the hunt, the moon, nature, and protection. The name carries elegance, independence, and a luminous historical quality. As a brand, it can feel refined, feminine, timeless, and emotionally polished.",
-      facts: [
-        ["Origin", "Roman / Latin"],
-        ["Language", "Latin"],
-        ["Historical Meaning", "Associated with the Roman goddess Diana, linked to the moon, hunt, nature, and protection"],
-        ["Cultural Significance", "A classical mythological name with elegant, independent, and luminous associations"],
-        ["Famous / Notable References", "Known through Roman mythology and many modern public figures with the name"],
-        ["Brand Fact", "Best suited for a refined visual identity using lunar geometry, elegant type, and soft contrast"]
-      ],
-      source: "https://en.wikipedia.org/wiki/Diana_(name)",
-      sourceLabel: "Reference"
-    }
-  };
+async function fetchHistory(name) {
+  const firstWord = getPrimaryNamePart(name);
+  const candidates = getNameCandidates(firstWord);
+  const fallback = getFallbackHistory(firstWord);
 
-  return known[key] || null;
+  for (const candidate of candidates) {
+    const queries = [`${candidate} (given name)`, `${candidate} (name)`, candidate];
+    for (const query of queries) {
+      const summary = await fetchWikipediaSummary(query, candidate, fallback);
+      if (summary) return summary;
+    }
+  }
+
+  for (const candidate of candidates) {
+    const titles = await fetchWikipediaSearchTitles(candidate);
+    for (const title of titles) {
+      const summary = await fetchWikipediaSummary(title, candidate, fallback);
+      if (summary) return summary;
+    }
+  }
+
+  for (const candidate of candidates) {
+    const wikidataRecord = await fetchWikidataNameRecord(candidate);
+    if (wikidataRecord) return fallback ? { ...wikidataRecord, copy: `${wikidataRecord.copy} ${fallback.copy}`, facts: fallback.facts } : wikidataRecord;
+  }
+
+  return fallback || getFuzzyFallbackHistory(firstWord) || estimateNameHistory(firstWord);
 }
 
 async function makeBrandProfile(name) {

@@ -1,9 +1,6 @@
 window.addEventListener("load", () => {
   const intro = document.querySelector(".cinematic-intro");
   initLiveNumbers();
-  initButtonAnalytics();
-  initSectionAnalytics();
-  initAnalyticsHeartbeat();
 
   if (intro) {
     window.setTimeout(() => {
@@ -39,8 +36,7 @@ const liveNumbersState = {
   metrics: null,
   factIndex: 0,
   factTimer: null,
-  supabase: null,
-  sessionId: null
+  supabase: null
 };
 
 function cleanBrandName(value) {
@@ -65,55 +61,14 @@ function getSupabaseClient() {
   return liveNumbersState.supabase;
 }
 
-function getSessionId() {
-  if (liveNumbersState.sessionId) return liveNumbersState.sessionId;
-
-  try {
-    const existing = window.sessionStorage.getItem("brandscanSessionId");
-    if (existing) {
-      liveNumbersState.sessionId = existing;
-      return existing;
-    }
-
-    const next = window.crypto?.randomUUID ? window.crypto.randomUUID() : `session-${Date.now()}`;
-    window.sessionStorage.setItem("brandscanSessionId", next);
-    liveNumbersState.sessionId = next;
-    return next;
-  } catch (error) {
-    liveNumbersState.sessionId = `session-${Date.now()}`;
-    return liveNumbersState.sessionId;
-  }
-}
-
-function getDeviceType() {
-  if (window.matchMedia("(max-width: 760px)").matches) return "mobile";
-  if (window.matchMedia("(max-width: 1040px)").matches) return "tablet";
-  return "desktop";
-}
-
-function getBrowserName() {
-  const agent = navigator.userAgent;
-  if (/Edg\//.test(agent)) return "Edge";
-  if (/Chrome\//.test(agent) && !/Chromium/.test(agent)) return "Chrome";
-  if (/Safari\//.test(agent) && !/Chrome\//.test(agent)) return "Safari";
-  if (/Firefox\//.test(agent)) return "Firefox";
-  return "Unknown";
-}
-
 function getDateRange() {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const yesterday = new Date(today);
-  yesterday.setDate(today.getDate() - 1);
   const tomorrow = new Date(today);
   tomorrow.setDate(today.getDate() + 1);
-  const weekStart = new Date(today);
-  weekStart.setDate(today.getDate() - today.getDay());
-  const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
   const lastHour = new Date(now.getTime() - 60 * 60 * 1000);
-  const onlineWindow = new Date(now.getTime() - 5 * 60 * 1000);
 
-  return { now, today, yesterday, tomorrow, weekStart, monthStart, lastHour, onlineWindow };
+  return { now, today, tomorrow, lastHour };
 }
 
 async function trackAnalyticsEvent(eventType, details = {}) {
@@ -123,12 +78,7 @@ async function trackAnalyticsEvent(eventType, details = {}) {
   await client.from("analytics_events").insert({
     event_type: eventType,
     name_input: details.nameInput || null,
-    page_url: details.pageUrl || window.location.href,
-    session_id: getSessionId(),
-    device_type: getDeviceType(),
-    browser: getBrowserName(),
-    country: null,
-    city: null
+    page_url: details.pageUrl || window.location.href
   });
 }
 
@@ -162,19 +112,11 @@ function getMostCommon(rows, key) {
 async function fetchLiveMetrics() {
   const client = getSupabaseClient();
   const emptyMetrics = {
-    totalVisits: 0,
-    visitsToday: 0,
-    visitsYesterday: 0,
-    visitsWeek: 0,
-    visitsMonth: 0,
     totalAnalyses: 0,
     analysesToday: 0,
     analysesLastHour: 0,
-    onlineNow: 0,
     topName: "None yet",
     topNameCount: 0,
-    topPage: "None yet",
-    topPageCount: 0,
     configured: Boolean(client)
   };
 
@@ -182,49 +124,25 @@ async function fetchLiveMetrics() {
 
   const range = getDateRange();
   const [
-    totalVisits,
-    visitsToday,
-    visitsYesterday,
-    visitsWeek,
-    visitsMonth,
     totalAnalyses,
     analysesToday,
     analysesLastHour,
-    recentSessions,
-    nameRows,
-    pageRows
+    nameRows
   ] = await Promise.all([
-    countEvents("page_view"),
-    countEvents("page_view", range.today, range.tomorrow),
-    countEvents("page_view", range.yesterday, range.today),
-    countEvents("page_view", range.weekStart),
-    countEvents("page_view", range.monthStart),
     countEvents("name_analysis"),
     countEvents("name_analysis", range.today, range.tomorrow),
     countEvents("name_analysis", range.lastHour),
-    client.from("analytics_events").select("session_id").gte("created_at", range.onlineWindow.toISOString()),
-    client.from("analytics_events").select("name_input").eq("event_type", "name_analysis").not("name_input", "is", null).limit(1000),
-    client.from("analytics_events").select("page_url").in("event_type", ["page_view", "section_view"]).limit(1000)
+    client.from("analytics_events").select("name_input").eq("event_type", "name_analysis").not("name_input", "is", null).limit(1000)
   ]);
 
-  const onlineSessions = recentSessions.error ? [] : [...new Set((recentSessions.data || []).map((row) => row.session_id).filter(Boolean))];
   const [topName, topNameCount] = getMostCommon(nameRows.error ? [] : nameRows.data || [], "name_input");
-  const [topPage, topPageCount] = getMostCommon(pageRows.error ? [] : pageRows.data || [], "page_url");
 
   return {
-    totalVisits,
-    visitsToday,
-    visitsYesterday,
-    visitsWeek,
-    visitsMonth,
     totalAnalyses,
     analysesToday,
     analysesLastHour,
-    onlineNow: onlineSessions.length,
     topName: topName || "None yet",
     topNameCount,
-    topPage: topPage ? new URL(topPage).hash || new URL(topPage).pathname || "/" : "None yet",
-    topPageCount,
     configured: true
   };
 }
@@ -233,33 +151,19 @@ function getHumanComparison(key, value, metrics) {
   if (!metrics.configured) return "Connect Supabase to begin tracking real analytics.";
   if (!value || value === "None yet") {
     const empty = {
-      totalVisits: "No real visits tracked yet.",
-      visitsToday: "No real visits tracked today.",
-      visitsYesterday: "No real visits tracked yesterday.",
-      visitsWeek: "No real visits tracked this week.",
-      visitsMonth: "No real visits tracked this month.",
       totalAnalyses: "0 names analyzed on this website.",
       analysesToday: "0 names analyzed today.",
       analysesLastHour: "0 names analyzed in the last hour.",
-      onlineNow: "No active sessions detected right now.",
-      topName: "No names searched on this website yet.",
-      topPage: "No page activity tracked yet."
+      topName: "No names searched on this website yet."
     };
     return empty[key] || "No real analytics tracked yet.";
   }
 
   const copy = {
-    totalVisits: `${formatNumber(value)} real page views have been recorded from this website.`,
-    visitsToday: `${formatNumber(value)} real visits have happened today on RasulTech.`,
-    visitsYesterday: `${formatNumber(value)} real visits were tracked yesterday.`,
-    visitsWeek: `${formatNumber(value)} real visits have been tracked this week.`,
-    visitsMonth: `${formatNumber(value)} real visits have been tracked this month.`,
     totalAnalyses: `${formatNumber(value)} real name analyses have been generated here.`,
     analysesToday: `${formatNumber(value)} names have been analyzed today.`,
     analysesLastHour: `${formatNumber(value)} analyses were created in the last hour.`,
-    onlineNow: `${formatNumber(value)} active session${value === 1 ? "" : "s"} detected in the last five minutes.`,
-    topName: `${metrics.topName} has been searched ${formatNumber(metrics.topNameCount)} time${metrics.topNameCount === 1 ? "" : "s"}.`,
-    topPage: `${metrics.topPage} is the most visited tracked page or section.`
+    topName: `${metrics.topName} has been searched ${formatNumber(metrics.topNameCount)} time${metrics.topNameCount === 1 ? "" : "s"}.`
   };
 
   return copy[key] || "Real analytics from this website.";
@@ -271,11 +175,10 @@ function getLiveFacts(metrics) {
   }
 
   const facts = [
-    `${formatNumber(metrics.totalVisits)} total real visits have been stored in analytics_events.`,
     `${formatNumber(metrics.totalAnalyses)} real name analyses have been generated on this website.`,
     metrics.topNameCount > 0 ? `${metrics.topName} is currently the most searched name on this website.` : "No searched names have been recorded yet.",
-    metrics.topPageCount > 0 ? `${metrics.topPage} is currently the most visited tracked page or section.` : "No page activity has been recorded yet.",
-    `${formatNumber(metrics.onlineNow)} people are currently online based on activity in the last five minutes.`
+    `${formatNumber(metrics.analysesToday)} names have been analyzed today.`,
+    `${formatNumber(metrics.analysesLastHour)} analyses were generated in the last hour.`
   ];
 
   return facts;
@@ -319,11 +222,6 @@ function renderLiveNumbers(metrics) {
     topNameElement.textContent = metrics.topName;
   }
 
-  const topPageElement = document.querySelector("[data-live-text='topPage']");
-  if (topPageElement) {
-    topPageElement.textContent = metrics.topPage;
-  }
-
   const facts = getLiveFacts(metrics);
   const factElement = document.querySelector("#live-fact");
   if (factElement) {
@@ -346,7 +244,6 @@ function renderLiveNumbers(metrics) {
 async function initLiveNumbers() {
   if (!document.querySelector(".live-numbers")) return;
 
-  await trackAnalyticsEvent("page_view");
   liveNumbersState.metrics = await fetchLiveMetrics();
   renderLiveNumbers(liveNumbersState.metrics);
 
@@ -366,43 +263,6 @@ async function refreshLiveNumbers() {
 async function recordLiveAnalysis(name) {
   await trackAnalyticsEvent("name_analysis", { nameInput: name });
   await refreshLiveNumbers();
-}
-
-function initButtonAnalytics() {
-  document.querySelectorAll("button, a").forEach((element) => {
-    element.addEventListener("click", () => {
-      const label = element.dataset.sample || element.textContent.trim() || element.getAttribute("href") || "unknown";
-      trackAnalyticsEvent("button_click", { nameInput: label.slice(0, 120) });
-    });
-  });
-}
-
-function initSectionAnalytics() {
-  if (!("IntersectionObserver" in window)) return;
-
-  const seenSections = new Set();
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting || entry.intersectionRatio < 0.45) return;
-      const id = entry.target.id || entry.target.getAttribute("aria-label");
-      if (!id || seenSections.has(id)) return;
-
-      seenSections.add(id);
-      trackAnalyticsEvent("section_view", {
-        pageUrl: `${window.location.origin}${window.location.pathname}#${id}`
-      });
-    });
-  }, { threshold: [0.45] });
-
-  document.querySelectorAll("section[id], section[aria-label]").forEach((section) => {
-    observer.observe(section);
-  });
-}
-
-function initAnalyticsHeartbeat() {
-  window.setInterval(() => {
-    trackAnalyticsEvent("heartbeat");
-  }, 60000);
 }
 
 function slugifyBrand(name) {
@@ -825,7 +685,7 @@ function buildVisualIdentity(name, traits, personality) {
       logo: `A ${first} monogram shaped like an open message mark, with a thin horizontal line suggesting delivery, guidance, or a transmitted signal`,
       logoReason: `The first letter can carry the identity alone, and the messenger meaning gives the symbol a reason to look directional rather than decorative.`,
       atmosphere: "Cinematic founder portfolio with a quiet origin panel, guided project cards, and a luminous message-line running through the page",
-      atmosphereReason: `The site should feel purposeful and calm, as if ${name} is guiding the visitor through a mission instead of simply showing projects.`
+      atmosphereReason: `The site should feel purposeful and calm, as if ${name} is guiding someone through a mission instead of simply showing projects.`
     },
     "distinctive-slavic": {
       paletteName: "Northern Forge",
@@ -895,7 +755,7 @@ function buildVisualIdentity(name, traits, personality) {
       logo: `A balanced emblem or grid-based ${first} monogram designed to look stable in proposals, slides, and website headers`,
       logoReason: `The name should project reliability, so symmetry and measured spacing matter more than decorative effects.`,
       atmosphere: "Premium consulting brand with calm proof blocks, case studies, muted motion, and strong trust signals",
-      atmosphereReason: `${name} should feel like a decision has already been organized before the visitor arrives.`
+      atmosphereReason: `${name} should feel like a decision has already been organized before the page is opened.`
     },
     "digital-alias": {
       paletteName: "Alias Code",

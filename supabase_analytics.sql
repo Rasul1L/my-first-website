@@ -5,13 +5,15 @@ create table if not exists public.analytics_events (
   event_type text not null,
   name_input text,
   page_url text,
-  session_id text,
-  device_type text,
-  browser text,
-  country text,
-  city text,
   created_at timestamptz not null default now()
 );
+
+alter table public.analytics_events
+  drop column if exists session_id,
+  drop column if exists device_type,
+  drop column if exists browser,
+  drop column if exists country,
+  drop column if exists city;
 
 create index if not exists analytics_events_event_type_idx
   on public.analytics_events (event_type);
@@ -24,9 +26,6 @@ create index if not exists analytics_events_name_input_idx
 
 create index if not exists analytics_events_page_url_idx
   on public.analytics_events (page_url);
-
-create index if not exists analytics_events_session_id_idx
-  on public.analytics_events (session_id);
 
 alter table public.analytics_events enable row level security;
 

@@ -3166,6 +3166,106 @@ button:hover {
   gap: 12px;
 }
 
+.life-date-picker {
+  display: grid;
+  gap: 14px;
+}
+
+.life-date-toolbar {
+  display: grid;
+  grid-template-columns: 1fr minmax(150px, 190px);
+  gap: 12px;
+  align-items: end;
+}
+
+.life-date-toolbar button {
+  margin: 0;
+  min-height: 54px;
+  text-align: left;
+}
+
+.life-year-jump label {
+  margin-bottom: 6px;
+  color: #94a3b8;
+  font-size: 0.68rem;
+}
+
+.life-picker-columns {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1.2fr;
+  gap: 12px;
+}
+
+.life-picker-columns > div {
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 8px;
+  padding: 10px;
+  background: rgba(2, 6, 23, 0.42);
+}
+
+.life-picker-columns > div > span {
+  display: block;
+  margin-bottom: 8px;
+  color: #fbbf24;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.life-year-grid,
+.life-month-grid,
+.life-day-grid {
+  display: grid;
+  gap: 7px;
+}
+
+.life-year-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.life-month-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.life-day-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  max-height: 196px;
+  overflow: auto;
+  padding-right: 3px;
+}
+
+.life-year-grid button,
+.life-month-grid button,
+.life-day-grid button {
+  margin: 0;
+  min-height: 38px;
+  border: 1px solid rgba(34, 211, 238, 0.14);
+  border-radius: 8px;
+  padding: 8px;
+  background: rgba(15, 23, 42, 0.74);
+  color: #dbeafe;
+  box-shadow: none;
+  font-size: 0.82rem;
+}
+
+.life-year-grid button:hover,
+.life-month-grid button:hover,
+.life-day-grid button:hover,
+.life-year-grid button.is-selected,
+.life-month-grid button.is-selected,
+.life-day-grid button.is-selected {
+  border-color: rgba(251, 191, 36, 0.62);
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(251, 191, 36, 0.16));
+  color: #ffffff;
+  box-shadow: 0 0 24px rgba(34, 211, 238, 0.14);
+}
+
+.life-submit-row {
+  grid-template-columns: 1fr;
+  margin-top: 14px;
+}
+
 .life-form input {
   width: 100%;
   box-sizing: border-box;
@@ -3569,12 +3669,19 @@ button:hover {
   .life-form-row,
   .life-hero-stat,
   .life-metric-grid,
-  .cosmic-grid {
+  .cosmic-grid,
+  .life-date-toolbar,
+  .life-picker-columns {
     grid-template-columns: 1fr;
   }
 
   .life-form button {
     width: 100%;
+  }
+
+  .life-day-grid {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    max-height: 150px;
   }
 
   .chart-row {

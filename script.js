@@ -1996,6 +1996,11 @@ if (brandscanForm) {
 
 const lifeForm = document.querySelector("#life-form");
 const birthDateInput = document.querySelector("#birth-date");
+const lifeDateDisplay = document.querySelector("#life-date-display");
+const lifeYearJump = document.querySelector("#life-year-jump");
+const lifeYearGrid = document.querySelector("#life-year-grid");
+const lifeMonthGrid = document.querySelector("#life-month-grid");
+const lifeDayGrid = document.querySelector("#life-day-grid");
 const lifeLoading = document.querySelector("#life-loading");
 const lifeResults = document.querySelector("#life-results");
 const resetLifeButton = document.querySelector("#reset-life");
@@ -2003,8 +2008,31 @@ const downloadLifeCardButton = document.querySelector("#download-life-card");
 const copyLifeLinkButton = document.querySelector("#copy-life-link");
 const shareLifeResultButton = document.querySelector("#share-life-result");
 let activeLifeProfile = null;
+const lifeDateState = {
+  year: 2000,
+  month: 10,
+  day: 6
+};
 
 const HISTORICAL_FACTS = {
+  1980: ["CNN launched and changed the speed of global news.", "Pac-Man became an arcade icon.", "The Voyager probes continued sending back deep-space perspective."],
+  1981: ["MTV launched with a new visual language for music.", "The first Space Shuttle mission flew.", "IBM released its first personal computer."],
+  1982: ["E.T. became a defining movie of the decade.", "The compact disc was introduced commercially.", "The Commodore 64 helped bring computing into homes."],
+  1983: ["The internet's TCP/IP standard became official.", "Motorola introduced the DynaTAC mobile phone.", "Sally Ride became the first American woman in space."],
+  1984: ["Apple introduced the Macintosh.", "The first TED conference was held.", "Tetris was created and became a global puzzle language."],
+  1985: ["Back to the Future made time travel pop culture.", "Nintendo released the NES in North America.", "Live Aid showed the scale of global televised music events."],
+  1986: ["The Mir space station launched.", "Pixar was founded.", "The Chernobyl disaster reshaped global nuclear conversations."],
+  1987: ["The Simpsons began as shorts on The Tracey Ullman Show.", "Final Fantasy launched in Japan.", "The Montreal Protocol became a major environmental agreement."],
+  1988: ["The first major internet worm exposed network vulnerability.", "CDs began overtaking vinyl in many markets.", "NASA resumed shuttle flights after Challenger."],
+  1989: ["The Berlin Wall fell.", "The World Wide Web was proposed by Tim Berners-Lee.", "Game Boy launched and made portable gaming iconic."],
+  1990: ["The Hubble Space Telescope launched.", "Home Alone became a cultural movie phenomenon.", "The web moved from idea toward working reality."],
+  1991: ["The World Wide Web became publicly available.", "Nirvana's Nevermind changed mainstream music.", "The Gulf War became a global televised conflict."],
+  1992: ["Text messaging began its long climb into daily life.", "The Dream Team dominated Olympic basketball.", "Windows 3.1 made PCs feel more approachable."],
+  1993: ["The Mosaic browser made the web easier to explore.", "Jurassic Park redefined blockbuster effects.", "The first Beanie Babies arrived."],
+  1994: ["Amazon was founded.", "The PlayStation launched in Japan.", "Netscape helped turn the web into a consumer platform."],
+  1995: ["Windows 95 brought the Start menu into everyday life.", "Toy Story became the first feature-length computer-animated film.", "eBay launched."],
+  1996: ["Pokemon debuted in Japan.", "DVD technology launched commercially.", "The Nintendo 64 brought 3D gaming into living rooms."],
+  1997: ["Netflix was founded as a DVD rental company.", "Deep Blue defeated Garry Kasparov.", "Titanic became a global film event."],
   1998: ["Google was founded, changing how the world searched for information.", "The International Space Station began assembly in orbit.", "MP3 players were becoming part of everyday digital culture."],
   1999: ["The world prepared for Y2K and a new digital century.", "Bluetooth 1.0 was introduced.", "The euro launched as an electronic currency."],
   2000: ["The world entered a new millennium with intense technology optimism.", "Camera phones began moving toward mainstream life.", "The PlayStation 2 launched and shaped home entertainment."],
@@ -2014,8 +2042,55 @@ const HISTORICAL_FACTS = {
   2004: ["Facebook launched from a college dorm room.", "Mozilla Firefox 1.0 gave web users a major browser alternative.", "NASA rovers Spirit and Opportunity landed on Mars."],
   2005: ["YouTube launched and transformed video culture.", "Google Maps made digital navigation feel everyday.", "Podcasting began entering mainstream awareness."],
   2006: ["Twitter launched and changed real-time public conversation.", "Nintendo Wii made motion controls mainstream.", "Cloud computing started becoming a serious business category."],
-  2007: ["The first iPhone was introduced.", "Netflix began streaming video online.", "Kindle helped push digital reading into the mainstream."]
+  2007: ["The first iPhone was introduced.", "Netflix began streaming video online.", "Kindle helped push digital reading into the mainstream."],
+  2008: ["Spotify launched in Europe.", "The Large Hadron Collider powered up.", "The Beijing Olympics became a major global spectacle."],
+  2009: ["Bitcoin's network began.", "Avatar pushed 3D cinema into the spotlight.", "Kepler launched to search for exoplanets."],
+  2010: ["Instagram launched.", "The iPad introduced a new tablet era.", "The FIFA World Cup brought vuvuzelas into global pop culture."],
+  2011: ["Snapchat launched.", "Minecraft officially released.", "NASA's Juno mission launched toward Jupiter."],
+  2012: ["Curiosity landed on Mars.", "Gangnam Style became a global internet music moment.", "The London Olympics dominated sports culture."],
+  2013: ["Frozen became a major cultural phenomenon.", "The PlayStation 4 and Xbox One launched.", "Vine shaped short-form internet humor."],
+  2014: ["The Rosetta mission reached comet 67P.", "TikTok's predecessor Musical.ly launched.", "The Ice Bucket Challenge showed viral fundraising power."],
+  2015: ["CRISPR entered mainstream science conversation.", "The Paris Climate Agreement was adopted.", "Apple Watch launched."],
+  2016: ["Pokemon Go turned streets into game boards.", "Reusable rocket landings became more visible.", "TikTok launched in China as Douyin."],
+  2017: ["Fortnite Battle Royale exploded in popularity.", "Scientists detected a neutron-star merger.", "The Nintendo Switch launched."],
+  2018: ["Black Panther became a global cultural event.", "The Parker Solar Probe launched toward the Sun.", "Short-form creator culture accelerated."],
+  2019: ["The first image of a black hole was released.", "Disney+ launched.", "TikTok became a dominant global social platform."],
+  2020: ["Remote life became mainstream almost overnight.", "Animal Crossing became a comfort game for millions.", "SpaceX flew astronauts from U.S. soil."],
+  2021: ["The James Webb Space Telescope launched.", "NFTs entered mainstream culture.", "Perseverance landed on Mars."],
+  2022: ["Generative AI entered public conversation.", "The World Cup in Qatar became a global sports focus.", "Artemis I flew around the Moon."],
+  2023: ["AI assistants became everyday creative tools.", "Barbie and Oppenheimer became a shared movie moment.", "India's Chandrayaan-3 landed near the lunar south pole."],
+  2024: ["A total solar eclipse crossed North America.", "AI video and multimodal tools accelerated.", "Paris prepared to host the Summer Olympics."],
+  2025: ["Personal AI tools continued moving into everyday work.", "Mixed-reality devices pushed spatial computing forward.", "Climate technology and battery systems stayed in focus."],
+  2026: ["AI-native apps became a normal part of building and learning.", "Private space missions continued expanding access to orbit.", "Personal analytics products became more interactive and visual."]
 };
+
+const DECADE_CONTEXT = {
+  1980: ["analog-to-digital transition", "arcades, cable TV, synth pop, blockbuster movies"],
+  1990: ["early internet childhood", "CDs, game consoles, sitcoms, grunge, and the first web browsers"],
+  2000: ["millennial internet culture", "flip phones, forums, DVDs, pop music, and early social networks"],
+  2010: ["mobile-first life", "apps, streaming, creators, memes, and always-connected identity"],
+  2020: ["AI and remote-era adulthood", "short video, streaming culture, spatial computing, and generative tools"]
+};
+
+const MONTH_SIGNALS = [
+  ["January", "new-year energy", "Your birth month carries reset energy: planning, first chapters, and the feeling of stepping into a blank calendar."],
+  ["February", "quiet winter focus", "Your birth month sits close to reflection, loyalty, and the small rituals people use to get through winter."],
+  ["March", "threshold energy", "Your birth month feels like a doorway from winter into motion, giving the timeline a renewal signal."],
+  ["April", "spring momentum", "Your birth month is tied to growth, rain, color returning, and the emotional lift of longer days."],
+  ["May", "bright social energy", "Your birth month often feels warm, expressive, and close to graduation seasons, outdoor life, and early summer anticipation."],
+  ["June", "summer opening", "Your birth month has long-day energy: movement, celebration, school endings, and open horizons."],
+  ["July", "high-summer intensity", "Your birth month feels cinematic and warm, with travel, independence, and peak-season memories."],
+  ["August", "late-summer glow", "Your birth month carries golden-hour energy: endings approaching, heat, reflection, and readiness."],
+  ["September", "fresh-start focus", "Your birth month is tied to school-year energy, structure, reinvention, and the first signal of autumn."],
+  ["October", "cinematic autumn", "Your birth month feels atmospheric: darker evenings, memory, mystery, warm lights, and story-rich nostalgia."],
+  ["November", "deep reflection", "Your birth month has quiet intensity: gratitude, colder air, family rituals, and end-of-year perspective."],
+  ["December", "closing chapter magic", "Your birth month carries celebration, reflection, winter brightness, and the emotional weight of a year ending."]
+];
+
+const DAY_SIGNALS = [
+  "first spark", "builder rhythm", "connector energy", "steady foundation", "restless explorer",
+  "mentor signal", "analyst mind", "ambition pulse", "old-soul curiosity", "reset marker"
+];
 
 const TECHNOLOGY_ERAS = [
   [1995, "Web Era", "The internet becomes personal, searchable, and social."],
@@ -2032,6 +2107,88 @@ function formatDateLong(date) {
 
 function formatCompact(value) {
   return Math.round(value).toLocaleString("en-US");
+}
+
+function padDatePart(value) {
+  return String(value).padStart(2, "0");
+}
+
+function getLifeDateValue() {
+  return `${lifeDateState.year}-${padDatePart(lifeDateState.month)}-${padDatePart(lifeDateState.day)}`;
+}
+
+function setLifeDateState(dateValue) {
+  const [year, month, day] = dateValue.split("-").map(Number);
+  if (!year || !month || !day) return;
+  lifeDateState.year = Math.max(1900, Math.min(2026, year));
+  lifeDateState.month = Math.max(1, Math.min(12, month));
+  const maxDay = new Date(lifeDateState.year, lifeDateState.month, 0).getDate();
+  lifeDateState.day = Math.max(1, Math.min(maxDay, day));
+}
+
+function updateLifeDateInput() {
+  if (!birthDateInput) return;
+  const value = getLifeDateValue();
+  birthDateInput.value = value;
+  if (lifeDateDisplay) {
+    lifeDateDisplay.textContent = formatDateLong(new Date(`${value}T00:00:00`));
+  }
+  if (lifeYearJump) {
+    lifeYearJump.value = lifeDateState.year;
+  }
+}
+
+function renderLifeDatePicker(centerYear = lifeDateState.year) {
+  if (!lifeYearGrid || !lifeMonthGrid || !lifeDayGrid) return;
+  const startYear = Math.max(1900, Math.min(2026 - 11, centerYear - 5));
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const daysInMonth = new Date(lifeDateState.year, lifeDateState.month, 0).getDate();
+
+  lifeYearGrid.innerHTML = "";
+  for (let year = startYear; year < startYear + 12; year += 1) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = year;
+    button.className = year === lifeDateState.year ? "is-selected" : "";
+    button.addEventListener("click", () => {
+      lifeDateState.year = year;
+      lifeDateState.day = Math.min(lifeDateState.day, new Date(lifeDateState.year, lifeDateState.month, 0).getDate());
+      updateLifeDateInput();
+      renderLifeDatePicker(year);
+    });
+    lifeYearGrid.appendChild(button);
+  }
+
+  lifeMonthGrid.innerHTML = "";
+  monthNames.forEach((month, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = month;
+    button.className = index + 1 === lifeDateState.month ? "is-selected" : "";
+    button.addEventListener("click", () => {
+      lifeDateState.month = index + 1;
+      lifeDateState.day = Math.min(lifeDateState.day, new Date(lifeDateState.year, lifeDateState.month, 0).getDate());
+      updateLifeDateInput();
+      renderLifeDatePicker(lifeDateState.year);
+    });
+    lifeMonthGrid.appendChild(button);
+  });
+
+  lifeDayGrid.innerHTML = "";
+  for (let day = 1; day <= daysInMonth; day += 1) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = day;
+    button.className = day === lifeDateState.day ? "is-selected" : "";
+    button.addEventListener("click", () => {
+      lifeDateState.day = day;
+      updateLifeDateInput();
+      renderLifeDatePicker(lifeDateState.year);
+    });
+    lifeDayGrid.appendChild(button);
+  }
+
+  updateLifeDateInput();
 }
 
 function getAgeParts(birthDate, now = new Date()) {
@@ -2058,6 +2215,27 @@ function addDays(date, days) {
   return next;
 }
 
+function getDecadeStart(year) {
+  return Math.floor(year / 10) * 10;
+}
+
+function getGeneration(year) {
+  if (year <= 1980) return ["Gen X edge", "You were born near the analog-to-digital handoff, where physical media and early networks shaped memory."];
+  if (year <= 1996) return ["Millennial", "Your generation grew up while the internet moved from strange novelty to daily infrastructure."];
+  if (year <= 2012) return ["Gen Z", "Your generation arrived into a world where phones, feeds, video, and identity were already merging."];
+  return ["Gen Alpha", "Your generation is growing up with AI, tablets, streaming, and voice interfaces as normal background technology."];
+}
+
+function getMonthSignal(birthDate) {
+  const month = birthDate.getMonth();
+  return MONTH_SIGNALS[month];
+}
+
+function getDaySignal(birthDate) {
+  const day = birthDate.getDate();
+  return DAY_SIGNALS[day % DAY_SIGNALS.length];
+}
+
 function getHistoricalFacts(year) {
   if (HISTORICAL_FACTS[year]) return HISTORICAL_FACTS[year];
   const closestYear = Object.keys(HISTORICAL_FACTS)
@@ -2066,6 +2244,27 @@ function getHistoricalFacts(year) {
   return [
     `Exact static facts for ${year} are limited in this MVP, so this capsule uses the closest available era: ${closestYear}.`,
     ...HISTORICAL_FACTS[closestYear].slice(0, 2)
+  ];
+}
+
+function getPersonalCapsule(birthDate) {
+  const year = birthDate.getFullYear();
+  const month = birthDate.getMonth() + 1;
+  const day = birthDate.getDate();
+  const decade = getDecadeStart(year);
+  const [generation, generationCopy] = getGeneration(year);
+  const [monthName, monthTheme, monthCopy] = getMonthSignal(birthDate);
+  const daySignal = getDaySignal(birthDate);
+  const decadeContext = DECADE_CONTEXT[decade] || DECADE_CONTEXT[2000];
+  const yearFacts = getHistoricalFacts(year);
+
+  return [
+    { year, title: `${year} World Snapshot`, copy: yearFacts[0] },
+    { year, title: "Technology Milestone", copy: yearFacts[1] || `The ${decade}s were shaped by ${decadeContext[0]}.` },
+    { year, title: "Culture Signal", copy: `${monthName} adds ${monthTheme} to the story. ${monthCopy}` },
+    { year, title: `${generation} Context`, copy: generationCopy },
+    { year, title: "Decade Atmosphere", copy: `You were born into the ${decade}s: ${decadeContext[1]}.` },
+    { year, title: "Exact Date Signature", copy: `The ${day}${day === 1 || day === 21 || day === 31 ? "st" : day === 2 || day === 22 ? "nd" : day === 3 || day === 23 ? "rd" : "th"} day gives this timeline a "${daySignal}" character, making ${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")} feel more specific than a birth year alone.` }
   ];
 }
 
@@ -2085,6 +2284,7 @@ function buildLifeProfile(dateValue) {
   const jupiterAge = age.years / 11.862;
   const year = birthDate.getFullYear();
   const facts = getHistoricalFacts(year);
+  const personalCapsule = getPersonalCapsule(birthDate);
   const techTimeline = TECHNOLOGY_ERAS
     .filter(([eraYear]) => eraYear >= year)
     .slice(0, 6)
@@ -2112,10 +2312,11 @@ function buildLifeProfile(dateValue) {
     marsAge,
     jupiterAge,
     facts,
+    personalCapsule,
     techTimeline,
     milestones,
     directUrl: `${window.location.origin}/timeline/${dateValue}`,
-    summary: `You have lived about ${formatCompact(daysLived)} days, traveled roughly ${formatCompact(earthOrbitKm)} km around the Sun, and crossed through ${age.years} years of technology, culture, and personal history.`
+    summary: `You have lived about ${formatCompact(daysLived)} days, traveled roughly ${formatCompact(earthOrbitKm)} km around the Sun, and crossed through ${age.years} years of technology, culture, and ${getMonthSignal(birthDate)[1]}.`
   };
 }
 
@@ -2207,10 +2408,10 @@ function renderLifeProfile(profile) {
   document.querySelector("#life-age-years").textContent = profile.age.years;
   document.querySelector("#life-age-copy").textContent = `${profile.age.months} months and ${profile.age.days} days into your current orbit.`;
   document.querySelector("#share-card-date").textContent = `Born in ${profile.year}`;
-  document.querySelector("#share-card-copy").textContent = `${formatCompact(profile.daysLived)} days lived. ${profile.facts[0]}`;
+  document.querySelector("#share-card-copy").textContent = `${formatCompact(profile.daysLived)} days lived. ${profile.personalCapsule[0].copy}`;
   renderLifeMetrics(profile);
   renderLifeChart(profile);
-  renderTimeline("#world-capsule", profile.facts.map((copy, index) => ({ year: profile.year, title: index === 0 ? "Birth Year Signal" : "World Context", copy })));
+  renderTimeline("#world-capsule", profile.personalCapsule);
   renderTimeline("#technology-timeline", profile.techTimeline);
   renderTimeline("#milestone-timeline", profile.milestones);
 
@@ -2270,10 +2471,23 @@ if (lifeForm) {
   const params = new URLSearchParams(window.location.search);
   const pathMatch = window.location.pathname.match(/\/timeline\/(\d{4}-\d{2}-\d{2})/);
   const initialDate = params.get("date") || (pathMatch ? pathMatch[1] : "");
-  if (initialDate) birthDateInput.value = initialDate;
+  if (initialDate) setLifeDateState(initialDate);
+  renderLifeDatePicker(lifeDateState.year);
+
+  if (lifeYearJump) {
+    lifeYearJump.addEventListener("input", () => {
+      const year = Number(lifeYearJump.value);
+      if (year >= 1900 && year <= 2026) {
+        lifeDateState.year = year;
+        lifeDateState.day = Math.min(lifeDateState.day, new Date(lifeDateState.year, lifeDateState.month, 0).getDate());
+        renderLifeDatePicker(year);
+      }
+    });
+  }
 
   lifeForm.addEventListener("submit", (event) => {
     event.preventDefault();
+    updateLifeDateInput();
     if (!birthDateInput.value) return;
     lifeLoading.hidden = false;
     lifeResults.hidden = true;

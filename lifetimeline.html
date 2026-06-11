@@ -47,8 +47,31 @@
 
         <form class="life-form" id="life-form">
           <label for="birth-date">Birth date</label>
-          <div class="life-form-row">
-            <input id="birth-date" name="birth-date" type="date" max="2026-06-11" required>
+          <input id="birth-date" name="birth-date" type="hidden" required>
+          <div class="life-date-picker" id="life-date-picker">
+            <div class="life-date-toolbar">
+              <button type="button" id="life-date-display">Select birth date</button>
+              <div class="life-year-jump">
+                <label for="life-year-jump">Jump to year</label>
+                <input id="life-year-jump" type="number" min="1900" max="2026" inputmode="numeric" placeholder="2000">
+              </div>
+            </div>
+            <div class="life-picker-columns">
+              <div>
+                <span>Year</span>
+                <div class="life-year-grid" id="life-year-grid" aria-label="Year options"></div>
+              </div>
+              <div>
+                <span>Month</span>
+                <div class="life-month-grid" id="life-month-grid" aria-label="Month options"></div>
+              </div>
+              <div>
+                <span>Day</span>
+                <div class="life-day-grid" id="life-day-grid" aria-label="Day options"></div>
+              </div>
+            </div>
+          </div>
+          <div class="life-form-row life-submit-row">
             <button type="submit">Build My Timeline</button>
           </div>
           <p class="estimate-note">First version uses reliable static datasets and estimates where live data is unnecessary.</p>

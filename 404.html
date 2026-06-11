@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opening Name Analysis | RasulTech</title>
+  <meta name="robots" content="noindex">
+  <script>
+    const match = window.location.pathname.match(/\/name\/([^/]+)/);
+    if (match) {
+      const name = decodeURIComponent(match[1].replace(/-/g, " "));
+      window.location.replace(`/brandscan.html?name=${encodeURIComponent(name)}#/name/${match[1]}`);
+    } else {
+      window.location.replace("/index.html");
+    }
+  </script>
+</head>
+<body>
+  <p>Opening RasulTech...</p>
+</body>
+</html>

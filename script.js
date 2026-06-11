@@ -23,6 +23,12 @@ const particleField = document.querySelector("#particle-field");
 const brandResults = document.querySelector("#brandscan-results");
 const tryAgainButton = document.querySelector("#try-again");
 const sampleButtons = document.querySelectorAll("[data-sample]");
+const homeNameForm = document.querySelector("#home-name-form");
+const homeNameInput = document.querySelector("#home-name-input");
+const copyResultButton = document.querySelector("#copy-result");
+const shareResultButton = document.querySelector("#share-result");
+const generateShareCardButton = document.querySelector("#generate-share-card");
+const copyDirectLinkButton = document.querySelector("#copy-direct-link");
 
 const loadingMessages = [
   "Scanning identity...",
@@ -32,6 +38,7 @@ const loadingMessages = [
 
 const recentAnalysisSignatures = [];
 const recentVisualSignatures = [];
+let activeBrandProfile = null;
 const liveNumbersState = {
   metrics: null,
   factIndex: 0,
@@ -270,6 +277,10 @@ function slugifyBrand(name) {
 }
 
 function clampScore(value, min = 18, max = 97) {
+  return Math.max(min, Math.min(max, Math.round(value)));
+}
+
+function clamp(value, min = 0, max = 100) {
   return Math.max(min, Math.min(max, Math.round(value)));
 }
 
@@ -691,6 +702,37 @@ function uniqueText(text, traits) {
 
 function getNameHash(value) {
   return [...value].reduce((total, character, index) => total + character.charCodeAt(0) * (index + 3), 0);
+}
+
+function getQualityScores(scoreProfile, traits, history) {
+  const factorMap = Object.fromEntries(scoreProfile.factors.map((factor) => [factor.label, factor.value]));
+  const historyDepth = Math.min(18, (history.facts?.length || 0) * 3);
+  const meaningBonus = traits.meaning !== "meaning not confirmed" ? 8 : 0;
+  const globalSignal = /international|global|widely|across|multicultural|many cultures/i.test(`${history.copy} ${traits.origin}`) ? 16 : 0;
+  const rarityBase = 100 - Math.round((factorMap["Social Handle Potential"] || 50) * 0.36) - Math.max(0, 14 - traits.compact.length) * 2;
+
+  return [
+    {
+      label: "Coolness Score",
+      value: clamp(Math.round((factorMap.Brandability || 50) * 0.45 + (factorMap["Visual Identity Potential"] || 50) * 0.35 + (traits.hasTech || traits.hasNumbers ? 16 : 8)), 0, 100),
+      note: traits.hasTech || traits.hasNumbers ? "Digital signal gives it modern edge." : "Driven by sound, visual shape, and brand energy."
+    },
+    {
+      label: "Rarity Score",
+      value: clamp(rarityBase + (/[xzqvk]/i.test(traits.compact) ? 10 : 0) + (traits.origin.includes("Estimated") ? 6 : 0), 0, 100),
+      note: "Higher means it feels less crowded and easier to own."
+    },
+    {
+      label: "Memorability Score",
+      value: clamp(Math.round((factorMap.Memorability || 50) * 0.72 + (factorMap.Pronunciation || 50) * 0.18 + meaningBonus), 0, 100),
+      note: "Balances rhythm, pronunciation, length, and story."
+    },
+    {
+      label: "Global Popularity Score",
+      value: clamp(Math.round((100 - (factorMap.Uniqueness || 50)) * 0.34 + (factorMap.Pronunciation || 50) * 0.24 + historyDepth + globalSignal), 0, 100),
+      note: globalSignal ? "History suggests cross-cultural recognition." : "Estimated from familiarity, pronunciation, and available history."
+    }
+  ];
 }
 
 function buildVisualIdentity(name, traits, personality) {
@@ -1348,6 +1390,7 @@ async function makeBrandProfile(name) {
   const comparison = getComparisonSet(traits);
   const growth = getGrowthSuggestions(name, traits, personality);
   const visualIdentity = buildVisualIdentity(name, traits, personality);
+  const qualityScores = getQualityScores(scoreProfile, traits, history);
 
   const strengths = [
     `${traits.topFactor.label} leads the score, so ${name} should put that advantage at the center of the first impression.`,
@@ -1444,6 +1487,7 @@ async function makeBrandProfile(name) {
     bios,
     comparison,
     growth,
+    qualityScores,
     personality,
     history,
     visualIdentity,
@@ -1490,6 +1534,7 @@ function createNameReveal(name) {
 
 function fillList(selector, items, tagName = "li") {
   const list = document.querySelector(selector);
+  if (!list) return;
   list.innerHTML = "";
 
   items.forEach((item) => {
@@ -1499,8 +1544,142 @@ function fillList(selector, items, tagName = "li") {
   });
 }
 
+function getNameSlug(name) {
+  return slugifyBrand(name).toLowerCase() || "name";
+}
+
+function getDirectResultUrl(profile) {
+  const url = new URL(window.location.href);
+  const slug = getNameSlug(profile.name);
+  return `${url.origin}/name/${slug}`;
+}
+
+function getShareText(profile) {
+  const topQuality = [...profile.qualityScores].sort((a, b) => b.value - a.value)[0];
+  return `${profile.name} scored ${profile.score}/100 on BrandScan AI. ${topQuality.label}: ${topQuality.value}/100. ${profile.summary}`;
+}
+
+async function copyText(value, button, successLabel = "Copied") {
+  const original = button?.textContent;
+  try {
+    await navigator.clipboard.writeText(value);
+    if (button) {
+      button.textContent = successLabel;
+      window.setTimeout(() => {
+        button.textContent = original;
+      }, 1200);
+    }
+  } catch (error) {
+    if (button) {
+      button.textContent = "Copy failed";
+      window.setTimeout(() => {
+        button.textContent = original;
+      }, 1200);
+    }
+  }
+}
+
+function updateSeoMetadata(profile) {
+  const directUrl = getDirectResultUrl(profile);
+  const title = `${profile.name} Name Meaning, Origin, Popularity & Brand Score | RasulTech`;
+  const description = `Analyze ${profile.name}: ${profile.history.title}. Brand score ${profile.score}/100, quality scores, origin, meaning, similar names, and shareable identity insights.`;
+  document.title = title;
+
+  const ensureMeta = (selector, attributes) => {
+    let element = document.head.querySelector(selector);
+    if (!element) {
+      element = document.createElement("meta");
+      Object.entries(attributes.identity || {}).forEach(([key, value]) => element.setAttribute(key, value));
+      document.head.appendChild(element);
+    }
+    Object.entries(attributes.values).forEach(([key, value]) => element.setAttribute(key, value));
+  };
+
+  ensureMeta('meta[name="description"]', { identity: { name: "description" }, values: { content: description } });
+  ensureMeta('meta[property="og:title"]', { identity: { property: "og:title" }, values: { content: title } });
+  ensureMeta('meta[property="og:description"]', { identity: { property: "og:description" }, values: { content: description } });
+  ensureMeta('meta[property="og:url"]', { identity: { property: "og:url" }, values: { content: directUrl } });
+
+  const schema = document.querySelector("#brandscan-schema");
+  if (schema) {
+    schema.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: title,
+      description,
+      url: directUrl,
+      about: {
+        "@type": "Thing",
+        name: profile.name,
+        description: profile.history.copy
+      },
+      mainEntity: {
+        "@type": "DefinedTerm",
+        name: profile.name,
+        description: profile.analysis
+      }
+    });
+  }
+
+  const seoTitle = document.querySelector("#seo-title-preview");
+  const seoDescription = document.querySelector("#seo-description-preview");
+  const seoLink = document.querySelector("#seo-direct-link");
+  if (seoTitle) seoTitle.textContent = title;
+  if (seoDescription) seoDescription.textContent = description;
+  if (seoLink) {
+    seoLink.hidden = false;
+    seoLink.href = directUrl;
+    seoLink.textContent = directUrl.replace(/^https?:\/\//, "");
+  }
+}
+
+function drawShareCard(profile) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1200;
+  canvas.height = 630;
+  const context = canvas.getContext("2d");
+  const gradient = context.createLinearGradient(0, 0, 1200, 630);
+  gradient.addColorStop(0, "#020617");
+  gradient.addColorStop(0.55, "#083344");
+  gradient.addColorStop(1, "#422006");
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, 1200, 630);
+
+  context.fillStyle = "rgba(34, 211, 238, 0.18)";
+  context.beginPath();
+  context.arc(980, 120, 210, 0, Math.PI * 2);
+  context.fill();
+  context.fillStyle = "rgba(251, 191, 36, 0.14)";
+  context.beginPath();
+  context.arc(170, 520, 260, 0, Math.PI * 2);
+  context.fill();
+
+  context.fillStyle = "#fbbf24";
+  context.font = "700 34px Arial";
+  context.fillText("RasulTech / BrandScan AI", 76, 92);
+  context.fillStyle = "#ffffff";
+  context.font = "900 88px Arial";
+  context.fillText(profile.name.slice(0, 18), 76, 210);
+  context.font = "900 126px Arial";
+  context.fillText(`${profile.score}/100`, 76, 360);
+  context.fillStyle = "#cbd5e1";
+  context.font = "500 34px Arial";
+  context.fillText(profile.summary.slice(0, 64), 76, 430);
+  context.fillStyle = "#e0f2fe";
+  context.font = "700 30px Arial";
+  profile.qualityScores.slice(0, 3).forEach((item, index) => {
+    context.fillText(`${item.label.replace(" Score", "")}: ${item.value}`, 76, 500 + index * 40);
+  });
+
+  const link = document.createElement("a");
+  link.href = canvas.toDataURL("image/png");
+  link.download = `${getNameSlug(profile.name)}-brandscan-card.png`;
+  link.click();
+}
+
 function showBrandProfile(profile) {
   const scoreOrbit = document.querySelector("#score-orbit");
+  activeBrandProfile = profile;
 
   document.querySelector("#result-name").textContent = profile.name;
   document.querySelector("#score-value").textContent = profile.score;
@@ -1531,6 +1710,24 @@ function showBrandProfile(profile) {
     row.append(top, track);
     breakdownList.appendChild(row);
   });
+
+  const qualityGrid = document.querySelector("#quality-grid");
+  if (qualityGrid) {
+    qualityGrid.innerHTML = "";
+    profile.qualityScores.forEach((item) => {
+      const quality = document.createElement("div");
+      quality.className = "quality-meter";
+      quality.style.setProperty("--quality", `${item.value * 3.6}deg`);
+      quality.innerHTML = `
+        <div class="quality-ring"><span>${item.value}</span></div>
+        <div>
+          <strong>${item.label}</strong>
+          <p>${item.note}</p>
+        </div>
+      `;
+      qualityGrid.appendChild(quality);
+    });
+  }
 
   const personalityGrid = document.querySelector("#personality-grid");
   personalityGrid.innerHTML = "";
@@ -1654,13 +1851,15 @@ function showBrandProfile(profile) {
 
     styleList.appendChild(item);
   });
+
+  updateSeoMetadata(profile);
 }
 
 async function analyzeBrand(value) {
   const name = cleanBrandName(value);
 
   if (!name) {
-    brandInput.focus();
+    brandInput?.focus();
     return;
   }
 
@@ -1691,6 +1890,9 @@ async function analyzeBrand(value) {
       showBrandProfile(profile);
       brandReveal.hidden = true;
       brandResults.hidden = false;
+      if (window.location.pathname.includes("brandscan.html")) {
+        window.history.replaceState({ name }, "", `brandscan.html?name=${encodeURIComponent(name)}#/name/${getNameSlug(name)}`);
+      }
       brandResults.scrollIntoView({ behavior: "smooth", block: "start" });
     }, Math.min(2600, 1450 + name.length * 90));
   }, 2200);
@@ -1717,4 +1919,63 @@ if (tryAgainButton) {
     brandInput.value = "";
     brandInput.focus();
   });
+}
+
+if (homeNameForm) {
+  homeNameForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const name = cleanBrandName(homeNameInput.value);
+    if (!name) {
+      homeNameInput.focus();
+      return;
+    }
+    window.location.href = `brandscan.html?name=${encodeURIComponent(name)}#/name/${getNameSlug(name)}`;
+  });
+}
+
+if (copyResultButton) {
+  copyResultButton.addEventListener("click", () => {
+    if (!activeBrandProfile) return;
+    copyText(`${getShareText(activeBrandProfile)}\n${getDirectResultUrl(activeBrandProfile)}`, copyResultButton, "Result Copied");
+  });
+}
+
+if (copyDirectLinkButton) {
+  copyDirectLinkButton.addEventListener("click", () => {
+    if (!activeBrandProfile) return;
+    copyText(getDirectResultUrl(activeBrandProfile), copyDirectLinkButton, "Link Copied");
+  });
+}
+
+if (shareResultButton) {
+  shareResultButton.addEventListener("click", async () => {
+    if (!activeBrandProfile) return;
+    const shareData = {
+      title: `${activeBrandProfile.name} BrandScan AI Result`,
+      text: getShareText(activeBrandProfile),
+      url: getDirectResultUrl(activeBrandProfile)
+    };
+    if (navigator.share) {
+      await navigator.share(shareData);
+    } else {
+      copyText(`${shareData.text}\n${shareData.url}`, shareResultButton, "Share Text Copied");
+    }
+  });
+}
+
+if (generateShareCardButton) {
+  generateShareCardButton.addEventListener("click", () => {
+    if (!activeBrandProfile) return;
+    drawShareCard(activeBrandProfile);
+  });
+}
+
+if (brandscanForm) {
+  const params = new URLSearchParams(window.location.search);
+  const pathNameMatch = window.location.pathname.match(/\/name\/([^/]+)/);
+  const initialName = params.get("name") || (pathNameMatch ? decodeURIComponent(pathNameMatch[1].replace(/-/g, " ")) : "");
+  if (initialName) {
+    brandInput.value = initialName;
+    window.setTimeout(() => analyzeBrand(initialName), 280);
+  }
 }

@@ -4,6 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BrandScan AI | RasulTech</title>
+  <meta name="description" content="Analyze any name with BrandScan AI: origin, meaning, uniqueness, quality scores, popularity signals, visual identity, bios, and shareable results.">
+  <meta property="og:title" content="BrandScan AI | RasulTech">
+  <meta property="og:description" content="Discover the story, quality, and brand potential behind any name.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="brandscan.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json" id="brandscan-schema">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "BrandScan AI",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": "AI-style name analysis for origins, meaning, quality scores, uniqueness, and personal brand identity."
+    }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -76,7 +92,13 @@
             <p class="eyebrow">Brand Signal Locked</p>
             <h3 id="result-name">RasulTech</h3>
           </div>
-          <button type="button" id="try-again">Try another name</button>
+          <div class="result-actions" aria-label="Share result actions">
+            <button type="button" id="copy-result">Copy Result</button>
+            <button type="button" id="share-result">Share Result</button>
+            <button type="button" id="generate-share-card">Generate Share Card</button>
+            <button type="button" id="copy-direct-link">Copy Direct Link</button>
+            <button type="button" id="try-again">Try another name</button>
+          </div>
         </div>
 
         <div class="dashboard-grid">
@@ -94,6 +116,11 @@
           <article class="brand-card breakdown-card">
             <span class="card-label">Score Breakdown</span>
             <div class="breakdown-list" id="breakdown-list"></div>
+          </article>
+
+          <article class="brand-card quality-card">
+            <span class="card-label">Name Quality System</span>
+            <div class="quality-grid" id="quality-grid"></div>
           </article>
 
           <article class="brand-card analysis-card">
@@ -160,6 +187,13 @@
           <article class="brand-card visual-card">
             <span class="card-label">Visual Style Recommendation</span>
             <div class="style-list" id="style-list"></div>
+          </article>
+
+          <article class="brand-card seo-card">
+            <span class="card-label">SEO Name Page</span>
+            <h4 id="seo-title-preview">SEO-ready result page</h4>
+            <p id="seo-description-preview">A shareable, structured result URL will appear after analysis.</p>
+            <a id="seo-direct-link" href="#" hidden>Open direct result</a>
           </article>
         </div>
       </div>

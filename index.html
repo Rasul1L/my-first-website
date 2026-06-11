@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RasulTech</title>
+  <title>RasulTech | Name Intelligence Platform</title>
+  <meta name="description" content="Discover the story behind your name with AI-style analysis for origins, meaning, uniqueness, memorability, popularity, and brand identity.">
+  <meta property="og:title" content="RasulTech | Discover the Story Behind Your Name">
+  <meta property="og:description" content="Analyze popularity, origins, uniqueness, and hidden insights about any name.">
+  <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -11,72 +15,73 @@
 </head>
 <body>
   <main class="galaxy">
-    <section class="cinematic-intro" aria-label="Cinematic sci-fi battle intro">
-      <div class="space-battle">
-        <div class="planet"></div>
-        <div class="battle-photo-wrap" aria-label="RasulTech picture in the battle">
-          <img src="my-photo.jpg" alt="RasulTech" class="battle-photo">
-          <span>RasulTech</span>
-        </div>
-        <div class="ship ship-one"></div>
-        <div class="ship ship-two"></div>
-        <div class="laser laser-one"></div>
-        <div class="laser laser-two"></div>
-        <div class="laser laser-three"></div>
-        <div class="battlefield">
-          <div class="soldier soldier-one">
-            <span class="helmet"></span>
-            <span class="rifle"></span>
-          </div>
-          <div class="soldier soldier-two">
-            <span class="helmet"></span>
-            <span class="rifle"></span>
-          </div>
-        </div>
+    <section class="cinematic-intro premium-name-intro" aria-label="RasulTech cinematic intro">
+      <div class="intro-particles" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span>
       </div>
-      <div class="logo-build" aria-label="Rasul is here">
+      <div class="logo-build" aria-label="RasulTech">
         <span class="logo-letter fly-a">R</span>
         <span class="logo-letter fly-b">a</span>
         <span class="logo-letter fly-c">s</span>
         <span class="logo-letter fly-d">u</span>
         <span class="logo-letter fly-e">l</span>
-        <span class="logo-space">&nbsp;</span>
-        <span class="logo-letter fly-f">i</span>
-        <span class="logo-letter fly-g">s</span>
-        <span class="logo-space">&nbsp;</span>
-        <span class="logo-letter fly-h">h</span>
-        <span class="logo-letter fly-i">e</span>
-        <span class="logo-letter fly-j">r</span>
-        <span class="logo-letter fly-k">e</span>
+        <span class="logo-letter fly-f">T</span>
+        <span class="logo-letter fly-g">e</span>
+        <span class="logo-letter fly-h">c</span>
+        <span class="logo-letter fly-i">h</span>
       </div>
       <div class="intro-ring"></div>
     </section>
   </main>
 
   <main class="home">
-    <section class="hero">
-      <div class="portrait-card">
-        <img
-          src="my-photo.jpg"
-          alt="Rasul's photo"
-          class="profile-photo"
-          onerror="this.classList.add('missing-photo')"
-        >
-        <div class="photo-fallback">
-          Add your photo as<br>
-          <strong>my-photo.jpg</strong>
+    <header class="site-header" aria-label="Primary navigation">
+      <a class="site-brand" href="index.html">RasulTech</a>
+      <nav>
+        <a href="hobbies.html">Hobby</a>
+        <a href="brandscan.html">Products</a>
+      </nav>
+    </header>
+
+    <section class="hero name-platform-hero">
+      <div class="intro">
+        <p class="eyebrow">Name Intelligence Platform</p>
+        <h1>Discover the Story Behind Your Name</h1>
+        <p class="highlight">Origins, meaning, uniqueness, popularity, and brand potential in one cinematic scan.</p>
+        <p>
+          Analyze any name, username, nickname, or personal brand idea. RasulTech turns
+          identity signals into a polished dashboard with history, quality scores,
+          visual direction, bios, domains, and shareable results.
+        </p>
+        <form class="hero-search" id="home-name-form">
+          <label for="home-name-input">Enter a name to analyze</label>
+          <div class="hero-search-row">
+            <input id="home-name-input" name="name" type="text" autocomplete="off" placeholder="Rasul, Sophia, Nacho, Xochitl..." required>
+            <button type="submit">Analyze Name</button>
+          </div>
+        </form>
+        <div class="hero-proof" aria-label="Available insights">
+          <span>Origin</span>
+          <span>Meaning</span>
+          <span>Rarity</span>
+          <span>Brand Score</span>
         </div>
       </div>
 
-      <div class="intro">
-        <p class="eyebrow">RasulTech</p>
-        <h1>Rasul is Here</h1>
-        <p class="highlight">Creator of this page</p>
-        <p>
-          Welcome to my first website. I am building my skills, creating my own style,
-          and sharing this page with the world through GitHub.
-        </p>
-        <button onclick="sayHello()">Say Hello</button>
+      <div class="hero-product-panel" aria-label="Name analysis preview">
+        <div class="panel-orbit">
+          <span>87</span>
+        </div>
+        <div>
+          <p class="eyebrow">Live Preview</p>
+          <h2>Name Quality Scan</h2>
+          <p>Coolness, rarity, memorability, popularity, origin, similar names, and identity direction.</p>
+        </div>
+        <div class="mini-metrics">
+          <span><strong>92</strong> Memorability</span>
+          <span><strong>78</strong> Rarity</span>
+          <span><strong>84</strong> Coolness</span>
+        </div>
       </div>
     </section>
 

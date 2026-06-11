@@ -6,10 +6,16 @@
   <title>Opening Name Analysis | RasulTech</title>
   <meta name="robots" content="noindex">
   <script>
-    const match = window.location.pathname.match(/\/name\/([^/]+)/);
-    if (match) {
-      const name = decodeURIComponent(match[1].replace(/-/g, " "));
-      window.location.replace(`/brandscan.html?name=${encodeURIComponent(name)}#/name/${match[1]}`);
+    const nameMatch = window.location.pathname.match(/\/name\/([^/]+)/);
+    const timelineMatch = window.location.pathname.match(/\/timeline\/(\d{4}-\d{2}-\d{2})/);
+    const bornMatch = window.location.pathname.match(/\/born-in\/(\d{4})/);
+    if (nameMatch) {
+      const name = decodeURIComponent(nameMatch[1].replace(/-/g, " "));
+      window.location.replace(`/brandscan.html?name=${encodeURIComponent(name)}#/name/${nameMatch[1]}`);
+    } else if (timelineMatch) {
+      window.location.replace(`/lifetimeline.html?date=${timelineMatch[1]}#/timeline/${timelineMatch[1]}`);
+    } else if (bornMatch) {
+      window.location.replace(`/lifetimeline.html#/born-in/${bornMatch[1]}`);
     } else {
       window.location.replace("/index.html");
     }

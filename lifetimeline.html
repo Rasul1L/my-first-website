@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Life Timeline | Personal Time Capsule by RasulTech</title>
+  <meta name="description" content="Create a beautiful personal life dashboard from your birth date: days lived, cosmic age, world events, technology timeline, future milestones, and shareable cards.">
+  <meta property="og:title" content="Life Timeline | Personal Time Capsule">
+  <meta property="og:description" content="Discover what happened when you were born, how long you have lived, your cosmic age, and your personal future milestones.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="lifetimeline.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script type="application/ld+json" id="life-schema">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Life Timeline",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "Web",
+      "description": "Personal life timeline calculator with age statistics, historical time capsule, cosmic age, and shareable cards."
+    }
+  </script>
+</head>
+<body class="life-body">
+  <main class="life-page">
+    <header class="site-header life-header" aria-label="Primary navigation">
+      <a class="site-brand" href="index.html">RasulTech</a>
+      <nav>
+        <a href="hobbies.html">Hobby</a>
+        <a href="brandscan.html">Products</a>
+      </nav>
+    </header>
+
+    <section class="life-hero reveal-on-scroll" id="life-hero">
+      <div class="life-stars" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      <div class="life-hero-copy">
+        <p class="eyebrow">Life Timeline</p>
+        <h1>Your Life, Turned Into a Cinematic Time Capsule</h1>
+        <p class="life-lead">
+          Enter your birth date to reveal days lived, heartbeats, sleep, world events,
+          technology milestones, cosmic age, future dates, and a shareable visual card.
+        </p>
+
+        <form class="life-form" id="life-form">
+          <label for="birth-date">Birth date</label>
+          <div class="life-form-row">
+            <input id="birth-date" name="birth-date" type="date" max="2026-06-11" required>
+            <button type="submit">Build My Timeline</button>
+          </div>
+          <p class="estimate-note">First version uses reliable static datasets and estimates where live data is unnecessary.</p>
+        </form>
+      </div>
+
+      <div class="life-preview-card" aria-label="Life dashboard preview">
+        <span class="life-preview-kicker">Personal Analytics</span>
+        <strong>9,387</strong>
+        <p>days lived become a story of eras, milestones, technology, and motion through space.</p>
+        <div class="life-preview-bars">
+          <span style="--bar: 82%"></span>
+          <span style="--bar: 64%"></span>
+          <span style="--bar: 92%"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="life-loading" id="life-loading" hidden>
+      <div class="life-loader"></div>
+      <p>Opening your time capsule...</p>
+    </section>
+
+    <section class="life-results" id="life-results" hidden>
+      <div class="life-results-top reveal-on-scroll">
+        <div>
+          <p class="eyebrow">Time Capsule Generated</p>
+          <h2 id="life-result-title">Born on October 6, 2000</h2>
+          <p id="life-result-summary">A personal dashboard about your time on Earth.</p>
+        </div>
+        <div class="life-actions">
+          <button type="button" id="download-life-card">Download Image Card</button>
+          <button type="button" id="copy-life-link">Copy Direct Link</button>
+          <button type="button" id="share-life-result">Share Result</button>
+          <button type="button" id="reset-life">Try Another Date</button>
+        </div>
+      </div>
+
+      <div class="life-dashboard-grid">
+        <article class="life-card life-hero-stat reveal-on-scroll">
+          <span class="card-label">Life Signal</span>
+          <strong id="life-age-years">25</strong>
+          <p id="life-age-copy">years of motion, memory, change, and possibility.</p>
+        </article>
+
+        <article class="life-card reveal-on-scroll">
+          <span class="card-label">Life Statistics</span>
+          <div class="life-metric-grid" id="life-metrics"></div>
+        </article>
+
+        <article class="life-card reveal-on-scroll">
+          <span class="card-label">Beautiful Charts</span>
+          <div class="life-chart" id="life-chart" aria-label="Life statistics chart"></div>
+        </article>
+
+        <article class="life-card reveal-on-scroll">
+          <span class="card-label">World Time Capsule</span>
+          <div class="capsule-list" id="world-capsule"></div>
+        </article>
+
+        <article class="life-card reveal-on-scroll">
+          <span class="card-label">Technology Timeline</span>
+          <div class="interactive-timeline" id="technology-timeline"></div>
+        </article>
+
+        <article class="life-card reveal-on-scroll">
+          <span class="card-label">Cosmic Timeline</span>
+          <div class="cosmic-grid" id="cosmic-timeline"></div>
+        </article>
+
+        <article class="life-card reveal-on-scroll">
+          <span class="card-label">Future Milestones</span>
+          <div class="interactive-timeline" id="milestone-timeline"></div>
+        </article>
+
+        <article class="life-card share-card-panel reveal-on-scroll">
+          <span class="card-label">Share Card Preview</span>
+          <div class="life-share-card" id="life-share-card">
+            <span>Life Timeline</span>
+            <strong id="share-card-date">Born in 2000</strong>
+            <p id="share-card-copy">A cinematic dashboard about time, history, and possibility.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

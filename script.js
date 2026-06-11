@@ -25,6 +25,8 @@ const tryAgainButton = document.querySelector("#try-again");
 const sampleButtons = document.querySelectorAll("[data-sample]");
 const homeNameForm = document.querySelector("#home-name-form");
 const homeNameInput = document.querySelector("#home-name-input");
+const homeLifeForm = document.querySelector("#home-life-form");
+const homeBirthDateInput = document.querySelector("#home-birth-date");
 const copyResultButton = document.querySelector("#copy-result");
 const shareResultButton = document.querySelector("#share-result");
 const generateShareCardButton = document.querySelector("#generate-share-card");
@@ -1933,6 +1935,18 @@ if (homeNameForm) {
   });
 }
 
+if (homeLifeForm) {
+  homeLifeForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const dateValue = homeBirthDateInput.value;
+    if (!dateValue) {
+      homeBirthDateInput.focus();
+      return;
+    }
+    window.location.href = `lifetimeline.html?date=${encodeURIComponent(dateValue)}#/timeline/${dateValue}`;
+  });
+}
+
 if (copyResultButton) {
   copyResultButton.addEventListener("click", () => {
     if (!activeBrandProfile) return;
@@ -1979,3 +1993,353 @@ if (brandscanForm) {
     window.setTimeout(() => analyzeBrand(initialName), 280);
   }
 }
+
+const lifeForm = document.querySelector("#life-form");
+const birthDateInput = document.querySelector("#birth-date");
+const lifeLoading = document.querySelector("#life-loading");
+const lifeResults = document.querySelector("#life-results");
+const resetLifeButton = document.querySelector("#reset-life");
+const downloadLifeCardButton = document.querySelector("#download-life-card");
+const copyLifeLinkButton = document.querySelector("#copy-life-link");
+const shareLifeResultButton = document.querySelector("#share-life-result");
+let activeLifeProfile = null;
+
+const HISTORICAL_FACTS = {
+  1998: ["Google was founded, changing how the world searched for information.", "The International Space Station began assembly in orbit.", "MP3 players were becoming part of everyday digital culture."],
+  1999: ["The world prepared for Y2K and a new digital century.", "Bluetooth 1.0 was introduced.", "The euro launched as an electronic currency."],
+  2000: ["The world entered a new millennium with intense technology optimism.", "Camera phones began moving toward mainstream life.", "The PlayStation 2 launched and shaped home entertainment."],
+  2001: ["Wikipedia launched and changed public knowledge forever.", "The iPod introduced a new era of portable music.", "Human spaceflight continued aboard the International Space Station."],
+  2002: ["Friendster helped define early social networking.", "Camera phones spread more widely across global markets.", "The Segway became a symbol of futuristic urban mobility."],
+  2003: ["Skype launched, making internet calls feel normal.", "Myspace grew into an early social media giant.", "The Human Genome Project was completed."],
+  2004: ["Facebook launched from a college dorm room.", "Mozilla Firefox 1.0 gave web users a major browser alternative.", "NASA rovers Spirit and Opportunity landed on Mars."],
+  2005: ["YouTube launched and transformed video culture.", "Google Maps made digital navigation feel everyday.", "Podcasting began entering mainstream awareness."],
+  2006: ["Twitter launched and changed real-time public conversation.", "Nintendo Wii made motion controls mainstream.", "Cloud computing started becoming a serious business category."],
+  2007: ["The first iPhone was introduced.", "Netflix began streaming video online.", "Kindle helped push digital reading into the mainstream."]
+};
+
+const TECHNOLOGY_ERAS = [
+  [1995, "Web Era", "The internet becomes personal, searchable, and social."],
+  [2001, "Portable Digital Life", "Music, phones, and messaging become pocket-sized identity tools."],
+  [2007, "Smartphone World", "Touchscreens turn the internet into something people carry everywhere."],
+  [2012, "Social Video Culture", "Feeds, creators, and mobile cameras reshape memory and attention."],
+  [2020, "Remote-First Life", "Work, school, and connection become more digitally distributed."],
+  [2023, "AI Companion Era", "Generative AI makes software feel conversational and creative."]
+];
+
+function formatDateLong(date) {
+  return date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+}
+
+function formatCompact(value) {
+  return Math.round(value).toLocaleString("en-US");
+}
+
+function getAgeParts(birthDate, now = new Date()) {
+  let years = now.getFullYear() - birthDate.getFullYear();
+  let months = now.getMonth() - birthDate.getMonth();
+  let days = now.getDate() - birthDate.getDate();
+
+  if (days < 0) {
+    months -= 1;
+    days += new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+  }
+
+  if (months < 0) {
+    years -= 1;
+    months += 12;
+  }
+
+  return { years, months, days };
+}
+
+function addDays(date, days) {
+  const next = new Date(date);
+  next.setDate(next.getDate() + days);
+  return next;
+}
+
+function getHistoricalFacts(year) {
+  if (HISTORICAL_FACTS[year]) return HISTORICAL_FACTS[year];
+  const closestYear = Object.keys(HISTORICAL_FACTS)
+    .map(Number)
+    .sort((a, b) => Math.abs(year - a) - Math.abs(year - b))[0];
+  return [
+    `Exact static facts for ${year} are limited in this MVP, so this capsule uses the closest available era: ${closestYear}.`,
+    ...HISTORICAL_FACTS[closestYear].slice(0, 2)
+  ];
+}
+
+function buildLifeProfile(dateValue) {
+  const birthDate = new Date(`${dateValue}T00:00:00`);
+  const now = new Date();
+  const age = getAgeParts(birthDate, now);
+  const daysLived = Math.max(0, Math.floor((now - birthDate) / 86400000));
+  const weeksLived = daysLived / 7;
+  const monthsLived = age.years * 12 + age.months;
+  const hoursLived = daysLived * 24;
+  const sleepHours = hoursLived * 0.33;
+  const heartbeats = daysLived * 24 * 60 * 72;
+  const breaths = daysLived * 24 * 60 * 16;
+  const earthOrbitKm = daysLived * 2570000;
+  const marsAge = age.years / 1.8808;
+  const jupiterAge = age.years / 11.862;
+  const year = birthDate.getFullYear();
+  const facts = getHistoricalFacts(year);
+  const techTimeline = TECHNOLOGY_ERAS
+    .filter(([eraYear]) => eraYear >= year)
+    .slice(0, 6)
+    .map(([eraYear, title, copy]) => ({ year: eraYear, title, copy, estimate: eraYear > now.getFullYear() }));
+
+  const milestones = [10000, 15000, 20000, 25000, 30000].map((day) => ({
+    title: `${formatCompact(day)} days old`,
+    date: formatDateLong(addDays(birthDate, day)),
+    copy: day > daysLived ? "A future checkpoint worth looking forward to." : "A milestone you have already passed."
+  }));
+
+  return {
+    birthDate,
+    dateValue,
+    year,
+    age,
+    daysLived,
+    weeksLived,
+    monthsLived,
+    hoursLived,
+    sleepHours,
+    heartbeats,
+    breaths,
+    earthOrbitKm,
+    marsAge,
+    jupiterAge,
+    facts,
+    techTimeline,
+    milestones,
+    directUrl: `${window.location.origin}/timeline/${dateValue}`,
+    summary: `You have lived about ${formatCompact(daysLived)} days, traveled roughly ${formatCompact(earthOrbitKm)} km around the Sun, and crossed through ${age.years} years of technology, culture, and personal history.`
+  };
+}
+
+function renderLifeMetrics(profile) {
+  const metrics = [
+    ["Days Lived", profile.daysLived, "Every day is one dot in your personal constellation."],
+    ["Weeks Lived", profile.weeksLived, "A calendar view of momentum and memory."],
+    ["Hours Lived", profile.hoursLived, "Time translated into scale."],
+    ["Sleep Estimate", profile.sleepHours, "Approximate, based on one third of life asleep."],
+    ["Heartbeats", profile.heartbeats, "Estimated at 72 beats per minute."],
+    ["Breaths", profile.breaths, "Estimated at 16 breaths per minute."]
+  ];
+  const container = document.querySelector("#life-metrics");
+  container.innerHTML = "";
+  metrics.forEach(([label, value, note], index) => {
+    const card = document.createElement("div");
+    card.className = "life-metric-card";
+    card.style.setProperty("--metric-delay", `${index * 80}ms`);
+    card.innerHTML = `<span>${label}</span><strong data-count-to="${Math.round(value)}">0</strong><p>${note}</p>`;
+    container.appendChild(card);
+  });
+}
+
+function animateLifeCounters(scope = document) {
+  scope.querySelectorAll("[data-count-to]").forEach((element) => {
+    const target = Number(element.dataset.countTo || 0);
+    const start = performance.now();
+    const duration = 900;
+    const tick = (time) => {
+      const progress = Math.min(1, (time - start) / duration);
+      element.textContent = formatCompact(target * (1 - Math.pow(1 - progress, 3)));
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+}
+
+function renderLifeChart(profile) {
+  const values = [
+    ["Life", Math.min(100, profile.age.years * 1.2)],
+    ["Sleep", 33],
+    ["Mars Age", Math.min(100, profile.marsAge * 3)],
+    ["Jupiter", Math.min(100, profile.jupiterAge * 18)]
+  ];
+  const chart = document.querySelector("#life-chart");
+  chart.innerHTML = values.map(([label, value]) => `
+    <div class="chart-row">
+      <span>${label}</span>
+      <div><i style="width: ${Math.max(6, value)}%"></i></div>
+      <strong>${Math.round(value)}</strong>
+    </div>
+  `).join("");
+}
+
+function renderTimeline(selector, items) {
+  const container = document.querySelector(selector);
+  container.innerHTML = "";
+  items.forEach((item) => {
+    const entry = document.createElement("div");
+    entry.className = "timeline-entry";
+    entry.innerHTML = `<span>${item.year || item.date}</span><strong>${item.title}</strong><p>${item.copy}</p>`;
+    container.appendChild(entry);
+  });
+}
+
+function updateLifeSeo(profile) {
+  const title = `Born on ${formatDateLong(profile.birthDate)} | Life Timeline`;
+  const description = `Personal time capsule for ${formatDateLong(profile.birthDate)}: ${formatCompact(profile.daysLived)} days lived, world events, technology timeline, cosmic age, and future milestones.`;
+  document.title = title;
+  const descriptionMeta = document.querySelector('meta[name="description"]');
+  if (descriptionMeta) descriptionMeta.setAttribute("content", description);
+  const schema = document.querySelector("#life-schema");
+  if (schema) {
+    schema.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: title,
+      description,
+      url: profile.directUrl,
+      about: "Life timeline calculator and personal time capsule"
+    });
+  }
+}
+
+function renderLifeProfile(profile) {
+  activeLifeProfile = profile;
+  document.querySelector("#life-result-title").textContent = `Born on ${formatDateLong(profile.birthDate)}`;
+  document.querySelector("#life-result-summary").textContent = profile.summary;
+  document.querySelector("#life-age-years").textContent = profile.age.years;
+  document.querySelector("#life-age-copy").textContent = `${profile.age.months} months and ${profile.age.days} days into your current orbit.`;
+  document.querySelector("#share-card-date").textContent = `Born in ${profile.year}`;
+  document.querySelector("#share-card-copy").textContent = `${formatCompact(profile.daysLived)} days lived. ${profile.facts[0]}`;
+  renderLifeMetrics(profile);
+  renderLifeChart(profile);
+  renderTimeline("#world-capsule", profile.facts.map((copy, index) => ({ year: profile.year, title: index === 0 ? "Birth Year Signal" : "World Context", copy })));
+  renderTimeline("#technology-timeline", profile.techTimeline);
+  renderTimeline("#milestone-timeline", profile.milestones);
+
+  const cosmic = document.querySelector("#cosmic-timeline");
+  cosmic.innerHTML = [
+    ["Age on Mars", `${profile.marsAge.toFixed(1)} Martian years`, "Mars takes 687 Earth days to orbit the Sun."],
+    ["Age on Jupiter", `${profile.jupiterAge.toFixed(2)} Jovian years`, "Jupiter years are huge, which makes life feel beautifully small."],
+    ["Solar Distance", `${formatCompact(profile.earthOrbitKm)} km`, "Estimated distance carried around the Sun by Earth."],
+    ["Moon Cycles", `${formatCompact(profile.daysLived / 29.53)}`, "Approximate lunar months since your birth."]
+  ].map(([label, value, copy]) => `<div><span>${label}</span><strong>${value}</strong><p>${copy}</p></div>`).join("");
+
+  updateLifeSeo(profile);
+  animateLifeCounters(lifeResults);
+}
+
+function downloadLifeShareCard(profile) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1200;
+  canvas.height = 630;
+  const context = canvas.getContext("2d");
+  const gradient = context.createLinearGradient(0, 0, 1200, 630);
+  gradient.addColorStop(0, "#020617");
+  gradient.addColorStop(0.5, "#082f49");
+  gradient.addColorStop(1, "#3b0764");
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, 1200, 630);
+  context.fillStyle = "rgba(34, 211, 238, 0.16)";
+  context.beginPath();
+  context.arc(930, 160, 260, 0, Math.PI * 2);
+  context.fill();
+  context.fillStyle = "#fbbf24";
+  context.font = "700 34px Arial";
+  context.fillText("RasulTech / Life Timeline", 72, 90);
+  context.fillStyle = "#ffffff";
+  context.font = "900 68px Arial";
+  context.fillText(`Born ${formatDateLong(profile.birthDate)}`, 72, 190);
+  context.font = "900 118px Arial";
+  context.fillText(`${formatCompact(profile.daysLived)} days`, 72, 340);
+  context.fillStyle = "#dbeafe";
+  context.font = "500 34px Arial";
+  context.fillText("lived on Earth, moving through history and space.", 72, 410);
+  context.fillStyle = "#e0f2fe";
+  context.font = "700 30px Arial";
+  context.fillText(`Heartbeats: ${formatCompact(profile.heartbeats)}`, 72, 500);
+  context.fillText(`Age on Mars: ${profile.marsAge.toFixed(1)} years`, 72, 545);
+  const link = document.createElement("a");
+  link.href = canvas.toDataURL("image/png");
+  link.download = `life-timeline-${profile.dateValue}.png`;
+  link.click();
+}
+
+function getLifeShareText(profile) {
+  return `I made my Life Timeline: ${formatCompact(profile.daysLived)} days lived, ${formatCompact(profile.heartbeats)} estimated heartbeats, and ${profile.marsAge.toFixed(1)} years old on Mars.`;
+}
+
+if (lifeForm) {
+  const params = new URLSearchParams(window.location.search);
+  const pathMatch = window.location.pathname.match(/\/timeline\/(\d{4}-\d{2}-\d{2})/);
+  const initialDate = params.get("date") || (pathMatch ? pathMatch[1] : "");
+  if (initialDate) birthDateInput.value = initialDate;
+
+  lifeForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!birthDateInput.value) return;
+    lifeLoading.hidden = false;
+    lifeResults.hidden = true;
+    window.setTimeout(() => {
+      const profile = buildLifeProfile(birthDateInput.value);
+      renderLifeProfile(profile);
+      lifeLoading.hidden = true;
+      lifeResults.hidden = false;
+      window.history.replaceState({ date: profile.dateValue }, "", `lifetimeline.html?date=${profile.dateValue}#/timeline/${profile.dateValue}`);
+      lifeResults.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 900);
+  });
+
+  if (initialDate) {
+    window.setTimeout(() => lifeForm.requestSubmit(), 320);
+  }
+}
+
+if (resetLifeButton) {
+  resetLifeButton.addEventListener("click", () => {
+    lifeResults.hidden = true;
+    birthDateInput.value = "";
+    birthDateInput.focus();
+  });
+}
+
+if (downloadLifeCardButton) {
+  downloadLifeCardButton.addEventListener("click", () => {
+    if (activeLifeProfile) downloadLifeShareCard(activeLifeProfile);
+  });
+}
+
+if (copyLifeLinkButton) {
+  copyLifeLinkButton.addEventListener("click", () => {
+    if (activeLifeProfile) copyText(activeLifeProfile.directUrl, copyLifeLinkButton, "Link Copied");
+  });
+}
+
+if (shareLifeResultButton) {
+  shareLifeResultButton.addEventListener("click", async () => {
+    if (!activeLifeProfile) return;
+    const shareData = {
+      title: "My Life Timeline",
+      text: getLifeShareText(activeLifeProfile),
+      url: activeLifeProfile.directUrl
+    };
+    if (navigator.share) {
+      await navigator.share(shareData);
+    } else {
+      copyText(`${shareData.text}\n${shareData.url}`, shareLifeResultButton, "Share Text Copied");
+    }
+  });
+}
+
+const revealObserver = "IntersectionObserver" in window
+  ? new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) entry.target.classList.add("is-visible");
+    });
+  }, { threshold: 0.16 })
+  : null;
+
+document.querySelectorAll(".reveal-on-scroll").forEach((element) => {
+  if (revealObserver) {
+    revealObserver.observe(element);
+  } else {
+    element.classList.add("is-visible");
+  }
+});

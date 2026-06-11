@@ -2234,12 +2234,51 @@ const TECH_MILESTONES = [
   { year: 2023, title: "Generative AI Goes Mainstream", copy: "AI became a creative and practical assistant for millions of people." }
 ];
 
+const SHARE_EVENT_LIBRARY = [
+  { year: 1985, category: "culture", title: "Back to the Future released", copy: "time travel became one of the decade's defining movie ideas" },
+  { year: 1989, category: "world", title: "the Berlin Wall fell", copy: "the map of modern Europe began changing in a dramatic public way" },
+  { year: 1990, category: "space", title: "Hubble launched", copy: "humanity put a new eye into orbit" },
+  { year: 1991, category: "internet", title: "the World Wide Web became public", copy: "the internet started moving toward ordinary life" },
+  { year: 1993, category: "movies", title: "Jurassic Park changed cinema", copy: "digital effects started feeling impossible and real at the same time" },
+  { year: 1995, category: "technology", title: "Windows 95 arrived", copy: "home computing became more visual and mainstream" },
+  { year: 1997, category: "culture", title: "Titanic became a global event", copy: "movie culture became a shared worldwide memory" },
+  { year: 1998, category: "internet", title: "Google was founded", copy: "search became the front door to the web" },
+  { year: 2000, category: "sports", title: "the Sydney Olympics happened", copy: "the new millennium opened with a global sports celebration" },
+  { year: 2001, category: "technology", title: "the iPod and Wikipedia arrived", copy: "portable music and open knowledge changed how people carried culture" },
+  { year: 2004, category: "internet", title: "Facebook launched", copy: "real-name social networking began reshaping identity online" },
+  { year: 2005, category: "internet", title: "YouTube launched", copy: "ordinary people could publish video to the world" },
+  { year: 2006, category: "internet", title: "Twitter launched", copy: "real-time public conversation became part of internet culture" },
+  { year: 2007, category: "technology", title: "the iPhone was introduced", copy: "the phone began turning into the center of daily life" },
+  { year: 2008, category: "science", title: "the Large Hadron Collider powered up", copy: "physics entered a new public imagination era" },
+  { year: 2008, category: "sports", title: "the Beijing Olympics happened", copy: "global sports spectacle entered a new visual scale" },
+  { year: 2009, category: "technology", title: "Bitcoin began", copy: "digital money started as a strange experiment" },
+  { year: 2010, category: "social", title: "Instagram launched", copy: "photo-sharing began changing identity, memory, and attention" },
+  { year: 2010, category: "sports", title: "the South Africa World Cup happened", copy: "global football culture had one of its loudest shared soundtracks" },
+  { year: 2012, category: "space", title: "Curiosity landed on Mars", copy: "a rover began exploring another world in high definition" },
+  { year: 2012, category: "music", title: "Gangnam Style went global", copy: "internet music became a worldwide shared joke and dance" },
+  { year: 2013, category: "culture", title: "Frozen became a phenomenon", copy: "animation and music turned into a generational memory" },
+  { year: 2015, category: "science", title: "CRISPR entered mainstream conversation", copy: "gene editing became one of the biggest science stories of the decade" },
+  { year: 2016, category: "gaming", title: "Pokemon Go exploded", copy: "phones turned streets and parks into game worlds" },
+  { year: 2017, category: "gaming", title: "Fortnite Battle Royale launched", copy: "gaming became social space, performance, and culture at once" },
+  { year: 2018, category: "movies", title: "Black Panther became a cultural event", copy: "superhero cinema carried a different kind of global meaning" },
+  { year: 2019, category: "science", title: "the first black hole image was released", copy: "the invisible became visible to the public" },
+  { year: 2020, category: "world", title: "remote life became mainstream", copy: "school, work, family, and friendship moved through screens" },
+  { year: 2021, category: "space", title: "James Webb launched", copy: "humanity sent its next great telescope toward deep space" },
+  { year: 2022, category: "ai", title: "generative AI entered public conversation", copy: "software started feeling creative in a new way" },
+  { year: 2023, category: "ai", title: "AI assistants went mainstream", copy: "millions of people began using AI for writing, coding, learning, and creating" },
+  { year: 2024, category: "space", title: "a total solar eclipse crossed North America", copy: "millions looked up at the same sky event" }
+];
+
 function formatDateLong(date) {
   return date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 }
 
 function formatCompact(value) {
   return Math.round(value).toLocaleString("en-US");
+}
+
+function capitalizeFirst(value) {
+  return value ? value.charAt(0).toUpperCase() + value.slice(1) : "";
 }
 
 function padDatePart(value) {
@@ -2357,6 +2396,46 @@ function getGeneration(year) {
   if (year <= 1996) return ["Millennial", "Your generation grew up while the internet moved from strange novelty to daily infrastructure."];
   if (year <= 2012) return ["Gen Z", "Your generation arrived into a world where phones, feeds, video, and identity were already merging."];
   return ["Gen Alpha", "Your generation is growing up with AI, tablets, streaming, and voice interfaces as normal background technology."];
+}
+
+function getGenerationProfile(year) {
+  if (year <= 1980) {
+    return {
+      name: "Gen X edge",
+      tech: ["cassette tapes", "arcades", "cable TV", "early PCs", "landline phones"],
+      culture: "analog childhood, independent youth culture, MTV, malls, and the first serious home computing wave",
+      inventions: "personal computers, game consoles, cable channels, and early mobile phones",
+      internet: "The internet arrived later, which means you experienced the before-and-after more clearly than younger generations."
+    };
+  }
+
+  if (year <= 1996) {
+    return {
+      name: "Millennial",
+      tech: ["CDs", "desktop computers", "AIM/MSN-style messaging", "early web browsers", "MP3 players"],
+      culture: "Saturday cartoons, school computer labs, DVDs, early social networks, and the jump from offline life to online identity",
+      inventions: "the mainstream web, search engines, smartphones, streaming, and social platforms",
+      internet: "You watched the internet grow up beside you, from slow pages and usernames to feeds, apps, and AI."
+    };
+  }
+
+  if (year <= 2012) {
+    return {
+      name: "Gen Z",
+      tech: ["smartphones", "apps", "YouTube", "social feeds", "streaming"],
+      culture: "creator culture, memes, mobile video, algorithmic discovery, and identity shaped through screens",
+      inventions: "touchscreen phones, app stores, short-form video, cloud tools, and generative AI",
+      internet: "For you, the internet was not a destination. It was the atmosphere."
+    };
+  }
+
+  return {
+    name: "Gen Alpha",
+    tech: ["tablets", "voice assistants", "streaming", "AI tools", "connected classrooms"],
+    culture: "video-first childhood, AI-assisted learning, immersive games, and personalized entertainment",
+    inventions: "generative AI, spatial computing, smart devices, and always-on cloud ecosystems",
+    internet: "You are growing up after the internet became invisible infrastructure."
+  };
 }
 
 function getMonthSignal(birthDate) {
@@ -2479,10 +2558,129 @@ function getPersonalTechTimeline(birthYear, currentYear) {
   return sortTimelineByYear([birthSnapshot, ...visible, ...future]).slice(0, 9);
 }
 
+function countRecurringEvents(birthYear, currentYear, interval, startYear) {
+  let count = 0;
+  for (let year = startYear; year <= currentYear; year += interval) {
+    if (year >= birthYear) count += 1;
+  }
+  return count;
+}
+
+function getLifespanPerspective(daysLived) {
+  const averageLifeDays = 80 * 365.2425;
+  const percent = Math.min(100, (daysLived / averageLifeDays) * 100);
+  const remaining = Math.max(0, averageLifeDays - daysLived);
+  return {
+    percent,
+    remainingDays: remaining,
+    livedDays: daysLived,
+    averageLifeDays
+  };
+}
+
+function describeAgeAtEvent(eventYear, birthYear) {
+  const age = eventYear - birthYear;
+  if (age < 0) {
+    const before = Math.abs(age);
+    return `${before} ${before === 1 ? "year" : "years"} before you were born`;
+  }
+  if (age === 0) return "the year you were born";
+  if (age === 1) return "when you were 1 year old";
+  return `when you were ${age} years old`;
+}
+
+function getEventsNearAge(profile, targetAge, categories = []) {
+  const targetYear = profile.year + targetAge;
+  return SHARE_EVENT_LIBRARY
+    .filter((event) => event.year >= profile.year && event.year <= 2026)
+    .filter((event) => !categories.length || categories.includes(event.category))
+    .map((event) => ({ ...event, distance: Math.abs(event.year - targetYear) }))
+    .sort((a, b) => a.distance - b.distance || a.year - b.year);
+}
+
+function getShareMoments(profile) {
+  const moments = [];
+  const birthCapsule = getYearCapsule(profile.year);
+  const birthEvent = SHARE_EVENT_LIBRARY.find((event) => event.year === profile.year);
+
+  if (birthEvent) {
+    moments.push(`You were born the same year ${birthEvent.title}; ${birthEvent.copy}.`);
+  } else {
+    moments.push(`The year you were born, ${birthCapsule.movies.toLowerCase()} That gives your birth year a specific cultural fingerprint.`);
+  }
+
+  const childhoodEvent = getEventsNearAge(profile, 5, ["internet", "technology", "culture", "movies", "gaming"])[0];
+  if (childhoodEvent) {
+    moments.push(`${capitalizeFirst(describeAgeAtEvent(childhoodEvent.year, profile.year))}, ${childhoodEvent.title}; ${childhoodEvent.copy}.`);
+  }
+
+  const earlyTeenEvent = getEventsNearAge(profile, 12, ["technology", "internet", "social", "gaming", "science"])[0];
+  if (earlyTeenEvent && !moments.some((moment) => moment.includes(earlyTeenEvent.title))) {
+    moments.push(`${capitalizeFirst(describeAgeAtEvent(earlyTeenEvent.year, profile.year))}, ${earlyTeenEvent.title}; ${earlyTeenEvent.copy}.`);
+  }
+
+  const adultEvent = getEventsNearAge(profile, 18, ["ai", "space", "science", "world", "sports"])[0];
+  if (adultEvent && !moments.some((moment) => moment.includes(adultEvent.title))) {
+    moments.push(`${capitalizeFirst(describeAgeAtEvent(adultEvent.year, profile.year))}, ${adultEvent.title}; ${adultEvent.copy}.`);
+  }
+
+  const backupEvents = SHARE_EVENT_LIBRARY
+    .filter((event) => event.year >= profile.year && event.year <= 2026)
+    .sort((a, b) => a.year - b.year);
+
+  backupEvents.forEach((event) => {
+    if (moments.length >= 5 || moments.some((moment) => moment.includes(event.title))) return;
+    moments.push(`${capitalizeFirst(describeAgeAtEvent(event.year, profile.year))}, ${event.title}; ${event.copy}.`);
+  });
+
+  if (moments.length < 5) {
+    const nextMilestoneAge = profile.age.years < 5 ? 5 : profile.age.years < 10 ? 10 : 18;
+    moments.push(`Your age-${nextMilestoneAge} chapter is still ahead, which means this timeline is not only memory. It is an unfolding story.`);
+  }
+
+  const generationMoment = profile.year < 1995
+    ? "Your childhood began before the mainstream web, so your timeline crosses the rare before-and-after of internet history."
+    : profile.year < 2007
+      ? "Your childhood started in the desktop internet era and shifted into smartphones before adulthood."
+      : profile.year < 2015
+        ? "Your childhood unfolded inside the app era, where photos, video, games, and school life were already becoming mobile."
+        : "Your early life belongs to the AI-and-streaming generation, where screens, voice assistants, and personalization were already normal.";
+
+  moments.push(generationMoment);
+
+  return moments.slice(0, 5);
+}
+
+function getPersonalStoryTimeline(profile) {
+  const moments = [5, 10, 15, 18, 21, 25, 30]
+    .filter((age) => age <= profile.age.years)
+    .map((age) => {
+      const year = profile.year + age;
+      const capsule = getYearCapsule(year);
+      const tech = TECH_MILESTONES.find((item) => item.year >= year) || TECH_MILESTONES[TECH_MILESTONES.length - 1];
+      return {
+        year,
+        title: `When you were ${age}`,
+        copy: `${capsule.culture} Around this chapter, technology was moving toward ${tech.title.toLowerCase()}: ${tech.copy}`
+      };
+    });
+
+  if (!moments.length) {
+    return [{
+      year: profile.year,
+      title: "Your story is just beginning",
+      copy: "The first chapters of your timeline are still forming, which makes every future milestone feel closer and more visible."
+    }];
+  }
+
+  return moments.slice(0, 7);
+}
+
 function buildLifeProfile(dateValue) {
   const birthDate = new Date(`${dateValue}T00:00:00`);
   const now = new Date();
   const age = getAgeParts(birthDate, now);
+  const year = birthDate.getFullYear();
   const daysLived = Math.max(0, Math.floor((now - birthDate) / 86400000));
   const weeksLived = daysLived / 7;
   const monthsLived = age.years * 12 + age.months;
@@ -2491,12 +2689,21 @@ function buildLifeProfile(dateValue) {
   const heartbeats = daysLived * 24 * 60 * 72;
   const breaths = daysLived * 24 * 60 * 16;
   const earthOrbitKm = daysLived * 2570000;
+  const earthOrbitMiles = earthOrbitKm * 0.621371;
+  const sunrises = daysLived;
+  const moonCycles = daysLived / 29.53;
+  const earthRotations = daysLived;
+  const weekends = Math.floor(daysLived / 7) * 2;
+  const birthdaysCelebrated = age.years;
+  const olympicGames = countRecurringEvents(year, now.getFullYear(), 4, 1980);
+  const worldCups = countRecurringEvents(year, now.getFullYear(), 4, 1982);
   const marsAge = age.years / 1.8808;
   const jupiterAge = age.years / 11.862;
-  const year = birthDate.getFullYear();
   const facts = getHistoricalFacts(year);
   const personalCapsule = getPersonalCapsule(birthDate);
   const techTimeline = getPersonalTechTimeline(year, now.getFullYear());
+  const generationProfile = getGenerationProfile(year);
+  const perspective = getLifespanPerspective(daysLived);
 
   const milestones = [10000, 15000, 20000, 25000, 30000].map((day) => ({
     title: `${formatCompact(day)} days old`,
@@ -2517,11 +2724,21 @@ function buildLifeProfile(dateValue) {
     heartbeats,
     breaths,
     earthOrbitKm,
+    earthOrbitMiles,
+    sunrises,
+    moonCycles,
+    earthRotations,
+    weekends,
+    birthdaysCelebrated,
+    olympicGames,
+    worldCups,
     marsAge,
     jupiterAge,
     facts,
     personalCapsule,
     techTimeline,
+    generationProfile,
+    perspective,
     milestones,
     directUrl: `${window.location.origin}/timeline/${dateValue}`,
     summary: `You have lived about ${formatCompact(daysLived)} days, traveled roughly ${formatCompact(earthOrbitKm)} km around the Sun, and crossed through ${age.years} years of technology, culture, and ${getMonthSignal(birthDate)[1]}.`
@@ -2579,6 +2796,90 @@ function renderLifeChart(profile) {
   `).join("");
 }
 
+function renderWowMetrics(profile) {
+  const container = document.querySelector("#wow-metrics");
+  if (!container) return;
+  const metrics = [
+    ["Sunrises", profile.sunrises, "roughly one sunrise for every day you have been here"],
+    ["Moon Cycles", profile.moonCycles, "full lunar cycles lived through"],
+    ["Earth Rotations", profile.earthRotations, "spins of the planet since your birth"],
+    ["Weekends", profile.weekends, "weekend days that passed through your timeline"],
+    ["Birthdays", profile.birthdaysCelebrated, "birthdays already celebrated"],
+    ["Olympic Games", profile.olympicGames, "Summer Olympic cycles during your lifetime"],
+    ["World Cups", profile.worldCups, "FIFA World Cup cycles during your lifetime"],
+    ["Space Travel", profile.earthOrbitMiles, "miles carried around the Sun by Earth"]
+  ];
+
+  container.innerHTML = metrics.map(([label, value, note], index) => `
+    <div class="wow-metric" style="--metric-delay: ${index * 70}ms">
+      <span>${label}</span>
+      <strong data-count-to="${Math.round(value)}">0</strong>
+      <p>${note}</p>
+    </div>
+  `).join("");
+}
+
+function renderShareMoments(profile) {
+  const container = document.querySelector("#share-moments");
+  if (!container) return;
+  container.innerHTML = getShareMoments(profile).map((moment) => `
+    <div class="share-moment-card">
+      <span>Share Moment</span>
+      <strong>${moment}</strong>
+    </div>
+  `).join("");
+}
+
+function renderGenerationProfile(profile) {
+  const container = document.querySelector("#generation-profile");
+  if (!container) return;
+  const generation = profile.generationProfile;
+  container.innerHTML = `
+    <h4>${generation.name}</h4>
+    <p>${generation.internet}</p>
+    <div class="generation-tags">
+      ${generation.tech.map((item) => `<span>${item}</span>`).join("")}
+    </div>
+    <div class="generation-detail">
+      <strong>Cultural texture</strong>
+      <p>${generation.culture}</p>
+    </div>
+    <div class="generation-detail">
+      <strong>Defining inventions</strong>
+      <p>${generation.inventions}</p>
+    </div>
+  `;
+}
+
+function renderLifePerspective(profile) {
+  const container = document.querySelector("#life-perspective");
+  if (!container) return;
+  const percent = profile.perspective.percent;
+  container.innerHTML = `
+    <div class="perspective-meter">
+      <span style="width: ${percent}%"></span>
+    </div>
+    <h4>${percent.toFixed(1)}% of an 80-year life estimate</h4>
+    <p>You have lived about ${formatCompact(profile.perspective.livedDays)} days. If you use age 80 as a gentle reference point, there are about ${formatCompact(profile.perspective.remainingDays)} days ahead. This is not a prediction; it is perspective.</p>
+    <div class="perspective-split">
+      <span><strong>${formatCompact(profile.perspective.livedDays)}</strong> lived</span>
+      <span><strong>${formatCompact(profile.perspective.remainingDays)}</strong> possible ahead</span>
+    </div>
+  `;
+}
+
+function getFinalLifeSummary(profile) {
+  const techArc = profile.year < 1995
+    ? "the rise of the web, search engines, social media, smartphones, streaming, and artificial intelligence"
+    : profile.year < 2007
+      ? "the shift from early internet life into smartphones, social platforms, streaming, and artificial intelligence"
+      : profile.year < 2015
+        ? "the app era, creator culture, streaming, remote life, and the arrival of mainstream AI"
+        : "a world where mobile life, streaming, creator culture, and AI were already shaping childhood";
+
+  return `You have already experienced over ${formatCompact(profile.sunrises)} sunrises, about ${formatCompact(profile.moonCycles)} moon cycles, and roughly ${formatCompact(profile.heartbeats)} heartbeats. Earth has carried you around the Sun for over ${formatCompact(profile.earthOrbitMiles)} miles. You have lived through ${techArc}. This is your story so far.`;
+}
+
 function renderTimeline(selector, items) {
   const container = document.querySelector(selector);
   container.innerHTML = "";
@@ -2618,10 +2919,15 @@ function renderLifeProfile(profile) {
   document.querySelector("#share-card-date").textContent = `Born in ${profile.year}`;
   document.querySelector("#share-card-copy").textContent = `${formatCompact(profile.daysLived)} days lived. ${profile.personalCapsule[0].copy}`;
   renderLifeMetrics(profile);
+  renderWowMetrics(profile);
+  renderShareMoments(profile);
+  renderGenerationProfile(profile);
   renderLifeChart(profile);
   renderTimeline("#world-capsule", profile.personalCapsule);
   renderTimeline("#technology-timeline", profile.techTimeline);
   renderTimeline("#milestone-timeline", profile.milestones);
+  renderTimeline("#personal-story-timeline", getPersonalStoryTimeline(profile));
+  renderLifePerspective(profile);
 
   const cosmic = document.querySelector("#cosmic-timeline");
   cosmic.innerHTML = [
@@ -2630,6 +2936,10 @@ function renderLifeProfile(profile) {
     ["Solar Distance", `${formatCompact(profile.earthOrbitKm)} km`, "Estimated distance carried around the Sun by Earth."],
     ["Moon Cycles", `${formatCompact(profile.daysLived / 29.53)}`, "Approximate lunar months since your birth."]
   ].map(([label, value, copy]) => `<div><span>${label}</span><strong>${value}</strong><p>${copy}</p></div>`).join("");
+
+  const finalSummary = getFinalLifeSummary(profile);
+  document.querySelector("#life-final-title").textContent = `${profile.generationProfile.name}: your story so far`;
+  document.querySelector("#life-final-summary").textContent = finalSummary;
 
   updateLifeSeo(profile);
   animateLifeCounters(lifeResults);

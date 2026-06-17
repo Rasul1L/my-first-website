@@ -422,6 +422,16 @@ body {
   animation: home-reveal 900ms ease 6.35s forwards;
 }
 
+.skip-intro .cinematic-intro {
+  display: none;
+}
+
+.skip-intro .home {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+
 .hero {
   width: min(1050px, 100%);
   min-height: calc(100vh - 92px);
@@ -3654,7 +3664,7 @@ button:hover {
 
 .chart-row {
   display: grid;
-  grid-template-columns: 92px 1fr 42px;
+  grid-template-columns: 98px 1fr 86px;
   gap: 12px;
   align-items: center;
   color: #dbeafe;
@@ -3676,6 +3686,20 @@ button:hover {
   background: linear-gradient(90deg, #22d3ee, #a78bfa, #fbbf24);
   box-shadow: 0 0 22px rgba(34, 211, 238, 0.22);
   animation: score-bar-grow 900ms ease both;
+}
+
+.chart-row strong {
+  color: #ffffff;
+  font-size: 0.82rem;
+  text-align: right;
+}
+
+.chart-row small {
+  grid-column: 2 / 4;
+  color: #94a3b8;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.35;
 }
 
 .capsule-list,

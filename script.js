@@ -1,8 +1,17 @@
+const shouldSkipHomeIntro = new URLSearchParams(window.location.search).get("skipIntro") === "1";
+
+if (shouldSkipHomeIntro) {
+  document.documentElement.classList.add("skip-intro");
+}
+
 window.addEventListener("load", () => {
   const intro = document.querySelector(".cinematic-intro");
   initLiveNumbers();
 
-  if (intro) {
+  if (shouldSkipHomeIntro) {
+    if (intro) intro.remove();
+    window.history.replaceState(null, "", "index.html");
+  } else if (intro) {
     window.setTimeout(() => {
       intro.remove();
     }, 7400);
@@ -2381,6 +2390,30 @@ function getAgeParts(birthDate, now = new Date()) {
   return { years, months, days };
 }
 
+function getBirthdayForYear(birthDate, year) {
+  const birthday = new Date(year, birthDate.getMonth(), birthDate.getDate());
+  if (birthday.getMonth() !== birthDate.getMonth()) {
+    return new Date(year, 1, 28);
+  }
+  return birthday;
+}
+
+function getAgeYearProgress(birthDate, now = new Date()) {
+  let lastBirthday = getBirthdayForYear(birthDate, now.getFullYear());
+  if (lastBirthday > now) {
+    lastBirthday = getBirthdayForYear(birthDate, now.getFullYear() - 1);
+  }
+  const nextBirthday = getBirthdayForYear(birthDate, lastBirthday.getFullYear() + 1);
+  const daysIntoAge = Math.max(0, Math.floor((now - lastBirthday) / 86400000));
+  const daysInAgeYear = Math.max(1, Math.round((nextBirthday - lastBirthday) / 86400000));
+
+  return {
+    daysIntoAge,
+    daysInAgeYear,
+    percent: Math.min(100, (daysIntoAge / daysInAgeYear) * 100)
+  };
+}
+
 function addDays(date, days) {
   const next = new Date(date);
   next.setDate(next.getDate() + days);
@@ -2780,18 +2813,43 @@ function animateLifeCounters(scope = document) {
 }
 
 function renderLifeChart(profile) {
+  const ageYear = getAgeYearProgress(profile.birthDate);
+  const awakeHours = Math.max(0, profile.hoursLived - profile.sleepHours);
+  const awakePercent = profile.hoursLived ? (awakeHours / profile.hoursLived) * 100 : 0;
+  const sleepPercent = profile.hoursLived ? (profile.sleepHours / profile.hoursLived) * 100 : 0;
   const values = [
-    ["Life", Math.min(100, profile.age.years * 1.2)],
-    ["Sleep", 33],
-    ["Mars Age", Math.min(100, profile.marsAge * 3)],
-    ["Jupiter", Math.min(100, profile.jupiterAge * 18)]
+    [
+      "Life lived",
+      profile.perspective.percent,
+      `${profile.perspective.percent.toFixed(1)}%`,
+      "of an 80-year reference point"
+    ],
+    [
+      "This age",
+      ageYear.percent,
+      `${ageYear.daysIntoAge}/${ageYear.daysInAgeYear}`,
+      "days through your current age year"
+    ],
+    [
+      "Awake",
+      awakePercent,
+      `${formatCompact(awakeHours)}h`,
+      "estimated hours awake since birth"
+    ],
+    [
+      "Sleep",
+      sleepPercent,
+      `${formatCompact(profile.sleepHours)}h`,
+      "estimated at one third of total hours"
+    ]
   ];
   const chart = document.querySelector("#life-chart");
-  chart.innerHTML = values.map(([label, value]) => `
+  chart.innerHTML = values.map(([label, value, displayValue, note]) => `
     <div class="chart-row">
       <span>${label}</span>
       <div><i style="width: ${Math.max(6, value)}%"></i></div>
-      <strong>${Math.round(value)}</strong>
+      <strong>${displayValue}</strong>
+      <small>${note}</small>
     </div>
   `).join("");
 }

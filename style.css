@@ -1692,74 +1692,9 @@ button:hover {
 .hobbies-hero {
   min-height: calc(100vh - 120px);
   display: grid;
-  grid-template-columns: minmax(260px, 480px) 1fr;
-  gap: clamp(32px, 6vw, 78px);
+  grid-template-columns: 1fr;
+  gap: clamp(28px, 5vw, 56px);
   align-items: center;
-}
-
-.mafia-promo {
-  position: relative;
-  min-height: 560px;
-  border: 1px solid rgba(251, 191, 36, 0.32);
-  border-radius: 8px;
-  background: #080504;
-  perspective: 1000px;
-  box-shadow:
-    0 30px 90px rgba(0, 0, 0, 0.56),
-    inset 0 0 80px rgba(251, 191, 36, 0.08);
-  overflow: hidden;
-  transform-style: preserve-3d;
-}
-
-.mafia-promo::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.58), transparent 36%, rgba(0, 0, 0, 0.32)),
-    linear-gradient(180deg, rgba(251, 191, 36, 0.18), transparent 32%, rgba(0, 0, 0, 0.42));
-  pointer-events: none;
-}
-
-.mafia-promo::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  background:
-    linear-gradient(90deg, rgba(251, 191, 36, 0.24), transparent 26%, transparent 74%, rgba(127, 29, 29, 0.22)),
-    radial-gradient(circle at 50% 42%, transparent 0 34%, rgba(0, 0, 0, 0.42) 82%);
-  pointer-events: none;
-}
-
-.mafia-promo .promo-image {
-  transform-origin: center;
-}
-
-.promo-image {
-  display: block;
-  width: 100%;
-  height: 100%;
-  min-height: 560px;
-  object-fit: cover;
-  object-position: 50% 50%;
-  animation: property-camera 24s ease-in-out infinite;
-  will-change: transform, object-position, filter;
-}
-
-.camera-sweep {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  background:
-    linear-gradient(105deg, transparent 0 32%, rgba(255, 255, 255, 0.16) 43%, transparent 54%),
-    linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.22));
-  mix-blend-mode: screen;
-  opacity: 0.22;
-  pointer-events: none;
-  transform: translateX(-58%);
-  animation: lens-sweep 12s ease-in-out infinite;
 }
 
 .hobbies-intro {
@@ -1784,28 +1719,6 @@ button:hover {
     rgba(2, 6, 23, 0.92);
 }
 
-.mafia-topic {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: minmax(220px, 0.54fr) minmax(420px, 1.46fr);
-  gap: 34px;
-  align-items: start;
-  border-color: rgba(251, 191, 36, 0.46);
-  background:
-    linear-gradient(160deg, rgba(127, 29, 29, 0.45), rgba(69, 26, 3, 0.66)),
-    rgba(2, 6, 23, 0.9);
-}
-
-.player-profile-title {
-  position: sticky;
-  top: 24px;
-}
-
-.player-profile-title h2 {
-  font-size: clamp(1.8rem, 4vw, 3.2rem);
-  line-height: 0.98;
-}
-
 .cinematic-title {
   display: flex;
   flex-wrap: wrap;
@@ -1815,118 +1728,6 @@ button:hover {
 
 .hobbies-intro .cinematic-title {
   justify-content: flex-start;
-}
-
-.title-piece {
-  display: inline-block;
-  opacity: 0;
-  filter: blur(12px);
-  text-shadow:
-    0 0 18px rgba(251, 191, 36, 0.74),
-    0 0 42px rgba(127, 29, 29, 0.48);
-  transform:
-    translate3d(var(--start-x), var(--start-y), 0)
-    rotate(var(--spin))
-    scale(1.8);
-  animation: mafia-title-gather 1.9s cubic-bezier(0.16, 1, 0.3, 1) var(--delay) forwards;
-  will-change: transform, opacity, filter;
-}
-
-.title-space {
-  width: 0.34em;
-}
-
-.cinematic-title-small .title-piece {
-  animation-duration: 1.65s;
-}
-
-.mafia-stats {
-  display: grid;
-  gap: 18px;
-}
-
-.profile-metrics {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.metric-card {
-  min-height: 118px;
-  padding: 18px;
-  border: 1px solid rgba(251, 191, 36, 0.22);
-  border-radius: 8px;
-  background:
-    linear-gradient(160deg, rgba(251, 191, 36, 0.12), rgba(2, 6, 23, 0.44)),
-    rgba(0, 0, 0, 0.2);
-}
-
-.metric-card span {
-  display: block;
-  margin-bottom: 22px;
-  color: #d6d3d1;
-  font-size: 0.72rem;
-  font-weight: 900;
-  text-transform: uppercase;
-}
-
-.metric-card strong {
-  color: #fbbf24;
-  font-family: "Orbitron", "Poppins", Arial, Helvetica, sans-serif;
-  font-size: clamp(1.45rem, 3vw, 2.25rem);
-}
-
-.stats-table {
-  display: grid;
-  border: 1px solid rgba(251, 191, 36, 0.22);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.stats-row {
-  display: grid;
-  grid-template-columns: minmax(110px, 1fr) minmax(92px, 0.72fr) minmax(64px, 0.5fr) minmax(72px, 0.58fr);
-  align-items: center;
-  gap: 12px;
-  padding: 13px 16px;
-  border-top: 1px solid rgba(251, 191, 36, 0.14);
-}
-
-.stats-row:first-child {
-  border-top: 0;
-}
-
-.stats-head {
-  color: #fbbf24;
-  background: rgba(0, 0, 0, 0.28);
-  font-size: 0.78rem;
-  font-weight: 900;
-  text-transform: uppercase;
-}
-
-.stats-row span,
-.stats-row strong {
-  color: #f8fafc;
-}
-
-.stats-row strong {
-  font-family: "Orbitron", "Poppins", Arial, Helvetica, sans-serif;
-}
-
-.mafia-names-photo {
-  margin: 0;
-  border: 1px solid rgba(251, 191, 36, 0.22);
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.24);
-  box-shadow: 0 20px 54px rgba(0, 0, 0, 0.26);
-  overflow: hidden;
-}
-
-.mafia-names-photo img {
-  display: block;
-  width: 100%;
-  max-height: 520px;
-  object-fit: cover;
 }
 
 .hobby-topic h2 {
@@ -2159,41 +1960,6 @@ button:hover {
   }
 }
 
-@keyframes mafia-title-gather {
-  0% {
-    opacity: 0;
-    filter: blur(14px);
-    transform:
-      translate3d(var(--start-x), var(--start-y), 0)
-      rotate(var(--spin))
-      scale(1.8);
-  }
-
-  38% {
-    opacity: 1;
-    filter: blur(3px);
-    transform:
-      translate3d(var(--orbit-x), var(--orbit-y), 0)
-      rotate(calc(var(--spin) + 180deg))
-      scale(1.24);
-  }
-
-  64% {
-    opacity: 1;
-    filter: blur(1px);
-    transform:
-      translate3d(var(--orbit-2-x), var(--orbit-2-y), 0)
-      rotate(calc(var(--spin) + 300deg))
-      scale(1.08);
-  }
-
-  100% {
-    opacity: 1;
-    filter: blur(0);
-    transform: translate3d(0, 0, 0) rotate(0) scale(1);
-  }
-}
-
 @keyframes scanner-pulse {
   0%, 100% {
     transform: translate(-50%, -50%) scale(0.92);
@@ -2369,9 +2135,6 @@ button:hover {
     animation: none;
   }
 
-  .promo-image,
-  .camera-sweep,
-  .title-piece,
   .scanner-core,
   .scanner-ring,
   .scanner-grid,
@@ -2388,7 +2151,6 @@ button:hover {
     animation: none;
   }
 
-  .title-piece,
   .reveal-letter {
     opacity: 1;
     filter: none;
@@ -2451,14 +2213,6 @@ button:hover {
     grid-template-columns: 1fr;
   }
 
-  .mafia-promo {
-    min-height: 440px;
-  }
-
-  .promo-image {
-    min-height: 440px;
-  }
-
   .hobbies-intro {
     border-left: 0;
     border-top: 3px solid #fbbf24;
@@ -2477,21 +2231,6 @@ button:hover {
 
   .hobby-topic {
     min-height: auto;
-  }
-
-  .mafia-topic {
-    grid-template-columns: 1fr;
-  }
-
-  .profile-metrics {
-    grid-template-columns: 1fr;
-  }
-
-  .stats-row {
-    grid-template-columns: minmax(78px, 1fr) 56px 42px 58px;
-    gap: 8px;
-    padding: 12px;
-    font-size: 0.82rem;
   }
 
   .live-numbers {
@@ -2595,14 +2334,6 @@ button:hover {
 
   .hobbies-hero {
     grid-template-columns: 1fr;
-  }
-
-  .mafia-topic {
-    grid-template-columns: 1fr;
-  }
-
-  .profile-metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .product-feature {

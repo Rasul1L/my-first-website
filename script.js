@@ -3133,3 +3133,62 @@ document.querySelectorAll(".reveal-on-scroll").forEach((element) => {
     element.classList.add("is-visible");
   }
 });
+
+const worldModal = document.querySelector("#world-modal");
+const openWorldModalButton = document.querySelector("#open-world-modal");
+const worldCards = document.querySelectorAll(".world-card[data-world]");
+const worldStorageKey = "rasultechWorld";
+const worldActionLabels = {
+  space: "Enter the Cosmos",
+  beach: "Follow the Horizon",
+  antarctica: "Open the Aurora",
+  jungle: "Enter the Canopy",
+  desert: "Open the Sands",
+  cyber: "Step into Neon"
+};
+
+function setActiveWorld(world) {
+  const selectedWorld = world || "space";
+  document.documentElement.dataset.world = selectedWorld;
+  if (openWorldModalButton) {
+    openWorldModalButton.textContent = worldActionLabels[selectedWorld] || worldActionLabels.space;
+  }
+  try {
+    window.localStorage.setItem(worldStorageKey, selectedWorld);
+  } catch (error) {
+    // The visual still updates if storage is unavailable.
+  }
+  worldCards.forEach((card) => {
+    card.classList.toggle("is-active", card.dataset.world === selectedWorld);
+  });
+}
+
+function closeWorldModal() {
+  if (!worldModal) return;
+  worldModal.hidden = true;
+  document.body.classList.remove("modal-open");
+}
+
+if (worldModal && openWorldModalButton) {
+  setActiveWorld(document.documentElement.dataset.world);
+
+  openWorldModalButton.addEventListener("click", () => {
+    worldModal.hidden = false;
+    document.body.classList.add("modal-open");
+  });
+
+  worldModal.querySelectorAll("[data-close-world]").forEach((button) => {
+    button.addEventListener("click", closeWorldModal);
+  });
+
+  worldCards.forEach((card) => {
+    card.addEventListener("click", () => {
+      setActiveWorld(card.dataset.world);
+      closeWorldModal();
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeWorldModal();
+  });
+}

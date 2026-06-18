@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RasulTech | Product Studio</title>
+  <title>RasulTech | Project Studio</title>
   <meta name="description" content="A premium dark digital portfolio for RasulTech projects: BrandScan AI and Personal Time Capsule.">
-  <meta property="og:title" content="RasulTech | Product Studio">
+  <meta property="og:title" content="RasulTech | Project Studio">
   <meta property="og:description" content="Explore RasulTech projects in a cinematic dark portfolio experience.">
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="world-theme.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -38,9 +39,7 @@
     <header class="site-header" aria-label="Primary navigation">
       <a class="site-brand" href="index.html">RasulTech</a>
       <nav>
-        <a href="#products">Products</a>
-        <a href="brandscan.html">BrandScan AI</a>
-        <a href="lifetimeline.html">Time Capsule</a>
+        <a href="products.html">Projects</a>
       </nav>
     </header>
 
@@ -66,56 +65,53 @@
       </div>
       <div class="hero-minimal">
         <p class="eyebrow">RasulTech</p>
-        <h1>Product Studio</h1>
-        <div class="hero-actions" aria-label="Project shortcuts">
-          <a href="#products">Explore Products</a>
-          <a href="brandscan.html">BrandScan AI</a>
-          <a href="lifetimeline.html">Time Capsule</a>
+        <h1>RasulTech</h1>
+        <div class="hero-actions" aria-label="World selection">
+          <button class="world-trigger" type="button" id="open-world-modal">Enter the Cosmos</button>
         </div>
       </div>
     </section>
-
-    <section class="story-page" id="products" aria-label="RasulTech products">
-      <div class="story-header">
-        <p class="eyebrow">Products</p>
-        <h2>Projects</h2>
-      </div>
-
-      <div class="topic-grid products-grid">
-        <article class="topic-card products-topic product-time-capsule">
-          <div>
-            <span class="topic-number">01</span>
-            <h3>Personal Time Capsule</h3>
-            <p>Days lived, world events, cosmic age, future milestones, and a share card in one product.</p>
-          </div>
-          <form class="hero-search product-search" id="home-life-form">
-            <label for="home-birth-date">Enter your birth date</label>
-            <div class="hero-search-row">
-              <input id="home-birth-date" name="birth-date" type="date" max="2026-06-11" required>
-              <button type="submit">Build Timeline</button>
-            </div>
-          </form>
-          <a class="product-action" href="lifetimeline.html">Open Product</a>
-        </article>
-
-        <article class="topic-card products-topic product-analyzer-card">
-          <div>
-            <span class="topic-number">02</span>
-            <h3>BrandScan AI</h3>
-            <p>Brand / Name Analyzer for names, usernames, and brand ideas with origin, meaning, score, identity, bios, domains, and shareable results.</p>
-          </div>
-          <form class="hero-search product-search" id="home-name-form">
-            <label for="home-name-input">Name, nickname, username, or brand idea</label>
-            <div class="hero-search-row">
-              <input id="home-name-input" name="name" type="text" autocomplete="off" placeholder="RasulTech" required>
-              <button type="submit">Analyze</button>
-            </div>
-          </form>
-          <a class="product-action" href="brandscan.html">Open Analyzer</a>
-        </article>
-      </div>
-    </section>
   </main>
+
+  <section class="world-modal" id="world-modal" aria-label="Choose your world" aria-modal="true" role="dialog" hidden>
+    <div class="world-modal-backdrop" data-close-world></div>
+    <div class="world-panel">
+      <div class="world-panel-top">
+        <div>
+          <p class="eyebrow">Atmosphere</p>
+          <h2>Choose Your World</h2>
+        </div>
+        <button class="world-close" type="button" aria-label="Close world chooser" data-close-world>Close</button>
+      </div>
+
+      <div class="world-grid">
+        <button class="world-card world-card-space" type="button" data-world="space">
+          <span>Space</span>
+          <strong>Deep space, stars, nebulas, planets, dark futuristic atmosphere.</strong>
+        </button>
+        <button class="world-card world-card-beach" type="button" data-world="beach">
+          <span>Beach</span>
+          <strong>Ocean waves, sunset, palm trees, warm relaxing colors.</strong>
+        </button>
+        <button class="world-card world-card-antarctica" type="button" data-world="antarctica">
+          <span>Antarctica</span>
+          <strong>Ice mountains, snow, northern lights, cold blue atmosphere.</strong>
+        </button>
+        <button class="world-card world-card-jungle" type="button" data-world="jungle">
+          <span>Jungle</span>
+          <strong>Tropical rainforest, mist, exotic plants, deep green colors.</strong>
+        </button>
+        <button class="world-card world-card-desert" type="button" data-world="desert">
+          <span>Desert</span>
+          <strong>Sand dunes, orange sunset, cinematic landscape.</strong>
+        </button>
+        <button class="world-card world-card-cyber" type="button" data-world="cyber">
+          <span>Cyber City</span>
+          <strong>Futuristic skyline, neon lights, high-tech atmosphere.</strong>
+        </button>
+      </div>
+    </div>
+  </section>
 
   <script src="script.js"></script>
 </body>

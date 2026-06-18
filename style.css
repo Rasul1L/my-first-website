@@ -1,13 +1,55 @@
 body {
+  --world-bg:
+    radial-gradient(circle at 70% 28%, rgba(148, 163, 184, 0.42) 0 4%, transparent 5%),
+    radial-gradient(circle at 34% 34%, rgba(59, 130, 246, 0.28), transparent 24%),
+    radial-gradient(circle at 62% 64%, rgba(168, 85, 247, 0.2), transparent 28%),
+    radial-gradient(circle, rgba(255, 255, 255, 0.72) 0 1px, transparent 1px),
+    linear-gradient(180deg, #020617 0%, #050816 58%, #01030a 100%);
+  --world-atmosphere:
+    radial-gradient(ellipse at 50% 88%, rgba(59, 130, 246, 0.16), transparent 46%),
+    linear-gradient(180deg, transparent 0 58%, rgba(2, 6, 23, 0.72) 100%);
+  --world-foreground:
+    linear-gradient(180deg, transparent 0 72%, rgba(1, 3, 10, 0.86) 100%);
+  --world-scale: 120px 120px, auto, auto, 86px 86px, auto;
   min-height: 100vh;
   margin: 0;
   font-family: "Poppins", Arial, Helvetica, sans-serif;
-  background:
-    linear-gradient(135deg, rgba(8, 145, 178, 0.2), transparent 34%),
-    linear-gradient(225deg, rgba(245, 158, 11, 0.18), transparent 38%),
-    #030712;
+  background: #030712;
   color: #f8fafc;
   overflow-x: hidden;
+  position: relative;
+  isolation: isolate;
+  transition: background-color 520ms ease;
+}
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+body::before {
+  z-index: 0;
+  background: var(--world-bg);
+  background-size: var(--world-scale);
+  transition: background 700ms ease, opacity 700ms ease;
+}
+
+body::after {
+  z-index: 0;
+  background:
+    var(--world-foreground),
+    var(--world-atmosphere);
+  opacity: 0.82;
+  animation: world-drift 26s ease-in-out infinite;
+}
+
+body > main,
+body > section {
+  position: relative;
+  z-index: 1;
 }
 
 .cinematic-intro {
@@ -417,42 +459,12 @@ body {
 .home {
   position: relative;
   min-height: 100vh;
-  padding: 46px 20px 80px;
+  padding: 46px 20px;
   opacity: 0;
   transform: translateY(22px);
   animation: home-reveal 900ms ease 6.35s forwards;
   overflow: hidden;
   isolation: isolate;
-}
-
-.home::before,
-.home::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  pointer-events: none;
-}
-
-.home::before {
-  background:
-    radial-gradient(circle at 18% 18%, rgba(59, 130, 246, 0.16), transparent 26%),
-    radial-gradient(circle at 78% 14%, rgba(45, 212, 191, 0.12), transparent 24%),
-    radial-gradient(circle at 54% 88%, rgba(168, 85, 247, 0.12), transparent 30%),
-    linear-gradient(135deg, #01030a 0%, #030712 46%, #070a12 100%);
-}
-
-.home::after {
-  z-index: -1;
-  background-image:
-    radial-gradient(circle, rgba(236, 253, 245, 0.34) 0 1px, transparent 1px),
-    linear-gradient(115deg, transparent 0 42%, rgba(96, 165, 250, 0.1) 48%, transparent 56%);
-  background-size: 84px 84px, 240% 100%;
-  background-position: 0 0, 120% 0;
-  opacity: 0.26;
-  animation:
-    particle-drift 26s linear infinite,
-    acoustic-sweep 12s ease-in-out infinite;
 }
 
 .skip-intro .cinematic-intro {
@@ -659,10 +671,9 @@ button:hover {
 .products-topic {
   position: relative;
   background:
-    radial-gradient(circle at 82% 18%, rgba(245, 158, 11, 0.2), transparent 24%),
-    linear-gradient(145deg, rgba(20, 184, 166, 0.18), rgba(15, 23, 42, 0.86)),
-    rgba(2, 6, 23, 0.94);
-  border-color: rgba(45, 212, 191, 0.34);
+    radial-gradient(circle at 82% 18%, rgba(255, 255, 255, 0.12), transparent 24%),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.58), rgba(2, 6, 23, 0.34));
+  border-color: rgba(226, 232, 240, 0.18);
   overflow: hidden;
   backdrop-filter: blur(18px);
 }
@@ -692,8 +703,8 @@ button:hover {
   width: auto;
   max-width: none;
   box-shadow:
-    0 28px 90px rgba(0, 0, 0, 0.42),
-    0 0 46px rgba(20, 184, 166, 0.12),
+    0 28px 90px rgba(0, 0, 0, 0.32),
+    0 0 46px rgba(226, 232, 240, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
   transition:
     border-color 180ms ease,
@@ -2317,6 +2328,18 @@ button:hover {
   }
 }
 
+@keyframes world-drift {
+  0%, 100% {
+    opacity: 0.74;
+    transform: translate3d(-1%, 0, 0) scale(1);
+  }
+
+  50% {
+    opacity: 0.92;
+    transform: translate3d(1%, -1%, 0) scale(1.02);
+  }
+}
+
 @keyframes shooting-star-pass {
   0%, 72%, 100% {
     opacity: 0;
@@ -2665,10 +2688,10 @@ button:hover {
   justify-content: space-between;
   width: min(1180px, 100%);
   margin: 0 auto 28px;
-  border: 1px solid rgba(226, 232, 240, 0.18);
+  border: 1px solid rgba(226, 232, 240, 0.14);
   border-radius: 8px;
   padding: 12px 14px;
-  background: rgba(3, 7, 18, 0.82);
+  background: rgba(3, 7, 18, 0.52);
   box-shadow:
     0 18px 48px rgba(0, 0, 0, 0.34),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -2696,10 +2719,10 @@ button:hover {
 }
 
 .site-header nav a {
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  border: 1px solid rgba(226, 232, 240, 0.16);
   border-radius: 8px;
   padding: 10px 13px;
-  background: rgba(15, 23, 42, 0.62);
+  background: rgba(15, 23, 42, 0.42);
   color: #e2e8f0;
   font-size: 0.88rem;
   transition:
@@ -2721,12 +2744,68 @@ button:hover {
   grid-template-columns: 1fr;
   place-items: center;
   overflow: hidden;
-  border: 1px solid rgba(226, 232, 240, 0.08);
-  border-radius: 8px;
-  background: #020617;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.products-page {
+  position: relative;
+  min-height: 100vh;
+  padding: 46px 20px 80px;
+  background: transparent;
+  color: #f8fafc;
+  overflow-x: hidden;
+}
+
+.products-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+.products-directory {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: clamp(54px, 8vw, 96px) 0 24px;
+  display: grid;
+  gap: 34px;
+}
+
+.products-directory .story-header {
+  max-width: 760px;
+}
+
+.products-directory h1 {
+  margin-bottom: 0;
+  text-transform: none;
+}
+
+.product-directory-card {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  min-height: 320px;
+  color: inherit;
+  text-decoration: none;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.product-directory-card .product-action {
+  align-self: end;
+  justify-self: start;
+  margin-top: 14px;
+}
+
+.product-directory-card:hover {
+  border-color: rgba(125, 211, 252, 0.48);
   box-shadow:
-    0 34px 110px rgba(0, 0, 0, 0.46),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 34px 100px rgba(0, 0, 0, 0.48),
+    0 0 58px rgba(45, 212, 191, 0.16);
+  transform: translateY(-3px);
 }
 
 .menu-atmosphere {
@@ -2939,10 +3018,371 @@ button:hover {
     transform 180ms ease;
 }
 
-.hero-actions a:hover {
+.world-trigger {
+  margin: 0;
+}
+
+.hero-actions a:hover,
+.world-trigger:hover {
   border-color: rgba(125, 211, 252, 0.48);
   background: rgba(14, 165, 233, 0.12);
   transform: translateY(-2px);
+}
+
+.world-trigger,
+.world-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border: 1px solid rgba(226, 232, 240, 0.18);
+  border-radius: 8px;
+  padding: 11px 15px;
+  background: rgba(2, 6, 23, 0.58);
+  color: #f8fafc;
+  font-size: 0.86rem;
+  font-weight: 900;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(16px);
+}
+
+.world-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.world-modal[hidden] {
+  display: none;
+}
+
+.world-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(96, 165, 250, 0.14), transparent 28%),
+    rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(14px);
+}
+
+.world-panel {
+  position: relative;
+  width: min(1040px, 100%);
+  max-height: min(760px, 88vh);
+  overflow: auto;
+  border: 1px solid rgba(226, 232, 240, 0.16);
+  border-radius: 8px;
+  padding: clamp(18px, 3vw, 28px);
+  background:
+    linear-gradient(145deg, rgba(15, 23, 42, 0.92), rgba(2, 6, 23, 0.9)),
+    rgba(2, 6, 23, 0.96);
+  box-shadow:
+    0 40px 120px rgba(0, 0, 0, 0.58),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.world-panel-top {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.world-panel h2 {
+  margin: 0;
+  color: #ffffff;
+  font-family: "Orbitron", "Poppins", Arial, Helvetica, sans-serif;
+  font-size: clamp(1.8rem, 5vw, 3.8rem);
+  line-height: 1;
+}
+
+.world-close {
+  cursor: pointer;
+}
+
+.world-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.world-card {
+  position: relative;
+  display: grid;
+  align-content: end;
+  min-height: 230px;
+  margin: 0;
+  border: 1px solid rgba(226, 232, 240, 0.14);
+  border-radius: 8px;
+  padding: 18px;
+  overflow: hidden;
+  color: #ffffff;
+  text-align: left;
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.34);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.world-card::before,
+.world-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.world-card::before {
+  background: var(--world-art);
+  transition: transform 500ms ease;
+}
+
+.world-card::after {
+  background:
+    linear-gradient(180deg, transparent 0 38%, rgba(2, 6, 23, 0.82) 100%),
+    radial-gradient(circle at 30% 16%, rgba(255, 255, 255, 0.16), transparent 22%);
+}
+
+.world-card span,
+.world-card strong {
+  position: relative;
+  z-index: 1;
+}
+
+.world-card span {
+  margin-bottom: 10px;
+  font-family: "Orbitron", "Poppins", Arial, Helvetica, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 900;
+}
+
+.world-card strong {
+  color: #dbeafe;
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+
+.world-card:hover,
+.world-card.is-active {
+  border-color: rgba(125, 211, 252, 0.5);
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.42),
+    0 0 34px rgba(96, 165, 250, 0.16);
+  transform: translateY(-3px);
+}
+
+.world-card:hover::before {
+  transform: scale(1.06);
+}
+
+.world-card-space {
+  --world-art:
+    radial-gradient(circle at 72% 26%, rgba(148, 163, 184, 0.9) 0 5%, transparent 6%),
+    radial-gradient(circle at 34% 34%, rgba(59, 130, 246, 0.42), transparent 24%),
+    radial-gradient(circle at 62% 64%, rgba(168, 85, 247, 0.28), transparent 28%),
+    radial-gradient(circle, rgba(255, 255, 255, 0.9) 0 1px, transparent 1px),
+    linear-gradient(145deg, #020617, #111827);
+  background-size: auto, auto, auto, 38px 38px, auto;
+}
+
+.world-card-beach {
+  --world-art:
+    linear-gradient(160deg, transparent 0 56%, rgba(14, 165, 233, 0.72) 57% 70%, rgba(245, 158, 11, 0.7) 71%),
+    radial-gradient(circle at 72% 28%, rgba(251, 191, 36, 0.9), transparent 16%),
+    linear-gradient(180deg, #f59e0b 0%, #0f766e 54%, #042f2e 100%);
+}
+
+.world-card-antarctica {
+  --world-art:
+    linear-gradient(145deg, transparent 0 52%, rgba(226, 232, 240, 0.85) 53% 62%, transparent 63%),
+    radial-gradient(ellipse at 52% 18%, rgba(34, 211, 238, 0.42), transparent 26%),
+    linear-gradient(180deg, #0f172a, #075985 54%, #e0f2fe 100%);
+}
+
+.world-card-jungle {
+  --world-art:
+    radial-gradient(ellipse at 28% 42%, rgba(34, 197, 94, 0.5), transparent 28%),
+    radial-gradient(ellipse at 72% 28%, rgba(132, 204, 22, 0.34), transparent 25%),
+    linear-gradient(135deg, #02140d 0%, #064e3b 50%, #022c22 100%);
+}
+
+.world-card-desert {
+  --world-art:
+    radial-gradient(circle at 74% 24%, rgba(251, 191, 36, 0.86), transparent 16%),
+    linear-gradient(160deg, transparent 0 54%, rgba(217, 119, 6, 0.64) 55% 68%, rgba(120, 53, 15, 0.78) 69%),
+    linear-gradient(180deg, #7c2d12 0%, #c2410c 48%, #451a03 100%);
+}
+
+.world-card-cyber {
+  --world-art:
+    linear-gradient(90deg, transparent 0 10%, rgba(34, 211, 238, 0.42) 11% 12%, transparent 13% 26%, rgba(168, 85, 247, 0.38) 27% 29%, transparent 30%),
+    linear-gradient(180deg, transparent 0 52%, rgba(15, 23, 42, 0.96) 53%),
+    radial-gradient(circle at 60% 22%, rgba(236, 72, 153, 0.24), transparent 28%),
+    linear-gradient(135deg, #020617, #111827 58%, #030712);
+}
+
+html[data-world="space"] .hero-sky::before {
+  background:
+    radial-gradient(circle at 76% 30%, rgba(148, 163, 184, 0.42) 0 5%, transparent 6%),
+    radial-gradient(circle at 38% 36%, rgba(59, 130, 246, 0.26), transparent 27%),
+    radial-gradient(circle at 58% 70%, rgba(168, 85, 247, 0.2), transparent 30%),
+    linear-gradient(180deg, #020617 0%, #040814 54%, #02030a 100%);
+}
+
+html[data-world="beach"] .hero-sky::before {
+  background:
+    radial-gradient(circle at 72% 28%, rgba(251, 191, 36, 0.42), transparent 18%),
+    linear-gradient(180deg, #3b0764 0%, #f97316 42%, #0f766e 72%, #042f2e 100%);
+}
+
+html[data-world="antarctica"] .hero-sky::before {
+  background:
+    radial-gradient(ellipse at 50% 18%, rgba(45, 212, 191, 0.28), transparent 26%),
+    linear-gradient(160deg, transparent 0 58%, rgba(226, 232, 240, 0.2) 59%),
+    linear-gradient(180deg, #020617 0%, #075985 62%, #bae6fd 100%);
+}
+
+html[data-world="jungle"] .hero-sky::before {
+  background:
+    radial-gradient(ellipse at 28% 42%, rgba(34, 197, 94, 0.26), transparent 30%),
+    radial-gradient(ellipse at 74% 28%, rgba(132, 204, 22, 0.18), transparent 26%),
+    linear-gradient(180deg, #01120b 0%, #052e1f 58%, #02140d 100%);
+}
+
+html[data-world="desert"] .hero-sky::before {
+  background:
+    radial-gradient(circle at 72% 28%, rgba(251, 191, 36, 0.38), transparent 18%),
+    linear-gradient(180deg, #2e1065 0%, #c2410c 48%, #451a03 100%);
+}
+
+html[data-world="cyber"] .hero-sky::before {
+  background:
+    linear-gradient(90deg, transparent 0 12%, rgba(34, 211, 238, 0.12) 13% 14%, transparent 15% 28%, rgba(236, 72, 153, 0.12) 29% 31%, transparent 32%),
+    radial-gradient(circle at 62% 24%, rgba(236, 72, 153, 0.22), transparent 28%),
+    linear-gradient(180deg, #020617 0%, #111827 62%, #030712 100%);
+}
+
+html[data-world="space"] body {
+  --world-bg:
+    radial-gradient(circle at 78% 24%, rgba(203, 213, 225, 0.9) 0 3.8%, rgba(71, 85, 105, 0.72) 4.2% 8%, transparent 8.4%),
+    radial-gradient(circle at 22% 72%, rgba(30, 41, 59, 0.95) 0 8%, rgba(59, 130, 246, 0.16) 8.4% 16%, transparent 16.5%),
+    radial-gradient(ellipse at 42% 34%, rgba(59, 130, 246, 0.34), transparent 28%),
+    radial-gradient(ellipse at 64% 62%, rgba(168, 85, 247, 0.24), transparent 30%),
+    radial-gradient(circle, rgba(255, 255, 255, 0.88) 0 1px, transparent 1px),
+    linear-gradient(180deg, #020617 0%, #050816 58%, #01030a 100%);
+  --world-atmosphere:
+    radial-gradient(ellipse at 50% 82%, rgba(59, 130, 246, 0.16), transparent 48%),
+    linear-gradient(180deg, transparent 0 58%, rgba(2, 6, 23, 0.72) 100%);
+  --world-foreground:
+    linear-gradient(180deg, transparent 0 70%, rgba(1, 3, 12, 0.88) 100%),
+    radial-gradient(ellipse at 50% 110%, rgba(59, 130, 246, 0.14), transparent 46%);
+  --world-scale: auto, auto, auto, auto, 86px 86px, auto;
+}
+
+html[data-world="beach"] body {
+  --world-bg:
+    linear-gradient(160deg, transparent 0 57%, rgba(14, 165, 233, 0.74) 58% 66%, rgba(6, 78, 59, 0.76) 67% 74%, rgba(120, 53, 15, 0.82) 75%),
+    radial-gradient(circle at 70% 28%, rgba(253, 186, 116, 0.86), transparent 13%),
+    linear-gradient(78deg, transparent 0 9%, rgba(20, 83, 45, 0.58) 10% 12%, transparent 13%),
+    linear-gradient(180deg, #2e1065 0%, #f97316 43%, #0f766e 72%, #042f2e 100%);
+  --world-atmosphere:
+    radial-gradient(ellipse at 52% 66%, rgba(255, 237, 213, 0.22), transparent 38%),
+    linear-gradient(180deg, transparent 0 52%, rgba(4, 47, 46, 0.74) 100%);
+  --world-foreground:
+    linear-gradient(80deg, transparent 0 7%, rgba(20, 83, 45, 0.78) 8% 10%, transparent 11%),
+    radial-gradient(ellipse at 50% 104%, rgba(254, 215, 170, 0.26), transparent 48%),
+    linear-gradient(180deg, transparent 0 70%, rgba(4, 47, 46, 0.86) 100%);
+  --world-scale: auto;
+}
+
+html[data-world="antarctica"] body {
+  --world-bg:
+    linear-gradient(145deg, transparent 0 54%, rgba(226, 232, 240, 0.9) 55% 61%, rgba(125, 211, 252, 0.44) 62% 69%, transparent 70%),
+    linear-gradient(35deg, transparent 0 61%, rgba(240, 249, 255, 0.72) 62% 68%, transparent 69%),
+    radial-gradient(ellipse at 44% 18%, rgba(45, 212, 191, 0.32), transparent 24%),
+    radial-gradient(ellipse at 62% 22%, rgba(168, 85, 247, 0.18), transparent 24%),
+    linear-gradient(180deg, #020617 0%, #075985 60%, #bae6fd 100%);
+  --world-atmosphere:
+    linear-gradient(100deg, transparent 0 20%, rgba(186, 230, 253, 0.2) 21% 23%, transparent 24% 42%, rgba(255, 255, 255, 0.18) 43% 45%, transparent 46%),
+    linear-gradient(180deg, transparent 0 56%, rgba(2, 6, 23, 0.44) 100%);
+  --world-foreground:
+    linear-gradient(145deg, transparent 0 56%, rgba(240, 249, 255, 0.72) 57% 64%, rgba(14, 116, 144, 0.34) 65% 70%, transparent 71%),
+    linear-gradient(180deg, transparent 0 68%, rgba(8, 47, 73, 0.82) 100%);
+  --world-scale: auto;
+}
+
+html[data-world="jungle"] body {
+  --world-bg:
+    radial-gradient(ellipse at 24% 40%, rgba(34, 197, 94, 0.42), transparent 28%),
+    radial-gradient(ellipse at 78% 24%, rgba(132, 204, 22, 0.26), transparent 25%),
+    linear-gradient(115deg, transparent 0 12%, rgba(20, 83, 45, 0.66) 13% 18%, transparent 19% 38%, rgba(22, 101, 52, 0.5) 39% 45%, transparent 46%),
+    linear-gradient(180deg, #01120b 0%, #052e1f 58%, #02140d 100%);
+  --world-atmosphere:
+    radial-gradient(ellipse at 50% 72%, rgba(187, 247, 208, 0.18), transparent 40%),
+    linear-gradient(105deg, transparent 0 34%, rgba(220, 252, 231, 0.12) 35% 37%, transparent 38% 58%, rgba(220, 252, 231, 0.09) 59% 61%, transparent 62%);
+  --world-foreground:
+    linear-gradient(115deg, transparent 0 11%, rgba(6, 78, 59, 0.88) 12% 15%, transparent 16% 34%, rgba(20, 83, 45, 0.82) 35% 39%, transparent 40%),
+    radial-gradient(ellipse at 50% 86%, rgba(187, 247, 208, 0.14), transparent 46%),
+    linear-gradient(180deg, transparent 0 68%, rgba(1, 20, 13, 0.9) 100%);
+  --world-scale: auto;
+}
+
+html[data-world="desert"] body {
+  --world-bg:
+    radial-gradient(circle at 72% 28%, rgba(251, 191, 36, 0.8), transparent 15%),
+    linear-gradient(160deg, transparent 0 54%, rgba(217, 119, 6, 0.64) 55% 64%, rgba(120, 53, 15, 0.82) 65% 72%, transparent 73%),
+    linear-gradient(20deg, transparent 0 62%, rgba(251, 191, 36, 0.28) 63% 67%, transparent 68%),
+    linear-gradient(180deg, #2e1065 0%, #c2410c 48%, #451a03 100%);
+  --world-atmosphere:
+    linear-gradient(105deg, transparent 0 28%, rgba(254, 215, 170, 0.12) 29% 34%, transparent 35% 68%, rgba(251, 191, 36, 0.1) 69% 72%, transparent 73%),
+    radial-gradient(ellipse at 50% 80%, rgba(251, 191, 36, 0.18), transparent 42%);
+  --world-foreground:
+    linear-gradient(165deg, transparent 0 58%, rgba(251, 191, 36, 0.38) 59% 64%, rgba(120, 53, 15, 0.88) 65% 72%, transparent 73%),
+    linear-gradient(20deg, transparent 0 64%, rgba(217, 119, 6, 0.42) 65% 69%, transparent 70%),
+    linear-gradient(180deg, transparent 0 70%, rgba(69, 26, 3, 0.88) 100%);
+  --world-scale: auto;
+}
+
+html[data-world="cyber"] body {
+  --world-bg:
+    linear-gradient(90deg, transparent 0 10%, rgba(34, 211, 238, 0.22) 11% 12%, transparent 13% 26%, rgba(236, 72, 153, 0.2) 27% 29%, transparent 30% 52%, rgba(45, 212, 191, 0.16) 53% 54%, transparent 55%),
+    linear-gradient(180deg, transparent 0 50%, rgba(15, 23, 42, 0.96) 51%),
+    radial-gradient(circle at 60% 22%, rgba(236, 72, 153, 0.24), transparent 28%),
+    radial-gradient(circle at 28% 36%, rgba(34, 211, 238, 0.2), transparent 26%),
+    linear-gradient(135deg, #020617, #111827 58%, #030712);
+  --world-atmosphere:
+    linear-gradient(180deg, transparent 0 48%, rgba(2, 6, 23, 0.64) 100%),
+    linear-gradient(90deg, transparent 0 20%, rgba(34, 211, 238, 0.14) 21% 22%, transparent 23% 76%, rgba(236, 72, 153, 0.12) 77% 78%, transparent 79%);
+  --world-foreground:
+    linear-gradient(180deg, transparent 0 48%, rgba(2, 6, 23, 0.9) 49% 100%),
+    linear-gradient(90deg, transparent 0 8%, rgba(15, 23, 42, 0.96) 9% 14%, transparent 15% 23%, rgba(15, 23, 42, 0.92) 24% 29%, transparent 30% 62%, rgba(15, 23, 42, 0.96) 63% 70%, transparent 71%);
+  --world-scale: auto;
+}
+
+html[data-world] .hero-sky::before {
+  background: var(--world-bg);
+  background-size: var(--world-scale);
+  transition: background 700ms ease;
+}
+
+html[data-world] .hero-sky::after {
+  background: var(--world-atmosphere);
+  transition: background 700ms ease, opacity 700ms ease;
+}
+
+.products-page,
+body.life-body,
+body.hobbies-body {
+  background: transparent;
 }
 
 .studio-hero-visual {
@@ -3441,11 +3881,7 @@ button:hover {
 }
 
 .life-body {
-  background:
-    radial-gradient(circle at 18% 10%, rgba(34, 211, 238, 0.18), transparent 30%),
-    radial-gradient(circle at 86% 18%, rgba(168, 85, 247, 0.18), transparent 28%),
-    radial-gradient(circle at 50% 92%, rgba(251, 191, 36, 0.14), transparent 34%),
-    #020617;
+  background: transparent;
 }
 
 .life-page {
@@ -4271,5 +4707,351 @@ button:hover {
 
   .chart-row {
     grid-template-columns: 72px 1fr 34px;
+  }
+}
+
+/* Cinematic world system: the selected world is the page, not a framed hero. */
+html[data-world="space"] body {
+  --world-image: url("assets/worlds/space.png");
+  --world-position: center center;
+  --world-tint: rgba(3, 7, 18, 0.28);
+  --world-accent: rgba(96, 165, 250, 0.34);
+  --world-button-bg: linear-gradient(135deg, rgba(3, 7, 18, 0.52), rgba(30, 64, 175, 0.24));
+  --world-button-border: rgba(147, 197, 253, 0.36);
+  --world-button-glow: rgba(59, 130, 246, 0.34);
+  --world-button-text: #eff6ff;
+}
+
+html[data-world="beach"] body {
+  --world-image: url("assets/worlds/beach.png");
+  --world-position: center center;
+  --world-tint: rgba(18, 12, 6, 0.24);
+  --world-accent: rgba(251, 191, 36, 0.34);
+  --world-button-bg: linear-gradient(135deg, rgba(120, 53, 15, 0.34), rgba(14, 116, 144, 0.28));
+  --world-button-border: rgba(253, 186, 116, 0.42);
+  --world-button-glow: rgba(251, 191, 36, 0.32);
+  --world-button-text: #fff7ed;
+}
+
+html[data-world="antarctica"] body {
+  --world-image: url("assets/worlds/antarctica.png");
+  --world-position: center center;
+  --world-tint: rgba(2, 12, 27, 0.24);
+  --world-accent: rgba(94, 234, 212, 0.34);
+  --world-button-bg: linear-gradient(135deg, rgba(8, 47, 73, 0.44), rgba(125, 211, 252, 0.18));
+  --world-button-border: rgba(186, 230, 253, 0.46);
+  --world-button-glow: rgba(94, 234, 212, 0.32);
+  --world-button-text: #f0f9ff;
+}
+
+html[data-world="jungle"] body {
+  --world-image: url("assets/worlds/jungle.png");
+  --world-position: center center;
+  --world-tint: rgba(1, 17, 11, 0.26);
+  --world-accent: rgba(132, 204, 22, 0.26);
+  --world-button-bg: linear-gradient(135deg, rgba(6, 78, 59, 0.42), rgba(132, 204, 22, 0.16));
+  --world-button-border: rgba(187, 247, 208, 0.34);
+  --world-button-glow: rgba(34, 197, 94, 0.3);
+  --world-button-text: #f0fdf4;
+}
+
+html[data-world="desert"] body {
+  --world-image: url("assets/worlds/desert.png");
+  --world-position: center center;
+  --world-tint: rgba(33, 12, 4, 0.22);
+  --world-accent: rgba(251, 146, 60, 0.34);
+  --world-button-bg: linear-gradient(135deg, rgba(146, 64, 14, 0.42), rgba(251, 191, 36, 0.18));
+  --world-button-border: rgba(253, 186, 116, 0.5);
+  --world-button-glow: rgba(251, 146, 60, 0.36);
+  --world-button-text: #fffbeb;
+}
+
+html[data-world="cyber"] body {
+  --world-image: url("assets/worlds/cyber-city.png");
+  --world-position: center center;
+  --world-tint: rgba(1, 7, 18, 0.25);
+  --world-accent: rgba(34, 211, 238, 0.34);
+  --world-button-bg: linear-gradient(135deg, rgba(8, 47, 73, 0.48), rgba(190, 24, 93, 0.22));
+  --world-button-border: rgba(103, 232, 249, 0.46);
+  --world-button-glow: rgba(236, 72, 153, 0.32);
+  --world-button-text: #ecfeff;
+}
+
+body {
+  --world-image: url("assets/worlds/space.png");
+  --world-position: center center;
+  --world-tint: rgba(3, 7, 18, 0.28);
+  --world-accent: rgba(96, 165, 250, 0.34);
+  --world-button-bg: linear-gradient(135deg, rgba(3, 7, 18, 0.52), rgba(30, 64, 175, 0.24));
+  --world-button-border: rgba(147, 197, 253, 0.36);
+  --world-button-glow: rgba(59, 130, 246, 0.34);
+  --world-button-text: #eff6ff;
+  background: #020617;
+}
+
+body::before {
+  background-image:
+    linear-gradient(180deg, rgba(2, 6, 23, 0.12), var(--world-tint) 54%, rgba(2, 6, 23, 0.62)),
+    var(--world-image);
+  background-position: center center, var(--world-position);
+  background-size: cover, cover;
+  background-repeat: no-repeat;
+  filter: saturate(1.04) contrast(1.04);
+  opacity: 1;
+  transform: scale(1.035);
+  animation: cinematic-world-breathe 30s ease-in-out infinite alternate;
+}
+
+body::after {
+  background:
+    radial-gradient(ellipse at 50% 18%, rgba(255, 255, 255, 0.12), transparent 30%),
+    radial-gradient(ellipse at 50% 95%, var(--world-accent), transparent 42%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.34), transparent 18% 82%, rgba(0, 0, 0, 0.34));
+  mix-blend-mode: screen;
+  opacity: 0.34;
+  animation: cinematic-haze 16s ease-in-out infinite alternate;
+}
+
+.home {
+  min-height: 100vh;
+  padding: 0;
+  opacity: 1;
+  transform: none;
+  animation: none;
+  overflow: visible;
+  isolation: auto;
+}
+
+.galaxy,
+.cinematic-intro {
+  display: none;
+}
+
+.site-header {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  width: min(1120px, calc(100vw - 32px));
+  margin: 0;
+  transform: translateX(-50%);
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(2, 6, 23, 0.62), rgba(2, 6, 23, 0.34));
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.34);
+}
+
+.site-header nav a,
+.world-close {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(2, 6, 23, 0.42);
+}
+
+.site-header nav a:hover,
+.world-close:hover {
+  border-color: rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.name-platform-hero {
+  width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.hero-sky {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+html[data-world] .hero-sky::before {
+  background-image:
+    linear-gradient(180deg, rgba(2, 6, 23, 0.06), var(--world-tint) 58%, rgba(2, 6, 23, 0.72)),
+    var(--world-image);
+  background-position: center center, var(--world-position);
+  background-size: cover, cover;
+  opacity: 1;
+  transform: scale(1.035);
+  transition: opacity 600ms ease, filter 600ms ease;
+  animation: cinematic-world-breathe 30s ease-in-out infinite alternate;
+}
+
+html[data-world] .hero-sky::after {
+  background:
+    radial-gradient(ellipse at 50% 18%, rgba(255, 255, 255, 0.12), transparent 28%),
+    radial-gradient(ellipse at 50% 100%, var(--world-accent), transparent 44%),
+    linear-gradient(180deg, transparent 0 58%, rgba(2, 6, 23, 0.68) 100%);
+  opacity: 0.6;
+}
+
+.menu-atmosphere,
+.sky-glow,
+.sky-horizon,
+.star-field,
+.shooting-star,
+.hero-particles {
+  display: none;
+}
+
+.hero-minimal {
+  min-height: 100vh;
+  padding: 120px 20px 64px;
+  text-shadow: 0 22px 80px rgba(0, 0, 0, 0.64);
+}
+
+.hero-minimal h1 {
+  color: #ffffff;
+  text-shadow:
+    0 2px 24px rgba(0, 0, 0, 0.7),
+    0 0 70px var(--world-accent);
+}
+
+.hero-actions {
+  gap: 0;
+}
+
+.hero-actions a {
+  display: none;
+}
+
+.world-trigger {
+  position: relative;
+  min-height: 46px;
+  border: 1px solid var(--world-button-border);
+  border-radius: 999px;
+  padding: 12px 20px;
+  background: var(--world-button-bg);
+  color: var(--world-button-text);
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow:
+    0 18px 70px rgba(0, 0, 0, 0.34),
+    0 0 34px var(--world-button-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(18px) saturate(1.35);
+  overflow: hidden;
+  transition:
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    transform 220ms ease,
+    background 220ms ease;
+}
+
+.world-trigger::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background: linear-gradient(110deg, transparent 0 28%, rgba(255, 255, 255, 0.22) 48%, transparent 68% 100%);
+  opacity: 0.42;
+  transform: translateX(-55%);
+  transition: transform 520ms ease, opacity 220ms ease;
+}
+
+.world-trigger:hover {
+  border-color: rgba(255, 255, 255, 0.54);
+  box-shadow:
+    0 24px 86px rgba(0, 0, 0, 0.42),
+    0 0 48px var(--world-button-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+  transform: translateY(-2px);
+}
+
+.world-trigger:hover::before {
+  opacity: 0.72;
+  transform: translateX(55%);
+}
+
+.products-page {
+  padding-top: 112px;
+  background: transparent;
+}
+
+.products-directory {
+  padding-top: clamp(36px, 6vw, 68px);
+}
+
+.life-header {
+  position: relative;
+  top: auto;
+  left: auto;
+  width: min(1120px, 100%);
+  margin: 0 auto 22px;
+  transform: none;
+}
+
+.world-panel {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(2, 6, 23, 0.72);
+}
+
+.world-card-space { --card-image: url("assets/worlds/space.png"); }
+.world-card-beach { --card-image: url("assets/worlds/beach.png"); }
+.world-card-antarctica { --card-image: url("assets/worlds/antarctica.png"); }
+.world-card-jungle { --card-image: url("assets/worlds/jungle.png"); }
+.world-card-desert { --card-image: url("assets/worlds/desert.png"); }
+.world-card-cyber { --card-image: url("assets/worlds/cyber-city.png"); }
+
+.world-card::before {
+  background-image:
+    linear-gradient(180deg, transparent 0 42%, rgba(2, 6, 23, 0.82) 100%),
+    var(--card-image);
+  background-position: center;
+  background-size: cover;
+}
+
+.world-card.is-active {
+  outline: 2px solid rgba(255, 255, 255, 0.44);
+  outline-offset: -5px;
+}
+
+@keyframes cinematic-world-breathe {
+  from {
+    transform: scale(1.035) translate3d(-0.4%, -0.25%, 0);
+  }
+
+  to {
+    transform: scale(1.075) translate3d(0.5%, 0.35%, 0);
+  }
+}
+
+@keyframes cinematic-haze {
+  from {
+    opacity: 0.24;
+  }
+
+  to {
+    opacity: 0.42;
+  }
+}
+
+@media (max-width: 760px) {
+  .site-header {
+    top: 12px;
+    width: calc(100vw - 24px);
+  }
+
+  .life-header {
+    top: auto;
+    width: min(1120px, 100%);
+  }
+
+  .hero-minimal {
+    padding-top: 108px;
+  }
+
+  .world-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .world-card {
+    min-height: 180px;
   }
 }

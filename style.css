@@ -4822,11 +4822,6 @@ body::after {
   isolation: auto;
 }
 
-.galaxy,
-.cinematic-intro {
-  display: none;
-}
-
 .site-header {
   position: fixed;
   top: 18px;
@@ -4889,15 +4884,6 @@ html[data-world] .hero-sky::after {
   opacity: 0.6;
 }
 
-.menu-atmosphere,
-.sky-glow,
-.sky-horizon,
-.star-field,
-.shooting-star,
-.hero-particles {
-  display: none;
-}
-
 .hero-minimal {
   min-height: 100vh;
   padding: 120px 20px 64px;
@@ -4912,11 +4898,7 @@ html[data-world] .hero-sky::after {
 }
 
 .hero-actions {
-  gap: 0;
-}
-
-.hero-actions a {
-  display: none;
+  gap: 10px;
 }
 
 .world-trigger {
@@ -4972,6 +4954,11 @@ html[data-world] .hero-sky::after {
 .products-page {
   padding-top: 112px;
   background: transparent;
+}
+
+.home .story-page {
+  width: min(1180px, calc(100% - 40px));
+  padding-bottom: 80px;
 }
 
 .products-directory {

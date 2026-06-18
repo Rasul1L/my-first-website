@@ -39,7 +39,10 @@
     <header class="site-header" aria-label="Primary navigation">
       <a class="site-brand" href="index.html">RasulTech</a>
       <nav>
-        <a href="products.html">Projects</a>
+        <a href="#products">Projects</a>
+        <a href="products.html">Directory</a>
+        <a href="brandscan.html">BrandScan AI</a>
+        <a href="lifetimeline.html">Time Capsule</a>
       </nav>
     </header>
 
@@ -65,10 +68,54 @@
       </div>
       <div class="hero-minimal">
         <p class="eyebrow">RasulTech</p>
-        <h1>RasulTech</h1>
-        <div class="hero-actions" aria-label="World selection">
+        <h1>Project Studio</h1>
+        <div class="hero-actions" aria-label="Project shortcuts and world selection">
+          <a href="#products">Explore Projects</a>
+          <a href="brandscan.html">BrandScan AI</a>
+          <a href="lifetimeline.html">Time Capsule</a>
           <button class="world-trigger" type="button" id="open-world-modal">Enter the Cosmos</button>
         </div>
+      </div>
+    </section>
+
+    <section class="story-page" id="products" aria-label="RasulTech projects">
+      <div class="story-header">
+        <p class="eyebrow">Projects</p>
+        <h2>Projects</h2>
+      </div>
+
+      <div class="topic-grid products-grid">
+        <article class="topic-card products-topic product-time-capsule">
+          <div>
+            <span class="topic-number">01</span>
+            <h3>Personal Time Capsule</h3>
+            <p>Days lived, world events, cosmic age, future milestones, and a share card in one project.</p>
+          </div>
+          <form class="hero-search product-search" id="home-life-form">
+            <label for="home-birth-date">Enter your birth date</label>
+            <div class="hero-search-row">
+              <input id="home-birth-date" name="birth-date" type="date" max="2026-06-18" required>
+              <button type="submit">Build Timeline</button>
+            </div>
+          </form>
+          <a class="product-action" href="lifetimeline.html">Open Project</a>
+        </article>
+
+        <article class="topic-card products-topic product-analyzer-card">
+          <div>
+            <span class="topic-number">02</span>
+            <h3>BrandScan AI</h3>
+            <p>Brand / Name Analyzer for names, usernames, and brand ideas with origin, meaning, score, identity, bios, domains, and shareable results.</p>
+          </div>
+          <form class="hero-search product-search" id="home-name-form">
+            <label for="home-name-input">Name, nickname, username, or brand idea</label>
+            <div class="hero-search-row">
+              <input id="home-name-input" name="name" type="text" autocomplete="off" placeholder="RasulTech" required>
+              <button type="submit">Analyze</button>
+            </div>
+          </form>
+          <a class="product-action" href="brandscan.html">Open Analyzer</a>
+        </article>
       </div>
     </section>
   </main>

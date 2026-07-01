@@ -3022,6 +3022,11 @@ button:hover {
   margin: 0;
 }
 
+.theme-selector {
+  display: flex;
+  justify-content: center;
+}
+
 .hero-actions a:hover,
 .world-trigger:hover {
   border-color: rgba(125, 211, 252, 0.48);

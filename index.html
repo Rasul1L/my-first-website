@@ -15,107 +15,41 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="galaxy">
-    <section class="cinematic-intro premium-name-intro" aria-label="RasulTech cinematic intro">
-      <div class="intro-particles" aria-hidden="true">
-        <span></span><span></span><span></span><span></span><span></span>
-      </div>
-      <div class="logo-build" aria-label="RasulTech">
-        <span class="logo-letter fly-a">R</span>
-        <span class="logo-letter fly-b">a</span>
-        <span class="logo-letter fly-c">s</span>
-        <span class="logo-letter fly-d">u</span>
-        <span class="logo-letter fly-e">l</span>
-        <span class="logo-letter fly-f">T</span>
-        <span class="logo-letter fly-g">e</span>
-        <span class="logo-letter fly-h">c</span>
-        <span class="logo-letter fly-i">h</span>
-      </div>
-      <div class="intro-ring"></div>
-    </section>
-  </main>
-
   <main class="home">
     <header class="site-header" aria-label="Primary navigation">
       <a class="site-brand" href="index.html">RasulTech</a>
       <nav>
-        <a href="#products">Projects</a>
-        <a href="products.html">Directory</a>
-        <a href="brandscan.html">BrandScan AI</a>
-        <a href="lifetimeline.html">Time Capsule</a>
+        <a href="#projects">Projects</a>
       </nav>
     </header>
 
-    <section class="hero name-platform-hero">
-      <div class="menu-atmosphere" aria-hidden="true">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <div class="hero-sky" aria-hidden="true">
-        <span class="sky-glow"></span>
-        <span class="sky-horizon"></span>
-        <div class="star-field star-field-one"></div>
-        <div class="star-field star-field-two"></div>
-        <div class="shooting-star"></div>
-        <div class="hero-particles">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </div>
-      <div class="hero-minimal">
-        <p class="eyebrow">RasulTech</p>
-        <h1>Project Studio</h1>
-        <div class="hero-actions" aria-label="Project shortcuts and world selection">
-          <a href="#products">Explore Projects</a>
-          <a href="brandscan.html">BrandScan AI</a>
-          <a href="lifetimeline.html">Time Capsule</a>
-          <button class="world-trigger" type="button" id="open-world-modal">Enter the Cosmos</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="story-page" id="products" aria-label="RasulTech projects">
+    <section class="story-page" id="projects" aria-label="RasulTech project navigation">
       <div class="story-header">
-        <p class="eyebrow">Projects</p>
-        <h2>Projects</h2>
+        <h1>Open a project</h1>
       </div>
 
       <div class="topic-grid products-grid">
-        <article class="topic-card products-topic product-time-capsule">
+        <a class="topic-card products-topic product-time-capsule" href="lifetimeline.html">
           <div>
             <span class="topic-number">01</span>
             <h3>Personal Time Capsule</h3>
             <p>Days lived, world events, cosmic age, future milestones, and a share card in one project.</p>
           </div>
-          <form class="hero-search product-search" id="home-life-form">
-            <label for="home-birth-date">Enter your birth date</label>
-            <div class="hero-search-row">
-              <input id="home-birth-date" name="birth-date" type="date" max="2026-06-18" required>
-              <button type="submit">Build Timeline</button>
-            </div>
-          </form>
-          <a class="product-action" href="lifetimeline.html">Open Project</a>
-        </article>
+          <span class="product-action">Open Project</span>
+        </a>
 
-        <article class="topic-card products-topic product-analyzer-card">
+        <a class="topic-card products-topic product-analyzer-card" href="brandscan.html">
           <div>
             <span class="topic-number">02</span>
             <h3>BrandScan AI</h3>
             <p>Brand / Name Analyzer for names, usernames, and brand ideas with origin, meaning, score, identity, bios, domains, and shareable results.</p>
           </div>
-          <form class="hero-search product-search" id="home-name-form">
-            <label for="home-name-input">Name, nickname, username, or brand idea</label>
-            <div class="hero-search-row">
-              <input id="home-name-input" name="name" type="text" autocomplete="off" placeholder="RasulTech" required>
-              <button type="submit">Analyze</button>
-            </div>
-          </form>
-          <a class="product-action" href="brandscan.html">Open Analyzer</a>
-        </article>
+          <span class="product-action">Open Project</span>
+        </a>
+      </div>
+
+      <div class="theme-selector" aria-label="World picture chooser">
+        <button class="world-trigger" type="button" id="open-world-modal">Choose World</button>
       </div>
     </section>
   </main>
@@ -134,27 +68,21 @@
       <div class="world-grid">
         <button class="world-card world-card-space" type="button" data-world="space">
           <span>Space</span>
-          <strong>Deep space, stars, nebulas, planets, dark futuristic atmosphere.</strong>
         </button>
         <button class="world-card world-card-beach" type="button" data-world="beach">
           <span>Beach</span>
-          <strong>Ocean waves, sunset, palm trees, warm relaxing colors.</strong>
         </button>
         <button class="world-card world-card-antarctica" type="button" data-world="antarctica">
           <span>Antarctica</span>
-          <strong>Ice mountains, snow, northern lights, cold blue atmosphere.</strong>
         </button>
         <button class="world-card world-card-jungle" type="button" data-world="jungle">
           <span>Jungle</span>
-          <strong>Tropical rainforest, mist, exotic plants, deep green colors.</strong>
         </button>
         <button class="world-card world-card-desert" type="button" data-world="desert">
           <span>Desert</span>
-          <strong>Sand dunes, orange sunset, cinematic landscape.</strong>
         </button>
         <button class="world-card world-card-cyber" type="button" data-world="cyber">
           <span>Cyber City</span>
-          <strong>Futuristic skyline, neon lights, high-tech atmosphere.</strong>
         </button>
       </div>
     </div>
